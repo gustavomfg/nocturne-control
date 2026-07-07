@@ -1,5 +1,6 @@
 import type { Villain } from "../types/villain";
 import { useTiltCard } from "../hooks/useTiltCard";
+import { asset } from "../utils/assets";
 
 import "../styles/villain-card.css";
 
@@ -26,7 +27,7 @@ export function VillainCard({ villain, onOpen }: VillainCardProps) {
       tabIndex={onOpen ? 0 : undefined}
     >
       <div className="villain-card-image">
-        <img src={villain.image} alt={`${villain.name} surveillance profile`} />
+        <img src={asset(villain.image)} alt={`${villain.name} surveillance profile`} />
       </div>
 
       <div className="villain-card-header">

@@ -1,4 +1,5 @@
 import { useGotham } from "../state/useGotham";
+import { asset } from "../utils/assets";
 
 import "../styles/profile.css";
 
@@ -18,7 +19,7 @@ export function Profile() {
       </header>
 
       <section className="profile-hero">
-        <img src="/profile/batman-profile.jpg" alt="Batman holding his cowl in silhouette" />
+        <img src={asset("/profile/batman-profile.jpg")} alt="Batman holding his cowl in silhouette" />
 
         <div>
           <span>ACTIVE OPERATIVE</span>

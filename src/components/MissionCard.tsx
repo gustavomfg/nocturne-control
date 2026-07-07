@@ -1,5 +1,6 @@
 import type { Mission } from "../types/mission";
 import { useTiltCard } from "../hooks/useTiltCard";
+import { asset } from "../utils/assets";
 
 import "../styles/mission-card.css";
 
@@ -13,7 +14,7 @@ export function MissionCard({ mission }: MissionCardProps) {
   return (
     <article className="mission-card" {...tiltCard}>
       <div className="mission-card-image">
-        <img src={mission.image} alt={`${mission.title} tactical map`} />
+        <img src={asset(mission.image)} alt={`${mission.title} tactical map`} />
       </div>
 
       <div className="mission-card-header">

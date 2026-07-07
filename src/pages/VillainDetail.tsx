@@ -1,4 +1,5 @@
 import { useGotham } from "../state/useGotham";
+import { asset } from "../utils/assets";
 import { slugify } from "../utils/slug";
 
 import "../styles/villain-detail.css";
@@ -29,7 +30,7 @@ export function VillainDetail({ slug, onBack }: VillainDetailProps) {
       <button className="back-button" onClick={onBack}>Back to Arkham</button>
 
       <section className="villain-dossier">
-        <img src={villain.image} alt={`${villain.name} dossier portrait`} />
+        <img src={asset(villain.image)} alt={`${villain.name} dossier portrait`} />
 
         <div>
           <span className="dossier-label">ARKHAM DOSSIER</span>

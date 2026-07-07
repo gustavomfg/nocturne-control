@@ -1,5 +1,6 @@
 import type { Gadget } from "../types/gadget";
 import { useTiltCard } from "../hooks/useTiltCard";
+import { asset } from "../utils/assets";
 
 import "../styles/gadget-card.css";
 
@@ -13,7 +14,7 @@ export function GadgetCard({ gadget }: GadgetCardProps) {
   return (
     <article className="gadget-card" {...tiltCard}>
       <div className="gadget-card-image">
-        <img src={gadget.image} alt={`${gadget.name} WayneTech profile`} />
+        <img src={asset(gadget.image)} alt={`${gadget.name} WayneTech profile`} />
       </div>
 
       <div className="gadget-card-header">

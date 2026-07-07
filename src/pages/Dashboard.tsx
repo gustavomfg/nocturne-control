@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { useGotham } from "../state/useGotham";
+import { asset } from "../utils/assets";
 
 import "../styles/dashboard.css";
 
@@ -163,7 +164,7 @@ export function Dashboard() {
               {mostWanted ? (
                 <>
                   <div className="target-file">
-                    <img src={mostWanted.image} alt={`${mostWanted.name} target file`} />
+                    <img src={asset(mostWanted.image)} alt={`${mostWanted.name} target file`} />
 
                     <div>
                       <strong>{mostWanted.name}</strong>
