@@ -1,0 +1,1 @@
+export type Page = "dashboard" | "arkham" | "missions" | "waynetech" | "terminal";

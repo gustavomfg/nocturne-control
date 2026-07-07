@@ -1,0 +1,75 @@
+.rain {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.46;
+  transform: skewX(-6deg);
+  mix-blend-mode: screen;
+}
+
+.rain span {
+  position: absolute;
+  width: 1px;
+  transform: translate3d(0, -120px, 0);
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(184, 190, 194, 0.08) 18%,
+    rgba(184, 190, 194, 0.34) 58%,
+    rgba(184, 190, 194, 0.06) 100%
+  );
+  border-radius: 999px;
+  animation: rainFall linear infinite;
+  will-change: transform;
+}
+
+.rain span:nth-child(3n) {
+  width: 2px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(205, 210, 214, 0.28),
+    rgba(205, 210, 214, 0.03)
+  );
+}
+
+.rain span:nth-child(4n) {
+  opacity: 0.18 !important;
+  animation-duration: 2.3s !important;
+}
+
+.rain span:nth-child(7n) {
+  height: 24px !important;
+  opacity: 0.12 !important;
+}
+
+@keyframes rainFall {
+  0% {
+    transform: translate3d(0, -120px, 0);
+  }
+
+  to {
+    transform: translate3d(var(--drift), 120vh, 0);
+  }
+}
+
+
+
+
+.scanlines {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0.55;
+  background:
+    radial-gradient(circle at 50% 50%, transparent 50%, rgba(0, 0, 0, 0.26) 100%),
+    repeating-linear-gradient(
+      transparent 0px,
+      transparent 6px,
+      rgba(255,255,255,.008) 7px
+    );
+  mix-blend-mode: soft-light;
+}

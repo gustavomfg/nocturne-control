@@ -1,0 +1,60 @@
+.arkham {
+  flex: 1;
+  min-height: 100vh;
+  padding: 46px;
+
+  background:
+    radial-gradient(circle at 80% 0, rgba(163, 58, 50, 0.08), transparent 30rem),
+    transparent;
+  color: var(--text);
+}
+
+.arkham-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.arkham-header h1 {
+  margin-bottom: 8px;
+  color: var(--text);
+  letter-spacing: 5px;
+  text-transform: uppercase;
+}
+
+.arkham-header p {
+  color: var(--muted);
+}
+
+.arkham-header strong {
+  height: fit-content;
+
+  padding: 10px 14px;
+
+  border: 1px solid rgba(163, 58, 50, 0.38);
+  color: #c46a60;
+  background: rgba(163, 58, 50, 0.08);
+}
+
+.villains-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+
+  gap: 20px;
+}
+
+@media (max-width: 640px) {
+  .arkham {
+    padding: 28px 18px;
+  }
+
+  .arkham-header {
+    display: block;
+  }
+
+  .arkham-header strong {
+    display: inline-block;
+    margin-top: 18px;
+  }
+}

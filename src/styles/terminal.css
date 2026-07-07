@@ -1,0 +1,68 @@
+.terminal-page {
+  flex: 1;
+  min-height: 100vh;
+  padding: 46px;
+  background:
+    radial-gradient(circle at 80% 0, rgba(102, 138, 91, 0.07), transparent 30rem),
+    transparent;
+  color: var(--text);
+}
+
+.terminal-page h1 {
+  margin-bottom: 30px;
+  color: var(--text);
+  letter-spacing: 5px;
+  text-transform: uppercase;
+}
+
+.terminal-window {
+  min-height: 520px;
+  padding: 26px;
+  border: 1px solid rgba(102, 138, 91, 0.24);
+  background:
+    linear-gradient(180deg, rgba(102, 138, 91, 0.06), transparent 220px),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0.018) 1px, transparent 1px, transparent 8px),
+    rgba(3, 5, 4, 0.86);
+  color: #8ea97e;
+  box-shadow: var(--shadow-heavy), inset 0 0 80px rgba(102, 138, 91, 0.03);
+}
+
+.terminal-window p {
+  margin-bottom: 12px;
+}
+
+.command {
+  color: var(--signal);
+}
+
+.response {
+  color: #8ea97e;
+}
+
+.terminal-input {
+  display: flex;
+  gap: 10px;
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(102, 138, 91, 0.16);
+}
+
+.terminal-input span {
+  color: var(--signal);
+}
+
+.terminal-input input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  color: #9fba8f;
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+@media (max-width: 640px) {
+  .terminal-page {
+    padding: 28px 18px;
+  }
+}

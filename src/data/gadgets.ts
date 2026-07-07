@@ -1,0 +1,48 @@
+import type { Gadget } from "../types/gadget";
+
+export const gadgets: Gadget[] = [
+  {
+    id: 1,
+    name: "Batmobile",
+    category: "Vehicle",
+    image: "/cards/gadget-batmobile.jpg",
+    status: "AVAILABLE",
+    powerLevel: 96,
+    lastMaintenance: "02:10 / WayneTech Garage",
+    deploymentHistory: "Last deployed during East End pursuit.",
+    description: "Armored tactical vehicle designed for high-speed pursuit.",
+  },
+  {
+    id: 2,
+    name: "Batsuit",
+    category: "Armor",
+    image: "/cards/gadget-batsuit.jpg",
+    status: "DEPLOYED",
+    powerLevel: 88,
+    lastMaintenance: "18:45 / Armor bay",
+    deploymentHistory: "Currently synced with field telemetry.",
+    description: "Advanced combat armor with reinforced protection systems.",
+  },
+  {
+    id: 3,
+    name: "Grapple Gun",
+    category: "Mobility",
+    image: "/cards/gadget-grapple.jpg",
+    status: "AVAILABLE",
+    powerLevel: 74,
+    lastMaintenance: "16:20 / Mobility rack",
+    deploymentHistory: "Used for rooftop traversal near Chinatown.",
+    description: "Compact launcher used for vertical movement across Gotham.",
+  },
+  {
+    id: 4,
+    name: "Smoke Bomb",
+    category: "Stealth",
+    image: "/cards/gadget-smoke.jpg",
+    status: "MAINTENANCE",
+    powerLevel: 42,
+    lastMaintenance: "Pending refill / Stealth lab",
+    deploymentHistory: "Low inventory after Arkham perimeter breach.",
+    description: "Tactical concealment device for escape and distraction.",
+  },
+];

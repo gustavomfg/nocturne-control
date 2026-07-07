@@ -1,0 +1,59 @@
+.missions {
+  flex: 1;
+  min-height: 100vh;
+  padding: 46px;
+
+  background:
+    radial-gradient(circle at 80% 0, rgba(214, 179, 90, 0.07), transparent 30rem),
+    transparent;
+  color: var(--text);
+}
+
+.missions-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.missions-header h1 {
+  margin-bottom: 8px;
+  color: var(--text);
+  letter-spacing: 5px;
+  text-transform: uppercase;
+}
+
+.missions-header p {
+  color: var(--muted);
+}
+
+.missions-header strong {
+  height: fit-content;
+  padding: 10px 14px;
+
+  border: 1px solid rgba(214, 179, 90, 0.34);
+  color: var(--signal);
+  background: rgba(214, 179, 90, 0.07);
+}
+
+.missions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+
+  gap: 20px;
+}
+
+@media (max-width: 640px) {
+  .missions {
+    padding: 28px 18px;
+  }
+
+  .missions-header {
+    display: block;
+  }
+
+  .missions-header strong {
+    display: inline-block;
+    margin-top: 18px;
+  }
+}

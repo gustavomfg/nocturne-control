@@ -1,0 +1,18 @@
+.page {
+  flex: 1;
+  min-height: 100vh;
+  padding: 46px;
+
+  background: transparent;
+  color: var(--text);
+}
+
+.page h1 {
+  margin-bottom: 16px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+}
+
+.page p {
+  color: var(--muted);
+}

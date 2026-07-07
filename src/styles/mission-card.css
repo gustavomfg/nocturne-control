@@ -1,0 +1,157 @@
+.mission-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(214, 179, 90, 0.15);
+  background:
+    radial-gradient(circle at 50% 0, rgba(214, 179, 90, 0.09), transparent 36%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.035), transparent 55%),
+    var(--panel);
+  box-shadow: 0 18px 54px rgba(0, 0, 0, 0.42);
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.mission-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(214, 179, 90, 0.32);
+  box-shadow: 0 22px 62px rgba(0, 0, 0, 0.54), 0 0 20px rgba(214, 179, 90, 0.055);
+}
+
+.mission-card-image {
+  position: relative;
+  height: 210px;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(214, 179, 90, 0.16);
+  background: #030303;
+}
+
+.mission-card-image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to top, rgba(12, 14, 17, 0.98), transparent 58%),
+    repeating-linear-gradient(90deg, rgba(214, 179, 90, 0.035), rgba(214, 179, 90, 0.035) 1px, transparent 1px, transparent 22px);
+}
+
+.mission-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.78) contrast(1.12) brightness(0.82);
+  transition: transform 0.45s ease, filter 0.45s ease;
+}
+
+.mission-card:hover .mission-card-image img {
+  transform: scale(1.035);
+  filter: saturate(0.98) contrast(1.18) brightness(0.94);
+}
+
+.mission-card-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 22px 24px 0;
+  margin-bottom: 20px;
+}
+
+.mission-card h2 {
+  margin-bottom: 4px;
+  color: var(--text);
+}
+
+.mission-card-header span {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.mission-card p {
+  padding: 0 24px;
+  margin-bottom: 24px;
+  color: var(--muted-strong);
+  line-height: 1.6;
+}
+
+.mission-priority {
+  height: fit-content;
+  padding: 6px 10px;
+  font-size: 0.75rem;
+  letter-spacing: 1.5px;
+}
+
+.mission-priority.low {
+  color: #8ea97e;
+  border: 1px solid rgba(102, 138, 91, 0.38);
+  background: rgba(102, 138, 91, 0.08);
+}
+
+.mission-priority.normal {
+  color: #8ba4b4;
+  border: 1px solid rgba(95, 127, 146, 0.38);
+  background: rgba(95, 127, 146, 0.08);
+}
+
+.mission-priority.high {
+  color: var(--signal);
+  border: 1px solid rgba(214, 179, 90, 0.34);
+  background: rgba(214, 179, 90, 0.07);
+}
+
+.mission-priority.critical {
+  color: #c46a60;
+  border: 1px solid rgba(163, 58, 50, 0.38);
+  background: rgba(163, 58, 50, 0.08);
+}
+
+.mission-meta {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 24px;
+  margin-bottom: 18px;
+  color: var(--muted);
+}
+
+.mission-status.active {
+  color: #8ea97e;
+}
+
+.mission-status.waiting {
+  color: var(--signal);
+}
+
+.mission-status.completed {
+  color: #8ba4b4;
+}
+
+.mission-progress {
+  padding: 0 24px 24px;
+}
+
+.mission-progress-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  color: var(--muted);
+}
+
+.mission-progress-header strong {
+  color: var(--signal);
+}
+
+.mission-progress-bar {
+  height: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(214, 179, 90, 0.25);
+  background: rgba(214, 179, 90, 0.07);
+}
+
+.mission-progress-bar div {
+  height: 100%;
+  background: linear-gradient(90deg, var(--signal-dim), var(--signal), #9b4d3e);
+  box-shadow: 0 0 16px rgba(214, 179, 90, 0.32);
+  animation: missionPulse 2.4s ease-in-out infinite alternate;
+}
+
+@keyframes missionPulse {
+  from { filter: brightness(0.86); }
+  to { filter: brightness(1.16); }
+}

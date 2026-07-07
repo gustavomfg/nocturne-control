@@ -1,0 +1,112 @@
+.villain-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(214, 179, 90, 0.14);
+  background:
+    radial-gradient(circle at 50% 0, rgba(214, 179, 90, 0.08), transparent 36%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.035), transparent 55%),
+    var(--panel);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.025), 0 18px 54px rgba(0, 0, 0, 0.42);
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.villain-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(214, 179, 90, 0.3);
+  box-shadow: 0 22px 62px rgba(0, 0, 0, 0.54), 0 0 20px rgba(214, 179, 90, 0.055);
+}
+
+.villain-card-image {
+  position: relative;
+  height: 210px;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(214, 179, 90, 0.14);
+  background: #030303;
+}
+
+.villain-card-image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to top, rgba(12, 14, 17, 0.98), transparent 58%),
+    radial-gradient(circle at 50% 45%, transparent 24%, rgba(0, 0, 0, 0.34) 100%),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.024), rgba(255, 255, 255, 0.024) 1px, transparent 1px, transparent 6px);
+}
+
+.villain-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: saturate(0.78) contrast(1.14) brightness(0.76);
+  transition: transform 0.45s ease, filter 0.45s ease;
+}
+
+.villain-card:hover .villain-card-image img {
+  transform: scale(1.035);
+  filter: saturate(0.94) contrast(1.18) brightness(0.9);
+}
+
+.villain-card-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 22px 24px 0;
+  margin-bottom: 24px;
+}
+
+.villain-card h2 {
+  margin-bottom: 4px;
+  color: var(--text);
+}
+
+.villain-card-header span {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.status {
+  height: fit-content;
+  padding: 6px 10px;
+  font-size: 0.75rem;
+  letter-spacing: 1.5px;
+}
+
+.status.captured {
+  color: #8ea97e;
+  border: 1px solid rgba(102, 138, 91, 0.38);
+  background: rgba(102, 138, 91, 0.08);
+}
+
+.status.escaped {
+  color: #c46a60;
+  border: 1px solid rgba(163, 58, 50, 0.38);
+  background: rgba(163, 58, 50, 0.08);
+}
+
+.status.unknown {
+  color: #8ba4b4;
+  border: 1px solid rgba(95, 127, 146, 0.38);
+  background: rgba(95, 127, 146, 0.08);
+}
+
+.villain-info {
+  padding: 0 24px;
+  margin-bottom: 20px;
+}
+
+.villain-info p {
+  margin-bottom: 8px;
+  color: var(--muted-strong);
+}
+
+.villain-info span {
+  color: var(--signal-dim);
+}
+
+.villain-description {
+  padding: 0 24px 24px;
+  color: var(--muted);
+  line-height: 1.6;
+}
