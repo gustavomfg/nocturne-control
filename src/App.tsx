@@ -58,6 +58,10 @@ function getRouteFromPath(pathname: string): AppRoute {
     };
   }
 
+  if (relativePath === "/") {
+    return { page: "dashboard" };
+  }
+
   const route = Object.entries(pageRoutes).find(([, path]) => path === relativePath);
 
   return {
@@ -84,8 +88,10 @@ function App() {
   const [soundEnabled, setSoundEnabled] = useState(() => loadStoredBoolean("gotham-sound-enabled", true));
   const activePage = route.page;
 
+  const basePathFull = import.meta.env.BASE_URL;
+
   useEffect(() => {
-    if (window.location.pathname === "/") {
+    if (window.location.pathname === basePathFull || window.location.pathname === basePathFull.replace(/\/$/, "")) {
       window.history.replaceState(null, "", toAppPath(pageRoutes.dashboard));
     }
 
