@@ -1,4 +1,5 @@
 import type { Gadget } from "../types/gadget";
+import { useTiltCard } from "../hooks/useTiltCard";
 
 import "../styles/gadget-card.css";
 
@@ -7,8 +8,10 @@ type GadgetCardProps = {
 };
 
 export function GadgetCard({ gadget }: GadgetCardProps) {
+  const tiltCard = useTiltCard();
+
   return (
-    <article className="gadget-card">
+    <article className="gadget-card" {...tiltCard}>
       <div className="gadget-card-image">
         <img src={gadget.image} alt={`${gadget.name} WayneTech profile`} />
       </div>

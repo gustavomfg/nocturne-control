@@ -1,4 +1,5 @@
 import type { Villain } from "../types/villain";
+import { useTiltCard } from "../hooks/useTiltCard";
 
 import "../styles/villain-card.css";
 
@@ -7,8 +8,10 @@ type VillainCardProps = {
 };
 
 export function VillainCard({ villain }: VillainCardProps) {
+  const tiltCard = useTiltCard();
+
   return (
-    <article className="villain-card">
+    <article className="villain-card" {...tiltCard}>
       <div className="villain-card-image">
         <img src={villain.image} alt={`${villain.name} surveillance profile`} />
       </div>

@@ -30,6 +30,7 @@ export function Dashboard() {
   );
 
   const mostWanted = villains.find((villain) => villain.status === "ESCAPED");
+  const targetConfidence = mostWanted?.dangerLevel === "EXTREME" ? 87 : 64;
 
   const incidentFeed = [
     "Arkham perimeter camera lost signal for 12 seconds.",
@@ -72,7 +73,10 @@ export function Dashboard() {
 
             <div className="radar">
               <div className="radar-map" />
+              <div className="radar-pulse pulse-one" />
+              <div className="radar-pulse pulse-two" />
               <div className="radar-sweep" />
+              <div className="radar-noise" />
               <div className="radar-contact contact-one" />
               <div className="radar-contact contact-two" />
               <div className="radar-contact contact-three" />
@@ -151,6 +155,39 @@ export function Dashboard() {
                   <li key={incident}>{incident}</li>
                 ))}
               </ul>
+            </article>
+
+            <article className="priority-target-panel">
+              <h2>PRIORITY TARGET</h2>
+
+              {mostWanted ? (
+                <>
+                  <div className="target-file">
+                    <img src={mostWanted.image} alt={`${mostWanted.name} target file`} />
+
+                    <div>
+                      <strong>{mostWanted.name}</strong>
+                      <span>{mostWanted.status} / {mostWanted.dangerLevel}</span>
+                      <p>{mostWanted.lastLocation}</p>
+                    </div>
+                  </div>
+
+                  <div className="target-confidence">
+                    <div>
+                      <span>TRACKING CONFIDENCE</span>
+                      <strong>{targetConfidence}%</strong>
+                    </div>
+
+                    <div className="target-confidence-bar">
+                      <div style={{ width: `${targetConfidence}%` }} />
+                    </div>
+                  </div>
+
+                  <p>{mostWanted.threatNotes}</p>
+                </>
+              ) : (
+                <p>No escaped target currently locked.</p>
+              )}
             </article>
           </section>
         </div>

@@ -1,19 +1,41 @@
 .mission-card {
   position: relative;
   overflow: hidden;
+  --tilt-x: 0deg;
+  --tilt-y: 0deg;
+  --glare-x: 50%;
+  --glare-y: 0%;
   border: 1px solid rgba(214, 179, 90, 0.15);
   background:
     radial-gradient(circle at 50% 0, rgba(214, 179, 90, 0.09), transparent 36%),
     linear-gradient(135deg, rgba(255, 255, 255, 0.035), transparent 55%),
     var(--panel);
   box-shadow: 0 18px 54px rgba(0, 0, 0, 0.42);
-  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  transform: perspective(1200px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y));
+  transform-style: preserve-3d;
+  transition: transform 0.28s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  will-change: transform;
+}
+
+.mission-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(circle at var(--glare-x) var(--glare-y), rgba(214, 179, 90, 0.08), transparent 42%);
+  transition: opacity 0.2s ease;
 }
 
 .mission-card:hover {
-  transform: translateY(-5px);
+  transform: perspective(1200px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) translateY(-4px);
   border-color: rgba(214, 179, 90, 0.32);
   box-shadow: 0 22px 62px rgba(0, 0, 0, 0.54), 0 0 20px rgba(214, 179, 90, 0.055);
+}
+
+.mission-card:hover::before {
+  opacity: 1;
 }
 
 .mission-card-image {
@@ -22,6 +44,7 @@
   overflow: hidden;
   border-bottom: 1px solid rgba(214, 179, 90, 0.16);
   background: #030303;
+  transform: translateZ(6px);
 }
 
 .mission-card-image::after {
@@ -52,6 +75,7 @@
   gap: 16px;
   padding: 22px 24px 0;
   margin-bottom: 20px;
+  transform: translateZ(8px);
 }
 
 .mission-card h2 {
@@ -69,6 +93,7 @@
   margin-bottom: 24px;
   color: var(--muted-strong);
   line-height: 1.6;
+  transform: translateZ(4px);
 }
 
 .mission-priority {
@@ -108,6 +133,7 @@
   padding: 0 24px;
   margin-bottom: 18px;
   color: var(--muted);
+  transform: translateZ(4px);
 }
 
 .mission-status.active {
@@ -124,6 +150,7 @@
 
 .mission-progress {
   padding: 0 24px 24px;
+  transform: translateZ(6px);
 }
 
 .mission-progress-header {

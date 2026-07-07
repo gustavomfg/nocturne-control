@@ -1,4 +1,5 @@
 import type { Mission } from "../types/mission";
+import { useTiltCard } from "../hooks/useTiltCard";
 
 import "../styles/mission-card.css";
 
@@ -7,8 +8,10 @@ type MissionCardProps = {
 };
 
 export function MissionCard({ mission }: MissionCardProps) {
+  const tiltCard = useTiltCard();
+
   return (
-    <article className="mission-card">
+    <article className="mission-card" {...tiltCard}>
       <div className="mission-card-image">
         <img src={mission.image} alt={`${mission.title} tactical map`} />
       </div>
