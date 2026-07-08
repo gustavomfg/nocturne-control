@@ -1,37 +1,26 @@
-# Gotham Control Center
+# Nocturne Control Center
 
-A fan-made Batman-inspired tactical control interface built with React, TypeScript and Vite.
+Original fictional tactical control interface built with React, TypeScript and Vite.
 
-The project simulates a WayneTech/Batcomputer-style dashboard with Gotham surveillance, Arkham records, active missions, tactical equipment, a custom interactive city map and an interactive terminal.
+The project simulates a noir city operations console for Nocturne City, with Gravemere archive records, Aegis arsenal systems, active missions, a custom Leaflet city map and an interactive terminal.
 
-## Fan Project Disclaimer
+## Status
 
-This is a personal, non-commercial fan project made for study, practice and portfolio purposes.
+This project now uses original fictional names, locations and dossiers. Local raster images for characters, backgrounds, profile art and screenshots were removed; the interface relies on CSS-driven HUD visuals, animated cards and the custom SVG map overlay.
 
-Batman, Gotham, Arkham, WayneTech and related names, characters and visual references belong to their respective rights holders, including DC Comics and Warner Bros. This project is not official, not licensed, not endorsed and not affiliated with DC Comics, Warner Bros. or any related company.
-
-Images and references used here are for fan-made educational experimentation only. If you own any asset used in this project and want it removed, please open an issue or contact the repository owner.
-
-## Screenshots
-
-![Dashboard](images/Captura_de_tela_20260707_193513.png)
-![Arkham and Missions](images/Captura_de_tela_20260707_193530.png)
-![WayneTech and Terminal](images/Captura_de_tela_20260707_193544.png)
-![Gotham Map and Profile](images/Captura_de_tela_20260707_193554.png)
-![Logs and Villain Detail](images/Captura_de_tela_20260707_193600.png)
+Latest upgrade: the Dashboard, navigation and card systems now use reusable inline HUD icons, smoother hover motion, fixed priority target layout and a consistent diagonal highlight effect across panels.
 
 ## Features
 
-- Noir Gotham visual theme with rain, scanlines and cinematic background.
-- URL-based navigation for Dashboard, Arkham, Missions, WayneTech, Terminal, Map, Profile and Logs.
-- Tactical dashboard with radar, threat index, incident feed and priority operation.
-- Villain, mission and gadget cards using local images and typed data.
-- Interactive Bat Terminal with commands backed by real project data.
+- Noir tactical theme with rain, scanlines, glow, radar and smooth page transitions.
+- URL-based navigation for Dashboard, Gravemere, Missions, Aegis Arsenal, Terminal, Map, Profile and Logs.
+- Tactical dashboard with radar, threat index, incident feed, priority operation and priority target tracking.
+- Villain, mission and gadget cards using typed data, generated HUD sigils and fluid hover motion.
+- Interactive Sentinel Terminal with commands backed by real project data.
 - Local in-memory state with persistence via localStorage.
-- Leaflet-powered custom Gotham district map with local SVG cartography, tactical markers and district intel.
-- Batman profile file.
-- Smooth page transitions, animated HUD effects, interactive card tilt and responsive controls.
-- Responsive layout for desktop and mobile.
+- Leaflet-powered custom Nocturne district map with local SVG cartography, tactical markers and district intel.
+- Original operative profile file.
+- Interactive card tilt and responsive controls for desktop and mobile.
 
 ## Commands
 
@@ -43,6 +32,18 @@ npm run lint
 npm run preview
 ```
 
+## Deploy
+
+Build output is generated in `dist/` and is intentionally ignored by Git:
+
+```bash
+npm run build
+```
+
+Publish the generated `dist/` folder with any static host such as Vercel, Netlify, GitHub Pages or a simple static server. The app does not require server-side rendering or private API keys.
+
+For GitHub Pages, confirm that `base` in `vite.config.ts` matches the repository path before building.
+
 ## Terminal Commands
 
 Inside the app terminal, try:
@@ -53,12 +54,12 @@ status city
 list villains
 list missions
 list gadgets
-open joker
-open batmobile
-deploy grapple
-capture joker
-resolve joker
-scan arkham
+open vesper
+open night rover
+deploy linecaster
+capture vesper
+resolve vesper
+scan gravemere
 signal on
 reset state
 clear
@@ -71,32 +72,33 @@ clear
 - Vite
 - Leaflet
 - ESLint
-- CSS modules by feature/style file
+- CSS by feature/style file
 
 ## Project Structure
 
 ```text
 src/components  Shared UI components
-src/data        Static Gotham domain data
+src/data        Static Nocturne domain data
 src/pages       Main app screens
 src/styles      Theme and page/component CSS
 src/types       Domain TypeScript models
-public/cards    Local card images
-public/backgrounds Local background images
-public/maps     Custom Gotham map overlays
-public/profile  Local profile images
+public/maps     Custom Nocturne map overlay
 ```
+
+## Git Hygiene
+
+The repository ignores local env files, build output, dependency caches, provider state folders and private key/certificate formats. Keep `.env.example` as the only committed env file.
 
 ## Map System
 
-The Gotham map uses Leaflet with `CRS.Simple` and a local SVG overlay at:
+The Nocturne map uses Leaflet with `CRS.Simple` and a local SVG overlay at:
 
 ```text
-public/maps/gotham-custom-map.svg
+public/maps/nocturne-custom-map.svg
 ```
 
-No Google Maps API key or external map service is required. Large generated 3D model exports should stay out of git; see `.gitignore`.
+No Google Maps API key or external map service is required.
 
 ## License / Usage
 
-This repository is intended as a personal fan project. Do not use it commercially or present it as an official Batman/DC product.
+Nocturne Control Center is an original fictional portfolio/study project. Keep any third-party images, generated model exports and large screenshots out of git unless they are explicitly cleared for use.

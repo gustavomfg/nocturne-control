@@ -1,25 +1,25 @@
 import { useMemo, useState } from "react";
 
-import { LeafletGothamMap } from "../components/LeafletGothamMap";
-import type { GothamDistrictMap } from "../components/LeafletGothamMap";
-import { useGotham } from "../state/useGotham";
+import { LeafletNocturneMap } from "../components/LeafletNocturneMap";
+import type { NocturneDistrictMap } from "../components/LeafletNocturneMap";
+import { useNocturne } from "../state/useNocturne";
 import { asset } from "../utils/assets";
 
-import "../styles/gotham-map.css";
+import "../styles/nocturne-map.css";
 
-const districts: GothamDistrictMap[] = [
+const districts: NocturneDistrictMap[] = [
   {
-    id: "arkham",
-    name: "Arkham",
-    aliases: ["arkham", "chemical", "ace"],
+    id: "gravemere",
+    name: "Gravemere",
+    aliases: ["gravemere", "chemical", "morrow"],
     center: [292, 292],
     pin: [286, 246],
     bounds: [[86, 72], [480, 508]],
   },
   {
-    id: "old-gotham",
-    name: "Old Gotham",
-    aliases: ["old gotham"],
+    id: "old-nocturne",
+    name: "Old Meridian",
+    aliases: ["old meridian"],
     center: [690, 292],
     pin: [678, 352],
     bounds: [[84, 445], [498, 923]],
@@ -27,15 +27,15 @@ const districts: GothamDistrictMap[] = [
   {
     id: "financial",
     name: "Financial",
-    aliases: ["financial", "wayne tower", "wayne"],
+    aliases: ["financial", "aegis spire", "aegis"],
     center: [1068, 304],
     pin: [1080, 235],
     bounds: [[82, 822], [530, 1314]],
   },
   {
     id: "east-end",
-    name: "East End",
-    aliases: ["east end"],
+    name: "Cinder Row",
+    aliases: ["cinder row"],
     center: [366, 682],
     pin: [346, 638],
     bounds: [[490, 73], [850, 678]],
@@ -43,7 +43,7 @@ const districts: GothamDistrictMap[] = [
   {
     id: "harbor",
     name: "Harbor",
-    aliases: ["harbor", "dock", "docks", "coventry"],
+    aliases: ["harbor", "dock", "docks", "quay"],
     center: [950, 704],
     pin: [1008, 785],
     bounds: [[520, 596], [888, 1276]],
@@ -61,9 +61,9 @@ function getDistrictForValue(value: string) {
   return districts.find((district) => matchesDistrict(value, district.id)) ?? districts[0];
 }
 
-export function GothamMap() {
-  const { villains, missions } = useGotham();
-  const [activeDistrictId, setActiveDistrictId] = useState("arkham");
+export function NocturneMap() {
+  const { villains, missions } = useNocturne();
+  const [activeDistrictId, setActiveDistrictId] = useState("gravemere");
   const activeDistrict = districts.find((district) => district.id === activeDistrictId) ?? districts[0];
 
   const districtVillains = useMemo(
@@ -84,10 +84,10 @@ export function GothamMap() {
   );
 
   return (
-    <main className="gotham-map-page">
+    <main className="nocturne-map-page">
       <header className="map-header">
         <div>
-          <h1>Gotham Map</h1>
+          <h1>Nocturne Map</h1>
           <p>District-level surveillance for active cases and target sightings.</p>
         </div>
 
@@ -97,12 +97,12 @@ export function GothamMap() {
       <section className="map-layout">
         <div className="map-panel">
           <div className="map-toolbar">
-            <span>WAYNETECH CARTOGRAPHY / LEAFLET GRID</span>
-            <span>CUSTOM GOTHAM OVERLAY / SIGNAL MODE</span>
+            <span>AEGIS CARTOGRAPHY / LEAFLET GRID</span>
+            <span>CUSTOM NOCTURNE OVERLAY / SIGNAL MODE</span>
           </div>
 
-          <LeafletGothamMap
-            imageUrl={asset("/maps/gotham-custom-map.svg")}
+          <LeafletNocturneMap
+            imageUrl={asset("/maps/nocturne-custom-map.svg")}
             districts={districts}
             activeDistrictId={activeDistrict.id}
             activeMissionPins={activeMissionPins}
@@ -111,12 +111,12 @@ export function GothamMap() {
             onSelectDistrict={setActiveDistrictId}
           />
 
-          <div className="map-location-menu" aria-label="Gotham landmark signals">
+          <div className="map-location-menu" aria-label="Nocturne landmark signals">
             <span>Locations</span>
-            <button onClick={() => setActiveDistrictId("financial")}>Wayne Tower</button>
-            <button onClick={() => setActiveDistrictId("arkham")}>Arkham Asylum</button>
-            <button onClick={() => setActiveDistrictId("old-gotham")}>City Hall</button>
-            <button onClick={() => setActiveDistrictId("harbor")}>Gotham Stadium</button>
+            <button onClick={() => setActiveDistrictId("financial")}>Aegis Spire</button>
+            <button onClick={() => setActiveDistrictId("gravemere")}>Gravemere Archive</button>
+            <button onClick={() => setActiveDistrictId("old-nocturne")}>City Hall</button>
+            <button onClick={() => setActiveDistrictId("harbor")}>Nocturne Stadium</button>
           </div>
 
           <div className="map-legend">

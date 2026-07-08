@@ -4,25 +4,25 @@ import { BootScreen } from "./components/BootScreen";
 import { Sidebar } from "./components/Sidebar";
 
 import { Dashboard } from "./pages/Dashboard";
-import { Arkham } from "./pages/Arkham";
+import { Gravemere } from "./pages/Gravemere";
 import { Missions } from "./pages/Missions";
 import { Terminal } from "./pages/Terminal";
-import { WayneTech } from "./pages/WayneTech";
+import { AegisArsenal } from "./pages/AegisArsenal";
 import { Logs } from "./pages/Logs";
 import { VillainDetail } from "./pages/VillainDetail";
-import { GothamMap } from "./pages/GothamMap";
+import { NocturneMap } from "./pages/NocturneMap";
 import { Profile } from "./pages/Profile";
 import { NotFound } from "./pages/NotFound";
-import { GothamEffects } from "./components/GothamEffects";
+import { NocturneEffects } from "./components/NocturneEffects";
 import { slugify } from "./utils/slug";
 
 import type { Page } from "./types";
 
 const pageRoutes: Record<Page, string> = {
   dashboard: "/dashboard",
-  arkham: "/arkham",
+  gravemere: "/gravemere",
   missions: "/missions",
-  waynetech: "/waynetech",
+  aegis: "/aegis",
   terminal: "/terminal",
   logs: "/logs",
   map: "/map",
@@ -52,10 +52,10 @@ type AppRoute = {
 function getRouteFromPath(pathname: string): AppRoute {
   const relativePath = getRelativePath(pathname);
 
-  if (relativePath.startsWith("/arkham/") && relativePath.length > "/arkham/".length) {
+  if (relativePath.startsWith("/gravemere/") && relativePath.length > "/gravemere/".length) {
     return {
-      page: "arkham",
-      villainSlug: relativePath.replace("/arkham/", ""),
+      page: "gravemere",
+      villainSlug: relativePath.replace("/gravemere/", ""),
     };
   }
 
@@ -98,9 +98,9 @@ function App() {
   const [boot, setBoot] = useState(true);
   const [route, setRoute] = useState<AppRoute>(() => getRouteFromPath(window.location.pathname));
   const [effectsEnabled, setEffectsEnabled] = useState(() =>
-    loadStoredBoolean("gotham-effects-enabled", !window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+    loadStoredBoolean("nocturne-effects-enabled", !window.matchMedia("(prefers-reduced-motion: reduce)").matches)
   );
-  const [soundEnabled, setSoundEnabled] = useState(() => loadStoredBoolean("gotham-sound-enabled", true));
+  const [soundEnabled, setSoundEnabled] = useState(() => loadStoredBoolean("nocturne-sound-enabled", true));
   const activePage = route.page;
 
   useEffect(() => {
@@ -118,11 +118,11 @@ function App() {
   }, []);
 
   useEffect(() => {
-    storeBoolean("gotham-effects-enabled", effectsEnabled);
+    storeBoolean("nocturne-effects-enabled", effectsEnabled);
   }, [effectsEnabled]);
 
   useEffect(() => {
-    storeBoolean("gotham-sound-enabled", soundEnabled);
+    storeBoolean("nocturne-sound-enabled", soundEnabled);
   }, [soundEnabled]);
 
   function handleChangePage(page: Page) {
@@ -133,13 +133,13 @@ function App() {
   function handleOpenVillain(villainName: string) {
     const villainSlug = slugify(villainName);
 
-    setRoute({ page: "arkham", villainSlug });
-    window.history.pushState(null, "", toAppPath(`/arkham/${villainSlug}`));
+    setRoute({ page: "gravemere", villainSlug });
+    window.history.pushState(null, "", toAppPath(`/gravemere/${villainSlug}`));
   }
 
-  function handleBackToArkham() {
-    setRoute({ page: "arkham" });
-    window.history.pushState(null, "", toAppPath(pageRoutes.arkham));
+  function handleBackToGravemere() {
+    setRoute({ page: "gravemere" });
+    window.history.pushState(null, "", toAppPath(pageRoutes.gravemere));
   }
 
   useEffect(() => {
@@ -152,21 +152,21 @@ function App() {
 
   function renderPage() {
     if (route.villainSlug) {
-      return <VillainDetail slug={route.villainSlug} onBack={handleBackToArkham} />;
+      return <VillainDetail slug={route.villainSlug} onBack={handleBackToGravemere} />;
     }
 
     switch (activePage) {
       case "dashboard":
         return <Dashboard />;
 
-      case "arkham":
-        return <Arkham onOpenVillain={handleOpenVillain} />;
+      case "gravemere":
+        return <Gravemere onOpenVillain={handleOpenVillain} />;
 
       case "missions":
         return <Missions />;
 
-      case "waynetech":
-        return <WayneTech />;
+      case "aegis":
+        return <AegisArsenal />;
 
       case "terminal":
         return <Terminal soundEnabled={soundEnabled} />;
@@ -175,7 +175,7 @@ function App() {
         return <Logs />;
 
       case "map":
-        return <GothamMap />;
+        return <NocturneMap />;
 
       case "profile":
         return <Profile />;
@@ -194,7 +194,7 @@ function App() {
 
   return (
     <>
-      <GothamEffects enabled={effectsEnabled} />
+      <NocturneEffects enabled={effectsEnabled} />
 
       <div className="app-layout">
         <Sidebar

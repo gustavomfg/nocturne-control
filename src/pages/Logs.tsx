@@ -1,9 +1,9 @@
-import { useGotham } from "../state/useGotham";
+import { useNocturne } from "../state/useNocturne";
 
 import "../styles/logs.css";
 
 export function Logs() {
-  const { logs } = useGotham();
+  const { logs } = useNocturne();
 
   function exportLogs() {
     const blob = new Blob([JSON.stringify(logs, null, 2)], { type: "application/json" });
@@ -11,7 +11,7 @@ export function Logs() {
     const link = document.createElement("a");
 
     link.href = url;
-    link.download = "gotham-control-logs.json";
+    link.download = "nocturne-control-logs.json";
     link.click();
     URL.revokeObjectURL(url);
   }
@@ -21,7 +21,7 @@ export function Logs() {
       <header className="logs-header">
         <div>
           <h1>Event Timeline</h1>
-          <p>Operational history from the current Gotham Control session.</p>
+          <p>Operational history from the current Nocturne Control session.</p>
         </div>
 
         <div className="logs-actions">

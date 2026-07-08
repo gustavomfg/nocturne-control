@@ -1,4 +1,4 @@
-.waynetech {
+.aegis {
   flex: 1;
   min-height: 100vh;
   padding: 46px;
@@ -9,25 +9,25 @@
   color: var(--text);
 }
 
-.waynetech-header {
+.aegis-header {
   display: flex;
   justify-content: space-between;
   gap: 24px;
   margin-bottom: 32px;
 }
 
-.waynetech-header h1 {
+.aegis-header h1 {
   margin-bottom: 8px;
   color: var(--text);
   letter-spacing: 5px;
   text-transform: uppercase;
 }
 
-.waynetech-header p {
+.aegis-header p {
   color: var(--muted);
 }
 
-.waynetech-header strong {
+.aegis-header strong {
   height: fit-content;
   padding: 10px 14px;
 
@@ -44,15 +44,15 @@
 }
 
 @media (max-width: 640px) {
-  .waynetech {
+  .aegis {
     padding: 28px 18px;
   }
 
-  .waynetech-header {
+  .aegis-header {
     display: block;
   }
 
-  .waynetech-header strong {
+  .aegis-header strong {
     display: inline-block;
     margin-top: 18px;
   }

@@ -1,4 +1,4 @@
-.arkham {
+.gravemere {
   flex: 1;
   min-height: 100vh;
   padding: 46px;
@@ -9,25 +9,25 @@
   color: var(--text);
 }
 
-.arkham-header {
+.gravemere-header {
   display: flex;
   justify-content: space-between;
   gap: 24px;
   margin-bottom: 32px;
 }
 
-.arkham-header h1 {
+.gravemere-header h1 {
   margin-bottom: 8px;
   color: var(--text);
   letter-spacing: 5px;
   text-transform: uppercase;
 }
 
-.arkham-header p {
+.gravemere-header p {
   color: var(--muted);
 }
 
-.arkham-header strong {
+.gravemere-header strong {
   height: fit-content;
 
   padding: 10px 14px;
@@ -45,15 +45,15 @@
 }
 
 @media (max-width: 640px) {
-  .arkham {
+  .gravemere {
     padding: 28px 18px;
   }
 
-  .arkham-header {
+  .gravemere-header {
     display: block;
   }
 
-  .arkham-header strong {
+  .gravemere-header strong {
     display: inline-block;
     margin-top: 18px;
   }

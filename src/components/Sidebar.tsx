@@ -1,5 +1,6 @@
 import type { Page } from "../types";
-import { useGotham } from "../state/useGotham";
+import { InterfaceIcon } from "./InterfaceIcon";
+import { useNocturne } from "../state/useNocturne";
 import { playTone } from "../utils/audio";
 import "../styles/sidebar.css";
 
@@ -12,6 +13,17 @@ type SidebarProps = {
   onToggleSound: () => void;
 };
 
+const navItems: Array<{ page: Page; label: string; icon: Parameters<typeof InterfaceIcon>[0]["name"] }> = [
+  { page: "dashboard", label: "Dashboard", icon: "dashboard" },
+  { page: "gravemere", label: "Gravemere", icon: "target" },
+  { page: "missions", label: "Missions", icon: "mission" },
+  { page: "aegis", label: "Aegis Lab", icon: "shield" },
+  { page: "terminal", label: "Terminal", icon: "terminal" },
+  { page: "map", label: "Map", icon: "map" },
+  { page: "profile", label: "Profile", icon: "profile" },
+  { page: "logs", label: "Logs", icon: "archive" },
+];
+
 export function Sidebar({
   activePage,
   onChangePage,
@@ -20,7 +32,7 @@ export function Sidebar({
   soundEnabled,
   onToggleSound,
 }: SidebarProps) {
-  const { resetState } = useGotham();
+  const { resetState } = useNocturne();
 
   function changePage(page: Page) {
     playTone("click", soundEnabled);
@@ -29,80 +41,30 @@ export function Sidebar({
 
   return (
     <aside className="sidebar">
-      <h2>GOTHAM CONTROL</h2>
+      <h2>NOCTURNE CONTROL</h2>
 
       <nav>
-        <button
-          className={activePage === "dashboard" ? "active" : ""}
-          onClick={() => changePage("dashboard")}
-          aria-current={activePage === "dashboard" ? "page" : undefined}
-        >
-          Dashboard
-        </button>
-
-        <button
-          className={activePage === "arkham" ? "active" : ""}
-          onClick={() => changePage("arkham")}
-          aria-current={activePage === "arkham" ? "page" : undefined}
-        >
-          Arkham
-        </button>
-
-        <button
-          className={activePage === "missions" ? "active" : ""}
-          onClick={() => changePage("missions")}
-          aria-current={activePage === "missions" ? "page" : undefined}
-        >
-          Missions
-        </button>
-
-        <button
-          className={activePage === "waynetech" ? "active" : ""}
-          onClick={() => changePage("waynetech")}
-          aria-current={activePage === "waynetech" ? "page" : undefined}
-        >
-          WayneTech
-        </button>
-
-        <button
-          className={activePage === "terminal" ? "active" : ""}
-          onClick={() => changePage("terminal")}
-          aria-current={activePage === "terminal" ? "page" : undefined}
-        >
-          Terminal
-        </button>
-
-        <button
-          className={activePage === "map" ? "active" : ""}
-          onClick={() => changePage("map")}
-          aria-current={activePage === "map" ? "page" : undefined}
-        >
-          Map
-        </button>
-
-        <button
-          className={activePage === "profile" ? "active" : ""}
-          onClick={() => changePage("profile")}
-          aria-current={activePage === "profile" ? "page" : undefined}
-        >
-          Profile
-        </button>
-
-        <button
-          className={activePage === "logs" ? "active" : ""}
-          onClick={() => changePage("logs")}
-          aria-current={activePage === "logs" ? "page" : undefined}
-        >
-          Logs
-        </button>
+        {navItems.map((item) => (
+          <button
+            key={item.page}
+            className={activePage === item.page ? "active" : ""}
+            onClick={() => changePage(item.page)}
+            aria-current={activePage === item.page ? "page" : undefined}
+          >
+            <InterfaceIcon name={item.icon} />
+            <span>{item.label}</span>
+          </button>
+        ))}
       </nav>
 
       <button className="effects-toggle" onClick={onToggleEffects} aria-pressed={effectsEnabled}>
-        Effects {effectsEnabled ? "On" : "Off"}
+        <InterfaceIcon name="activity" />
+        <span>Effects {effectsEnabled ? "On" : "Off"}</span>
       </button>
 
       <button className="effects-toggle" onClick={onToggleSound} aria-pressed={soundEnabled}>
-        Sound {soundEnabled ? "On" : "Off"}
+        <InterfaceIcon name="sound" />
+        <span>Sound {soundEnabled ? "On" : "Off"}</span>
       </button>
 
       <button
@@ -112,10 +74,11 @@ export function Sidebar({
           playTone("alert", soundEnabled);
         }}
       >
-        Reset State
+        <InterfaceIcon name="reset" />
+        <span>Reset State</span>
       </button>
 
-      <p className="fan-disclaimer">Fan-made project. Not official or affiliated with DC/Warner.</p>
+      <p className="fan-disclaimer">Original fictional tactical interface for portfolio and study.</p>
 
       <small>SYSTEM ONLINE</small>
     </aside>

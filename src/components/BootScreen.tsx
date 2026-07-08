@@ -3,12 +3,12 @@ import { useEffect, useState } from "react";
 import "../styles/boot.css";
 
 const bootMessages = [
-  "Initializing Gotham Control Center...",
-  "Checking WayneTech Modules...",
-  "Loading Arkham Database...",
-  "Activating Bat Signal...",
+  "Initializing Nocturne Control Center...",
+  "Checking Aegis Modules...",
+  "Loading Gravemere Archive...",
+  "Activating Night Signal...",
   "Access Granted.",
-  "Welcome, Bruce Wayne.",
+  "Welcome, Orion Vale.",
 ];
 
 export function BootScreen() {
@@ -29,7 +29,7 @@ export function BootScreen() {
   return (
     <main className="boot">
       <div className="boot-card">
-        <h1>GOTHAM SYSTEM</h1>
+        <h1>NOCTURNE SYSTEM</h1>
 
         <div className="boot-terminal">
           {bootMessages.slice(0, currentMessage + 1).map((message) => (
@@ -41,7 +41,7 @@ export function BootScreen() {
           <span className="boot-cursor">_</span>
         </div>
 
-        <small>WayneTech Security Protocol v1.0</small>
+        <small>Aegis Security Protocol v1.0</small>
       </div>
     </main>
   );

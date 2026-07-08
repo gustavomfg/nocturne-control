@@ -1,6 +1,6 @@
 import type { Villain } from "../types/villain";
 import { useTiltCard } from "../hooks/useTiltCard";
-import { asset } from "../utils/assets";
+import { InterfaceIcon } from "./InterfaceIcon";
 
 import "../styles/villain-card.css";
 
@@ -11,6 +11,11 @@ type VillainCardProps = {
 
 export function VillainCard({ villain, onOpen }: VillainCardProps) {
   const tiltCard = useTiltCard();
+  const initials = villain.name
+    .split(" ")
+    .map((part) => part[0])
+    .join("")
+    .slice(0, 2);
 
   return (
     <article
@@ -27,7 +32,8 @@ export function VillainCard({ villain, onOpen }: VillainCardProps) {
       tabIndex={onOpen ? 0 : undefined}
     >
       <div className="villain-card-image">
-        <img src={asset(villain.image)} alt={`${villain.name} surveillance profile`} />
+        <InterfaceIcon name="target" />
+        <span>{initials}</span>
       </div>
 
       <div className="villain-card-header">

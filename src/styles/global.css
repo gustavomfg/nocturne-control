@@ -13,8 +13,9 @@
   --success: #668a5b;
   --tech: #5f7f92;
   --shadow-heavy: 0 28px 90px rgba(0, 0, 0, 0.62);
-  --ease-fluid: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-fluid: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-snap: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 * {
@@ -31,8 +32,9 @@ body {
   min-width: 320px;
   min-height: 100vh;
   background:
+    radial-gradient(circle at 72% 12%, rgba(214, 179, 90, 0.13), transparent 24rem),
+    radial-gradient(circle at 18% 72%, rgba(95, 127, 146, 0.1), transparent 32rem),
     linear-gradient(180deg, rgba(2, 2, 3, 0.34), rgba(2, 2, 3, 0.82) 78%),
-    url("/backgrounds/gotham-skyline.jpg") center top / cover fixed,
     #020203;
   color: var(--text);
   font-family: "Courier New", monospace;
@@ -73,6 +75,16 @@ input {
   color: inherit;
 }
 
+.interface-icon {
+  width: 1.1rem;
+  height: 1.1rem;
+  flex: 0 0 auto;
+  transition:
+    transform 0.32s var(--ease-soft),
+    filter 0.32s var(--ease-fluid),
+    opacity 0.24s var(--ease-fluid);
+}
+
 ::selection {
   color: #090806;
   background: var(--signal);
@@ -93,7 +105,7 @@ input {
 .page-transition {
   flex: 1;
   min-width: 0;
-  animation: pageEnter 0.42s var(--ease-snap) both;
+  animation: pageEnter 0.52s var(--ease-snap) both;
   transform-origin: 50% 24px;
   will-change: opacity, transform, filter;
 }
@@ -116,14 +128,14 @@ input {
 @keyframes pageEnter {
   from {
     opacity: 0;
-    transform: translate3d(0, 14px, 0) scale(0.992);
-    filter: blur(7px);
+    transform: translate3d(0, 18px, 0) scale(0.986);
+    filter: blur(9px) saturate(0.82);
   }
 
   to {
     opacity: 1;
     transform: translate3d(0, 0, 0) scale(1);
-    filter: blur(0);
+    filter: blur(0) saturate(1);
   }
 }
 

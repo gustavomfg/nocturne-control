@@ -1,4 +1,4 @@
-import "../styles/gotham-effects.css";
+import "../styles/nocturne-effects.css";
 
 const rainDrops = Array.from({ length: 80 }, () => ({
   left: `${Math.random() * 100}%`,
@@ -11,11 +11,11 @@ const rainDrops = Array.from({ length: 80 }, () => ({
   "--drift": `${-28 - Math.random() * 52}px`,
 }));
 
-type GothamEffectsProps = {
+type NocturneEffectsProps = {
   enabled: boolean;
 };
 
-export function GothamEffects({ enabled }: GothamEffectsProps) {
+export function NocturneEffects({ enabled }: NocturneEffectsProps) {
   if (!enabled) {
     return null;
   }

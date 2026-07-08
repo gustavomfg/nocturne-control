@@ -5,12 +5,12 @@ import { gadgets as initialGadgets } from "../data/gadgets";
 import { missions as initialMissions } from "../data/missions";
 import { villains as initialVillains } from "../data/villains";
 import type { EventLog } from "../types";
-import { GothamContext } from "./gothamContext";
-import type { GothamAction, GothamState } from "./gothamContext";
+import { NocturneContext } from "./nocturneContext";
+import type { NocturneAction, NocturneState } from "./nocturneContext";
 
-const STORAGE_KEY = "gotham-control-state";
+const STORAGE_KEY = "nocturne-control-state";
 
-const initialState: GothamState = {
+const initialState: NocturneState = {
   villains: initialVillains,
   missions: initialMissions,
   gadgets: initialGadgets,
@@ -19,7 +19,7 @@ const initialState: GothamState = {
       id: 1,
       timestamp: "SYSTEM BOOT",
       type: "SYSTEM",
-      message: "Gotham Control Center initialized.",
+      message: "Nocturne Control Center initialized.",
     },
   ],
 };
@@ -33,12 +33,12 @@ function createLog(type: EventLog["type"], message: string, timestamp: string): 
   };
 }
 
-function isGothamState(value: unknown): value is GothamState {
+function isNocturneState(value: unknown): value is NocturneState {
   if (!value || typeof value !== "object") {
     return false;
   }
 
-  const state = value as Partial<GothamState>;
+  const state = value as Partial<NocturneState>;
 
   return (
     Array.isArray(state.villains) &&
@@ -51,7 +51,7 @@ function isGothamState(value: unknown): value is GothamState {
   );
 }
 
-function loadState(): GothamState {
+function loadState(): NocturneState {
   let savedState: string | null;
 
   try {
@@ -67,13 +67,13 @@ function loadState(): GothamState {
   try {
     const parsedState: unknown = JSON.parse(savedState);
 
-    return isGothamState(parsedState) ? parsedState : initialState;
+    return isNocturneState(parsedState) ? parsedState : initialState;
   } catch {
     return initialState;
   }
 }
 
-function gothamReducer(state: GothamState, action: GothamAction): GothamState {
+function nocturneReducer(state: NocturneState, action: NocturneAction): NocturneState {
   switch (action.type) {
     case "CAPTURE_VILLAIN": {
       const villain = state.villains.find((item) => item.id === action.villainId);
@@ -161,8 +161,8 @@ function getTimestamp() {
   });
 }
 
-export function GothamProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(gothamReducer, undefined, loadState);
+export function NocturneProvider({ children }: { children: ReactNode }) {
+  const [state, dispatch] = useReducer(nocturneReducer, undefined, loadState);
 
   useEffect(() => {
     try {
@@ -173,7 +173,7 @@ export function GothamProvider({ children }: { children: ReactNode }) {
   }, [state]);
 
   return (
-    <GothamContext.Provider
+    <NocturneContext.Provider
       value={{
         ...state,
         captureVillain: (villainId) => dispatch({ type: "CAPTURE_VILLAIN", villainId, timestamp: getTimestamp() }),
@@ -183,6 +183,6 @@ export function GothamProvider({ children }: { children: ReactNode }) {
       }}
     >
       {children}
-    </GothamContext.Provider>
+    </NocturneContext.Provider>
   );
 }

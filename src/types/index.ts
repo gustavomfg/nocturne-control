@@ -1,4 +1,4 @@
-export type Page = "dashboard" | "arkham" | "missions" | "waynetech" | "terminal" | "logs" | "map" | "profile";
+export type Page = "dashboard" | "gravemere" | "missions" | "aegis" | "terminal" | "logs" | "map" | "profile";
 
 export type EventLog = {
   id: number;

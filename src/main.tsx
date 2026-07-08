@@ -2,13 +2,13 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
 import App from "./App";
-import { GothamProvider } from "./state/GothamContext";
+import { NocturneProvider } from "./state/NocturneContext";
 import "./styles/global.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <GothamProvider>
+    <NocturneProvider>
       <App />
-    </GothamProvider>
+    </NocturneProvider>
   </StrictMode>
 );

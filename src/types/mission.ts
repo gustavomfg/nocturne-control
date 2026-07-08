@@ -6,7 +6,6 @@ export type Mission = {
   id: number;
   title: string;
   district: string;
-  image: string;
   priority: MissionPriority;
   status: MissionStatus;
   progress: number;

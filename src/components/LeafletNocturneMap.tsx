@@ -5,7 +5,7 @@ import "leaflet/dist/leaflet.css";
 import type { Mission } from "../types/mission";
 import type { Villain } from "../types/villain";
 
-export type GothamDistrictMap = {
+export type NocturneDistrictMap = {
   id: string;
   name: string;
   aliases: string[];
@@ -14,13 +14,13 @@ export type GothamDistrictMap = {
   bounds: [[number, number], [number, number]];
 };
 
-type LeafletGothamMapProps = {
+type LeafletNocturneMapProps = {
   imageUrl: string;
-  districts: GothamDistrictMap[];
+  districts: NocturneDistrictMap[];
   activeDistrictId: string;
   activeMissionPins: Mission[];
   escapedVillainPins: Villain[];
-  getDistrictForValue: (value: string) => GothamDistrictMap;
+  getDistrictForValue: (value: string) => NocturneDistrictMap;
   onSelectDistrict: (districtId: string) => void;
 };
 
@@ -32,14 +32,14 @@ function toLeafletPoint(point: [number, number]): L.LatLngExpression {
 
 function createMarkerIcon(type: "district" | "mission" | "villain", label: string, active = false) {
   return L.divIcon({
-    className: `gotham-leaflet-marker ${type} ${active ? "active" : ""}`,
+    className: `nocturne-leaflet-marker ${type} ${active ? "active" : ""}`,
     html: `<span></span><strong>${label}</strong>`,
     iconSize: [120, 34],
     iconAnchor: [14, 17],
   });
 }
 
-export function LeafletGothamMap({
+export function LeafletNocturneMap({
   imageUrl,
   districts,
   activeDistrictId,
@@ -47,7 +47,7 @@ export function LeafletGothamMap({
   escapedVillainPins,
   getDistrictForValue,
   onSelectDistrict,
-}: LeafletGothamMapProps) {
+}: LeafletNocturneMapProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<L.Map | null>(null);
   const overlayRef = useRef<L.ImageOverlay | null>(null);
@@ -121,7 +121,7 @@ export function LeafletGothamMap({
         fillColor: active ? "#d6b35a" : "#5f7f92",
         fillOpacity: active ? 0.1 : 0.035,
         interactive: true,
-        className: "gotham-district-hitbox",
+        className: "nocturne-district-hitbox",
       });
       const marker = L.marker(toLeafletPoint(district.center), {
         icon: createMarkerIcon("district", district.name, active),
@@ -151,7 +151,7 @@ export function LeafletGothamMap({
 
       marker.bindTooltip(`${mission.title} / ${mission.riskLevel}% risk`, {
         direction: "top",
-        className: "gotham-map-tooltip",
+        className: "nocturne-map-tooltip",
       });
       signalLayer.addLayer(marker);
     });
@@ -164,7 +164,7 @@ export function LeafletGothamMap({
 
       marker.bindTooltip(`${villain.name} / ${villain.dangerLevel}`, {
         direction: "top",
-        className: "gotham-map-tooltip",
+        className: "nocturne-map-tooltip",
       });
       signalLayer.addLayer(marker);
     });
@@ -184,5 +184,5 @@ export function LeafletGothamMap({
     });
   }, [activeDistrictId, districts]);
 
-  return <div className="gotham-leaflet-map" ref={containerRef} aria-label="Custom Gotham Leaflet map" />;
+  return <div className="nocturne-leaflet-map" ref={containerRef} aria-label="Custom Nocturne Leaflet map" />;
 }

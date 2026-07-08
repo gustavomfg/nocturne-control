@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-import { useGotham } from "../state/useGotham";
+import { useNocturne } from "../state/useNocturne";
 import type { TerminalLine } from "../types/terminal";
 import { playTone } from "../utils/audio";
 
@@ -31,17 +31,17 @@ export function Terminal({ soundEnabled }: TerminalProps) {
     deployGadget,
     resolveMission,
     resetState,
-  } = useGotham();
+  } = useNocturne();
 
   const [history, setHistory] = useState<TerminalLine[]>([
     {
       id: 1,
-      text: "WayneTech Batcomputer v1.7 initialized.",
+      text: "Aegis Sentinel Console v1.7 initialized.",
       type: "response",
     },
     {
       id: 2,
-      text: "Type 'help' to inspect Gotham Control commands.",
+      text: "Type 'help' to inspect Nocturne Control commands.",
       type: "response",
     },
   ]);
@@ -76,14 +76,14 @@ export function Terminal({ soundEnabled }: TerminalProps) {
     const normalizedCommand = normalize(input);
 
     if (normalizedCommand === "help") {
-      return "Commands: status city | villains | missions | gadgets | open <name> | capture/cap <villain> | deploy/dep <gadget> | resolve/res <mission> | scan arkham | signal on | reset state | clear";
+      return "Commands: status city | villains | missions | gadgets | open <name> | capture/cap <villain> | deploy/dep <gadget> | resolve/res <mission> | scan gravemere | signal on | reset state | clear";
     }
 
     if (normalizedCommand === "status city" || normalizedCommand === "status") {
       const escapedVillains = villains.filter((villain) => villain.status === "ESCAPED").length;
       const activeMissions = missions.filter((mission) => mission.status === "ACTIVE").length;
 
-      return `City status: DANGER. ${escapedVillains} escaped targets, ${activeMissions} active missions, ${gadgets.length} WayneTech assets indexed.`;
+      return `City status: DANGER. ${escapedVillains} escaped targets, ${activeMissions} active missions, ${gadgets.length} Aegis assets indexed.`;
     }
 
     if (normalizedCommand === "list villains" || normalizedCommand === "villains") {
@@ -98,14 +98,14 @@ export function Terminal({ soundEnabled }: TerminalProps) {
       return gadgets.map((gadget) => `${gadget.name}: ${gadget.status} / power ${gadget.powerLevel}%`).join(" | ");
     }
 
-    if (normalizedCommand === "scan arkham") {
-      const arkhamTargets = villains.filter((villain) => villain.lastLocation.toLowerCase().includes("arkham"));
+    if (normalizedCommand === "scan gravemere") {
+      const gravemereTargets = villains.filter((villain) => villain.lastLocation.toLowerCase().includes("gravemere"));
 
-      return `Arkham scan complete: ${arkhamTargets.length} target signal(s). ${arkhamTargets.map((target) => target.name).join(", ") || "No direct lock."}`;
+      return `Gravemere scan complete: ${gravemereTargets.length} target signal(s). ${gravemereTargets.map((target) => target.name).join(", ") || "No direct lock."}`;
     }
 
     if (normalizedCommand === "signal on") {
-      return "Bat-Signal protocol online. Rooftop relay visibility degraded by rain, but beam lock is stable.";
+      return "Night Signal protocol online. Rooftop relay visibility degraded by rain, but beam lock is stable.";
     }
 
     if (normalizedCommand.startsWith("open ")) {
@@ -134,7 +134,7 @@ export function Terminal({ soundEnabled }: TerminalProps) {
       const gadget = findByName(gadgets, query);
 
       if (!gadget) {
-        return "Deployment failed. WayneTech asset not found.";
+        return "Deployment failed. Aegis asset not found.";
       }
 
       if (gadget.status === "MAINTENANCE") {
@@ -151,7 +151,7 @@ export function Terminal({ soundEnabled }: TerminalProps) {
       const villain = findByName(villains, query);
 
       if (!villain) {
-        return "Capture failed. Arkham target file not found.";
+        return "Capture failed. Gravemere target file not found.";
       }
 
       if (villain.status === "CAPTURED") {
@@ -160,7 +160,7 @@ export function Terminal({ soundEnabled }: TerminalProps) {
 
       captureVillain(villain.id);
 
-      return `${villain.name} capture confirmed. Arkham containment status updated.`;
+      return `${villain.name} capture confirmed. Gravemere containment status updated.`;
     }
 
     if (normalizedCommand.startsWith("resolve ") || normalizedCommand.startsWith("res ")) {
@@ -183,7 +183,7 @@ export function Terminal({ soundEnabled }: TerminalProps) {
     if (normalizedCommand === "reset state") {
       resetState();
 
-      return "Local Gotham state reset to baseline files.";
+      return "Local Nocturne state reset to baseline files.";
     }
 
     return "Unknown command. Type 'help'.";
@@ -227,7 +227,7 @@ export function Terminal({ soundEnabled }: TerminalProps) {
 
   return (
     <main className="terminal-page">
-      <h1>Bat Terminal</h1>
+      <h1>Sentinel Terminal</h1>
 
       <section className="terminal-window">
         {history.map((line) => (

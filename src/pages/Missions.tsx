@@ -1,17 +1,17 @@
 import { MissionCard } from "../components/MissionCard";
-import { useGotham } from "../state/useGotham";
+import { useNocturne } from "../state/useNocturne";
 
 import "../styles/missions.css";
 
 export function Missions() {
-  const { missions } = useGotham();
+  const { missions } = useNocturne();
 
   return (
     <main className="missions">
       <header className="missions-header">
         <div>
           <h1>Mission Control</h1>
-          <p>Active Gotham operations and tactical objectives.</p>
+          <p>Active Nocturne operations and tactical objectives.</p>
         </div>
 
         <strong>OPERATIONS: {missions.length}</strong>

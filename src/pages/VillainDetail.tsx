@@ -1,5 +1,4 @@
-import { useGotham } from "../state/useGotham";
-import { asset } from "../utils/assets";
+import { useNocturne } from "../state/useNocturne";
 import { slugify } from "../utils/slug";
 
 import "../styles/villain-detail.css";
@@ -10,15 +9,15 @@ type VillainDetailProps = {
 };
 
 export function VillainDetail({ slug, onBack }: VillainDetailProps) {
-  const { villains, logs, captureVillain } = useGotham();
+  const { villains, logs, captureVillain } = useNocturne();
   const villain = villains.find((item) => slugify(item.name) === slug);
 
   if (!villain) {
     return (
       <main className="villain-detail">
-        <button className="back-button" onClick={onBack}>Back to Arkham</button>
+        <button className="back-button" onClick={onBack}>Back to Gravemere</button>
         <h1>File Not Found</h1>
-        <p>Arkham database could not locate this dossier.</p>
+        <p>Gravemere archive could not locate this dossier.</p>
       </main>
     );
   }
@@ -27,13 +26,15 @@ export function VillainDetail({ slug, onBack }: VillainDetailProps) {
 
   return (
     <main className="villain-detail">
-      <button className="back-button" onClick={onBack}>Back to Arkham</button>
+      <button className="back-button" onClick={onBack}>Back to Gravemere</button>
 
       <section className="villain-dossier">
-        <img src={asset(villain.image)} alt={`${villain.name} dossier portrait`} />
+        <div className="dossier-sigil" aria-hidden="true">
+          {villain.name.slice(0, 2).toUpperCase()}
+        </div>
 
         <div>
-          <span className="dossier-label">ARKHAM DOSSIER</span>
+          <span className="dossier-label">GRAVEMERE DOSSIER</span>
           <h1>{villain.name}</h1>
           <strong>{villain.status} / {villain.dangerLevel}</strong>
           <p>{villain.description}</p>

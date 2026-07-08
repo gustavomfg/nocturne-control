@@ -27,8 +27,8 @@
   <path d="M88 724 C202 665 295 701 406 657 C528 608 604 535 735 570 C872 607 988 545 1126 476 C1238 420 1326 426 1400 470" fill="none" stroke="#8ba4b4" stroke-opacity=".35" stroke-width="5" stroke-dasharray="18 18"/>
 
   <g id="districts" filter="url(#glow)">
-    <path id="arkham" d="M115 145 L360 86 L508 205 L465 440 L227 480 L72 313 Z" fill="#211d18" stroke="#d6b35a" stroke-opacity=".52" stroke-width="3"/>
-    <path id="old-gotham" d="M492 132 L760 84 L923 238 L835 498 L570 462 L445 274 Z" fill="#191d1f" stroke="#d6b35a" stroke-opacity=".48" stroke-width="3"/>
+    <path id="gravemere" d="M115 145 L360 86 L508 205 L465 440 L227 480 L72 313 Z" fill="#211d18" stroke="#d6b35a" stroke-opacity=".52" stroke-width="3"/>
+    <path id="old-meridian" d="M492 132 L760 84 L923 238 L835 498 L570 462 L445 274 Z" fill="#191d1f" stroke="#d6b35a" stroke-opacity=".48" stroke-width="3"/>
     <path id="financial" d="M890 136 L1185 82 L1314 282 L1200 530 L908 464 L822 254 Z" fill="#1a2229" stroke="#d6b35a" stroke-opacity=".48" stroke-width="3"/>
     <path id="east-end" d="M226 523 L538 490 L678 687 L535 850 L190 796 L73 623 Z" fill="#17211c" stroke="#d6b35a" stroke-opacity=".42" stroke-width="3"/>
     <path id="harbor" d="M690 548 L1006 520 L1276 648 L1215 872 L802 888 L596 735 Z" fill="#152630" stroke="#8ba4b4" stroke-opacity=".46" stroke-width="3"/>
@@ -67,8 +67,8 @@
   </g>
 
   <g id="labels" font-family="Courier New, monospace" font-weight="700" fill="#e6e0d3" text-anchor="middle" letter-spacing="2">
-    <text x="292" y="292" font-size="29">ARKHAM</text>
-    <text x="690" y="292" font-size="29">OLD GOTHAM</text>
+    <text x="292" y="292" font-size="29">GRAVEMERE</text>
+    <text x="690" y="292" font-size="29">OLD MERIDIAN</text>
     <text x="1068" y="304" font-size="29">FINANCIAL</text>
     <text x="366" y="682" font-size="29">EAST END</text>
     <text x="950" y="704" font-size="29">HARBOR</text>
@@ -76,15 +76,15 @@
 
   <g id="landmarks" font-family="Courier New, monospace" fill="#d6b35a" letter-spacing="1.6">
     <circle cx="1080" cy="235" r="9" fill="#d6b35a"/>
-    <text x="1098" y="241" font-size="19">WAYNE TOWER</text>
+    <text x="1098" y="241" font-size="19">AEGIS SPIRE</text>
     <circle cx="286" cy="246" r="9" fill="#c46a60"/>
-    <text x="304" y="252" font-size="19">ARKHAM ASYLUM</text>
+    <text x="304" y="252" font-size="19">GRAVEMERE ARCHIVE</text>
     <circle cx="678" cy="352" r="8" fill="#8ba4b4"/>
     <text x="696" y="358" font-size="18">CITY HALL</text>
     <circle cx="1008" cy="785" r="8" fill="#8ea97e"/>
-    <text x="1026" y="791" font-size="18">GOTHAM STADIUM</text>
+    <text x="1026" y="791" font-size="18">NOCTURNE STADIUM</text>
   </g>
 
   <rect x="32" y="30" width="330" height="62" fill="#030405" fill-opacity=".62" stroke="#d6b35a" stroke-opacity=".32"/>
-  <text x="54" y="67" font-family="Courier New, monospace" font-size="22" font-weight="700" fill="#d6b35a" letter-spacing="3">GOTHAM CITY GRID</text>
+  <text x="54" y="67" font-family="Courier New, monospace" font-size="22" font-weight="700" fill="#d6b35a" letter-spacing="3">NOCTURNE CITY GRID</text>
 </svg>

@@ -1,16 +1,16 @@
 import { GadgetCard } from "../components/GadgetCard";
-import { useGotham } from "../state/useGotham";
+import { useNocturne } from "../state/useNocturne";
 
-import "../styles/waynetech.css";
+import "../styles/aegis-arsenal.css";
 
-export function WayneTech() {
-  const { gadgets } = useGotham();
+export function AegisArsenal() {
+  const { gadgets } = useNocturne();
 
   return (
-    <main className="waynetech">
-      <header className="waynetech-header">
+    <main className="aegis">
+      <header className="aegis-header">
         <div>
-          <h1>WayneTech Arsenal</h1>
+          <h1>Aegis Arsenal</h1>
           <p>Equipment, vehicles and tactical systems.</p>
         </div>
 

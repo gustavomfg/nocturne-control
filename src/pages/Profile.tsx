@@ -1,10 +1,9 @@
-import { useGotham } from "../state/useGotham";
-import { asset } from "../utils/assets";
+import { useNocturne } from "../state/useNocturne";
 
 import "../styles/profile.css";
 
 export function Profile() {
-  const { missions, gadgets } = useGotham();
+  const { missions, gadgets } = useNocturne();
   const activeCases = missions.filter((mission) => mission.status === "ACTIVE").length;
   const deployedAssets = gadgets.filter((gadget) => gadget.status === "DEPLOYED").length;
 
@@ -12,19 +11,19 @@ export function Profile() {
     <main className="profile-page">
       <header className="profile-header">
         <div>
-          <span>WAYNE IDENTITY FILE</span>
-          <h1>Bruce Wayne / Batman</h1>
+          <span>FIELD OPERATIVE FILE</span>
+          <h1>Orion Vale / Night Sentinel</h1>
           <p>Field readiness, active case load and current tactical equipment state.</p>
         </div>
       </header>
 
       <section className="profile-hero">
-        <img src={asset("/profile/batman-profile.jpg")} alt="Batman holding his cowl in silhouette" />
+        <div className="profile-sigil" aria-hidden="true">NV</div>
 
         <div>
           <span>ACTIVE OPERATIVE</span>
-          <h2>The Dark Knight</h2>
-          <p>Primary field asset for Gotham Control. Identity file restricted to WayneTech black-level clearance.</p>
+          <h2>The Night Sentinel</h2>
+          <p>Primary field asset for Nocturne Control. Identity file restricted to Aegis black-level clearance.</p>
         </div>
       </section>
 
@@ -38,18 +37,18 @@ export function Profile() {
         <article className="profile-card">
           <h2>Active Case Files</h2>
           <strong>{activeCases}</strong>
-          <p>Mission load synced with Gotham Control operations.</p>
+          <p>Mission load synced with Nocturne Control operations.</p>
         </article>
 
         <article className="profile-card">
           <h2>Equipment Sync</h2>
           <strong>{deployedAssets}</strong>
-          <p>WayneTech assets currently deployed or telemetry-linked.</p>
+          <p>Aegis assets currently deployed or telemetry-linked.</p>
         </article>
 
         <article className="profile-card profile-wide">
           <h2>Current Protocol</h2>
-          <p>Maintain Arkham containment priority. Avoid public exposure unless Bat-Signal relay confirms civilian risk escalation.</p>
+          <p>Maintain Gravemere containment priority. Avoid public exposure unless Night Signal relay confirms civilian risk escalation.</p>
         </article>
       </section>
     </main>

@@ -1,20 +1,20 @@
 import { VillainCard } from "../components/VillainCard";
-import { useGotham } from "../state/useGotham";
+import { useNocturne } from "../state/useNocturne";
 
-import "../styles/arkham.css";
+import "../styles/gravemere.css";
 
-type ArkhamProps = {
+type GravemereProps = {
   onOpenVillain: (villainName: string) => void;
 };
 
-export function Arkham({ onOpenVillain }: ArkhamProps) {
-  const { villains } = useGotham();
+export function Gravemere({ onOpenVillain }: GravemereProps) {
+  const { villains } = useNocturne();
 
   return (
-    <main className="arkham">
-      <header className="arkham-header">
+    <main className="gravemere">
+      <header className="gravemere-header">
         <div>
-          <h1>Arkham Database</h1>
+          <h1>Gravemere Archive</h1>
           <p>Villain records and containment status.</p>
         </div>
 

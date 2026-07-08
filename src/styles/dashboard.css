@@ -69,11 +69,12 @@
 .status-grid article::before {
   content: "";
   position: absolute;
-  inset: 0;
+  inset: -38% -78%;
   pointer-events: none;
-  background: linear-gradient(110deg, transparent 28%, rgba(255, 255, 255, 0.035), transparent 42%);
+  z-index: 2;
+  background: linear-gradient(115deg, transparent 42%, rgba(214, 179, 90, 0.1), transparent 58%);
   opacity: 0;
-  transform: translateX(-80%);
+  transform: translateX(-22%) rotate(8deg);
   transition: opacity 0.24s var(--ease-fluid), transform 0.7s var(--ease-snap);
 }
 
@@ -81,7 +82,7 @@
 .command-grid article:hover::before,
 .status-grid article:hover::before {
   opacity: 1;
-  transform: translateX(80%);
+  transform: translateX(22%) rotate(8deg);
 }
 
 .radar-frame {
@@ -513,26 +514,82 @@
   gap: 16px;
   align-items: center;
   margin-bottom: 20px;
+  min-width: 0;
 }
 
-.target-file img {
+.target-file > div:last-child {
+  min-width: 0;
+}
+
+.target-sigil {
+  position: relative;
+  display: grid;
+  place-items: center;
   width: 96px;
   height: 118px;
-  object-fit: cover;
+  overflow: hidden;
   border: 1px solid rgba(163, 58, 50, 0.34);
-  filter: saturate(0.82) contrast(1.1) brightness(0.78);
+  background:
+    radial-gradient(circle at 50% 42%, rgba(163, 58, 50, 0.18), transparent 38%),
+    linear-gradient(135deg, rgba(214, 179, 90, 0.07), transparent 54%),
+    rgba(5, 5, 5, 0.72);
   box-shadow: 0 18px 38px rgba(0, 0, 0, 0.38);
+}
+
+.target-sigil::before,
+.target-sigil::after {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border: 1px solid rgba(214, 179, 90, 0.12);
+  pointer-events: none;
+}
+
+.target-sigil::after {
+  inset: 0;
+  border: 0;
+  background:
+    linear-gradient(to top, rgba(12, 14, 17, 0.95), transparent 62%),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.024), rgba(255, 255, 255, 0.024) 1px, transparent 1px, transparent 7px);
+  animation: targetSigilScan 4.6s linear infinite;
+}
+
+.target-sigil .interface-icon {
+  position: absolute;
+  z-index: 1;
+  width: 70px;
+  height: 70px;
+  color: rgba(214, 179, 90, 0.16);
+  filter: drop-shadow(0 0 16px rgba(214, 179, 90, 0.14));
+}
+
+.target-sigil span {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 54px;
+  aspect-ratio: 1;
+  margin: 0;
+  padding: 0;
+  border: 1px solid rgba(163, 58, 50, 0.36);
+  color: #c46a60;
+  background: rgba(163, 58, 50, 0.1);
+  font-size: 1.35rem;
+  letter-spacing: 2px;
+  text-shadow: 0 0 16px rgba(163, 58, 50, 0.3);
 }
 
 .target-file strong {
   display: block;
   margin-bottom: 8px;
   color: var(--text);
-  font-size: 1.5rem;
+  font-size: clamp(1.18rem, 2vw, 1.5rem);
   letter-spacing: 2px;
+  overflow-wrap: anywhere;
 }
 
-.target-file span {
+.target-file > div:last-child > span {
   display: inline-block;
   margin-bottom: 12px;
   padding: 5px 8px;
@@ -550,6 +607,7 @@
 .target-confidence > div:first-child {
   display: flex;
   justify-content: space-between;
+  align-items: baseline;
   gap: 16px;
   margin-bottom: 8px;
   color: var(--muted);
@@ -643,6 +701,35 @@
   .radar {
     width: min(230px, 100%);
   }
+
+  .target-file {
+    grid-template-columns: 78px 1fr;
+    gap: 14px;
+  }
+
+  .target-sigil {
+    width: 78px;
+    height: 96px;
+  }
+
+  .target-sigil .interface-icon {
+    width: 58px;
+    height: 58px;
+  }
+
+  .target-sigil span {
+    width: 46px;
+    font-size: 1.12rem;
+  }
+
+  .target-confidence > div:first-child {
+    display: block;
+  }
+
+  .target-confidence strong {
+    display: block;
+    margin-top: 4px;
+  }
 }
 
 @keyframes radarSpin {
@@ -712,6 +799,16 @@
 
   to {
     background-position: 180% 0;
+  }
+}
+
+@keyframes targetSigilScan {
+  0%, 100% {
+    background-position: 0 0, 0 0;
+  }
+
+  50% {
+    background-position: 0 0, 0 16px;
   }
 }
 

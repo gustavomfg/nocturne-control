@@ -1,6 +1,6 @@
 import type { Mission } from "../types/mission";
 import { useTiltCard } from "../hooks/useTiltCard";
-import { asset } from "../utils/assets";
+import { InterfaceIcon } from "./InterfaceIcon";
 
 import "../styles/mission-card.css";
 
@@ -10,11 +10,17 @@ type MissionCardProps = {
 
 export function MissionCard({ mission }: MissionCardProps) {
   const tiltCard = useTiltCard();
+  const code = mission.title
+    .split(" ")
+    .map((part) => part[0])
+    .join("")
+    .slice(0, 3);
 
   return (
     <article className="mission-card" {...tiltCard}>
       <div className="mission-card-image">
-        <img src={asset(mission.image)} alt={`${mission.title} tactical map`} />
+        <InterfaceIcon name="crosshair" />
+        <span>{code}</span>
       </div>
 
       <div className="mission-card-header">

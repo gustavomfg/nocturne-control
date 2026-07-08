@@ -14,7 +14,7 @@
   transform: perspective(1200px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y));
   transform-style: preserve-3d;
   animation: cardRise 0.62s var(--ease-snap) both;
-  transition: transform 0.32s var(--ease-fluid), border-color 0.25s ease, box-shadow 0.25s ease;
+  transition: transform 0.42s var(--ease-soft), border-color 0.25s ease, box-shadow 0.25s ease;
   will-change: transform;
 }
 
@@ -58,10 +58,15 @@
 
 .gadget-card-image {
   position: relative;
+  display: grid;
+  place-items: center;
   height: 210px;
   overflow: hidden;
   border-bottom: 1px solid rgba(95, 127, 146, 0.18);
-  background: #030303;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(95, 127, 146, 0.16), transparent 28%),
+    repeating-linear-gradient(0deg, rgba(95, 127, 146, 0.04), rgba(95, 127, 146, 0.04) 1px, transparent 1px, transparent 20px),
+    #030303;
   transform: translateZ(6px);
 }
 
@@ -75,17 +80,40 @@
   animation: techPulse 5.4s ease-in-out infinite;
 }
 
-.gadget-card-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: saturate(0.78) contrast(1.12) brightness(0.82);
+.gadget-card-image span {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 126px;
+  aspect-ratio: 1;
+  border: 1px solid rgba(95, 127, 146, 0.3);
+  color: #8ba4b4;
+  background: rgba(95, 127, 146, 0.06);
+  font-size: 2.2rem;
+  letter-spacing: 4px;
+  text-shadow: 0 0 20px rgba(95, 127, 146, 0.28);
   transition: transform 0.45s ease, filter 0.45s ease;
 }
 
-.gadget-card:hover .gadget-card-image img {
+.gadget-card-image .interface-icon {
+  position: absolute;
+  z-index: 1;
+  width: 132px;
+  height: 132px;
+  color: rgba(95, 127, 146, 0.16);
+  filter: drop-shadow(0 0 24px rgba(95, 127, 146, 0.12));
+  animation: cardIconFloat 6s var(--ease-fluid) infinite alternate;
+}
+
+.gadget-card:hover .gadget-card-image span {
   transform: scale(1.035);
-  filter: saturate(0.96) contrast(1.18) brightness(0.94);
+  filter: brightness(1.14);
+}
+
+.gadget-card:hover .gadget-card-image .interface-icon {
+  transform: scale(1.08) rotate(-4deg);
+  color: rgba(95, 127, 146, 0.25);
 }
 
 .gadget-card-header {
@@ -221,5 +249,15 @@
 
   to {
     background-position: 180% 0;
+  }
+}
+
+@keyframes cardIconFloat {
+  from {
+    transform: translate3d(3px, 2px, 0) scale(0.98);
+  }
+
+  to {
+    transform: translate3d(-3px, -5px, 0) scale(1.04);
   }
 }

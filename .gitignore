@@ -17,6 +17,37 @@ dist-ssr
 !.env.example
 .vite
 coverage
+.cache
+.parcel-cache
+.turbo
+.eslintcache
+*.tsbuildinfo
+
+# Deployment provider state and local previews
+.vercel
+.netlify
+.firebase
+.wrangler
+
+# Test reports and generated screenshots
+playwright-report
+test-results
+screenshots
+*.png.tmp
+*.webm
+*.mp4
+
+# Private keys and certificates
+*.pem
+*.key
+*.p12
+*.crt
+
+# Local screenshots and raster references are intentionally kept out of git.
+images/
+public/cards/
+public/backgrounds/
+public/profile/
 
 # Generated or exported heavy map/model assets
 public/models/*.glb

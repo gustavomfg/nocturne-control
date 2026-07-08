@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 
-import { useGotham } from "../state/useGotham";
-import { asset } from "../utils/assets";
+import { InterfaceIcon } from "../components/InterfaceIcon";
+import { useNocturne } from "../state/useNocturne";
 
 import "../styles/dashboard.css";
 
 export function Dashboard() {
   const [currentTime, setCurrentTime] = useState(new Date());
-  const { villains, gadgets, missions } = useGotham();
+  const { villains, gadgets, missions } = useNocturne();
 
   const escapedVillains = villains.filter(
     (villain) => villain.status === "ESCAPED"
@@ -32,9 +32,15 @@ export function Dashboard() {
 
   const mostWanted = villains.find((villain) => villain.status === "ESCAPED");
   const targetConfidence = mostWanted?.dangerLevel === "EXTREME" ? 87 : 64;
+  const targetInitials = mostWanted?.name
+    .split(" ")
+    .map((part) => part[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
 
   const incidentFeed = [
-    "Arkham perimeter camera lost signal for 12 seconds.",
+    "Gravemere perimeter camera lost signal for 12 seconds.",
     `${criticalMission.assignedUnit} reports movement near ${criticalMission.district}.`,
     "Rain interference elevated across rooftop relay network.",
     mostWanted
@@ -60,8 +66,8 @@ export function Dashboard() {
     <main className="dashboard">
       <header className="dashboard-header">
         <div>
-          <h1>Gotham Live Monitor</h1>
-          <p>Real-time tactical overview from the Batcomputer.</p>
+          <h1>Nocturne Live Monitor</h1>
+          <p>Real-time tactical overview from the Sentinel console.</p>
         </div>
 
         <strong>{formattedTime}</strong>
@@ -70,7 +76,7 @@ export function Dashboard() {
       <section className="dashboard-content">
         <article className="radar-panel">
           <div className="radar-frame">
-            <div className="radar-label">GCPD / WAYNETECH GRID</div>
+            <div className="radar-label">CITYWATCH / AEGIS GRID</div>
 
             <div className="radar">
               <div className="radar-map" />
@@ -91,7 +97,7 @@ export function Dashboard() {
           </div>
 
           <h2>City Surveillance</h2>
-          <p>Low-visibility scan across central Gotham and Arkham perimeter.</p>
+          <p>Low-visibility scan across central Nocturne and Gravemere perimeter.</p>
         </article>
 
         <div className="dashboard-mainframe">
@@ -102,7 +108,7 @@ export function Dashboard() {
             </article>
 
             <article>
-              <h2>BAT SIGNAL</h2>
+              <h2>NIGHT SIGNAL</h2>
               <strong>ONLINE</strong>
             </article>
 
@@ -122,7 +128,7 @@ export function Dashboard() {
             </article>
 
             <article>
-              <h2>ARKHAM STATUS</h2>
+              <h2>GRAVEMERE STATUS</h2>
               <strong>BREACH</strong>
             </article>
           </section>
@@ -138,7 +144,7 @@ export function Dashboard() {
                 <div style={{ width: `${cityThreatLevel}%` }} />
               </div>
 
-              <p>Calculated from active mission risk, Arkham breach state and escaped target count.</p>
+              <p>Calculated from active mission risk, Gravemere breach state and escaped target count.</p>
             </article>
 
             <article className="priority-panel">
@@ -164,7 +170,10 @@ export function Dashboard() {
               {mostWanted ? (
                 <>
                   <div className="target-file">
-                    <img src={asset(mostWanted.image)} alt={`${mostWanted.name} target file`} />
+                    <div className="target-sigil" aria-hidden="true">
+                      <InterfaceIcon name="target" />
+                      <span>{targetInitials}</span>
+                    </div>
 
                     <div>
                       <strong>{mostWanted.name}</strong>
