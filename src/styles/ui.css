@@ -1,0 +1,84 @@
+.toast-viewport {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 100;
+  display: grid;
+  width: min(390px, calc(100vw - 32px));
+  gap: 10px;
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 16px 18px;
+  border: 1px solid rgba(214, 179, 90, 0.34);
+  border-left: 3px solid var(--signal);
+  background: rgba(8, 10, 12, 0.96);
+  box-shadow: 0 22px 70px rgba(0, 0, 0, 0.7);
+  animation: toastEnter 0.32s var(--ease-snap) both;
+  pointer-events: auto;
+}
+
+.toast.success { border-left-color: var(--success); }
+.toast.warning { border-left-color: var(--danger); }
+.toast strong { display: block; color: var(--text); letter-spacing: 1px; }
+.toast p { margin-top: 5px; color: var(--muted-strong); font-size: 0.82rem; line-height: 1.45; }
+.toast button { align-self: flex-start; border: 0; color: var(--muted); background: none; font-size: 1.3rem; cursor: pointer; }
+
+.nocturne-dialog {
+  width: min(480px, calc(100vw - 32px));
+  padding: 28px;
+  border: 1px solid rgba(214, 179, 90, 0.3);
+  color: var(--text);
+  background: #090b0e;
+  box-shadow: 0 30px 120px #000;
+}
+
+.nocturne-dialog::backdrop { background: rgba(0, 0, 0, 0.78); backdrop-filter: blur(6px); }
+.nocturne-dialog > span { color: var(--signal); font-size: 0.72rem; letter-spacing: 3px; }
+.nocturne-dialog h2 { margin: 14px 0 10px; text-transform: uppercase; letter-spacing: 2px; }
+.nocturne-dialog p { color: var(--muted-strong); line-height: 1.7; }
+.nocturne-dialog > div { display: flex; justify-content: flex-end; gap: 10px; margin-top: 26px; }
+.nocturne-dialog button { padding: 10px 14px; border: 1px solid var(--panel-border); color: var(--muted-strong); background: var(--panel-soft); cursor: pointer; }
+.nocturne-dialog button.danger { border-color: rgba(163, 58, 50, 0.6); color: #df8a81; }
+
+.command-palette {
+  width: min(660px, calc(100vw - 28px));
+  max-height: min(680px, calc(100vh - 40px));
+  padding: 0;
+  border: 1px solid rgba(214, 179, 90, 0.3);
+  color: var(--text);
+  background: rgba(7, 9, 11, 0.98);
+  box-shadow: 0 35px 140px #000;
+}
+.command-palette::backdrop { background: rgba(0,0,0,.75); backdrop-filter: blur(8px); }
+.command-palette header { display: flex; align-items: center; gap: 12px; padding: 18px; border-bottom: 1px solid var(--panel-border); color: var(--signal); }
+.command-palette input { flex: 1; border: 0; outline: 0; color: var(--text); background: none; font: 500 1rem var(--font-body); }
+kbd { padding: 3px 6px; border: 1px solid rgba(255,255,255,.12); border-radius: 3px; color: var(--muted); background: rgba(255,255,255,.04); font: .65rem var(--font-code); }
+.command-results { max-height: 510px; padding: 10px; overflow: auto; }
+.command-results > small { display: block; padding: 10px 10px 6px; color: var(--muted); letter-spacing: 2px; }
+.command-results button { display: flex; width: 100%; align-items: center; justify-content: space-between; padding: 12px; border: 1px solid transparent; color: var(--text); background: none; text-align: left; cursor: pointer; }
+.command-results button:hover, .command-results button:focus-visible { border-color: var(--panel-border); outline: none; background: rgba(214,179,90,.06); }
+.command-results button strong, .command-results button small { display: block; }
+.command-results button small { margin-top: 4px; color: var(--muted); }
+.command-results p { padding: 22px 12px; color: var(--muted); }
+.command-palette footer { display: flex; gap: 16px; padding: 10px 18px; border-top: 1px solid var(--panel-border); color: var(--muted); font-size: .7rem; }
+
+.route-skeleton { min-height: 100vh; padding: 46px; }
+.skeleton-line, .skeleton-card { background: linear-gradient(90deg, rgba(255,255,255,.035), rgba(214,179,90,.09), rgba(255,255,255,.035)); background-size: 240% 100%; animation: skeletonFlow 1.3s linear infinite; }
+.skeleton-line { width: 32%; height: 13px; margin-bottom: 12px; }
+.skeleton-line.wide { width: 55%; height: 38px; }
+.route-skeleton section { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 42px; }
+.skeleton-card { height: 250px; border: 1px solid var(--panel-border); }
+
+@keyframes toastEnter { from { opacity: 0; transform: translateX(22px); } }
+@keyframes skeletonFlow { to { background-position: -240% 0; } }
+
+@media (max-width: 700px) {
+  .toast-viewport { right: 16px; bottom: 88px; }
+  .route-skeleton { padding: 28px 18px; }
+  .route-skeleton section { grid-template-columns: 1fr; }
+}

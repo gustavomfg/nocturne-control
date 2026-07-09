@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { useNocturne } from "../state/useNocturne";
 import type { TerminalLine } from "../types/terminal";
+import type { Page } from "../types";
 import { playTone } from "../utils/audio";
 
 import "../styles/terminal.css";
@@ -18,12 +19,24 @@ function findByName<T extends { name?: string; title?: string }>(items: T[], que
 
 type TerminalProps = {
   soundEnabled: boolean;
+  onNavigate: (page: Page) => void;
+  onOpenVillain: (name: string) => void;
 };
 
-export function Terminal({ soundEnabled }: TerminalProps) {
+const baseCommands = [
+  "help", "status city", "list villains", "list missions", "list gadgets",
+  "scan gravemere", "signal on", "go dashboard", "go map", "go missions",
+  "go gravemere", "go aegis", "go logs", "go profile", "clear", "reset state",
+];
+
+export function Terminal({ soundEnabled, onNavigate, onOpenVillain }: TerminalProps) {
   const [command, setCommand] = useState("");
   const typingIntervals = useRef<number[]>([]);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const commandHistory = useRef<string[]>([]);
+  const historyIndex = useRef(-1);
   const {
+    operatorName,
     villains,
     missions,
     gadgets,
@@ -41,7 +54,7 @@ export function Terminal({ soundEnabled }: TerminalProps) {
     },
     {
       id: 2,
-      text: "Type 'help' to inspect Nocturne Control commands.",
+      text: "Type 'help' to inspect Nocturne Control commands. Use ↑/↓ for history and Tab to complete.",
       type: "response",
     },
   ]);
@@ -76,7 +89,23 @@ export function Terminal({ soundEnabled }: TerminalProps) {
     const normalizedCommand = normalize(input);
 
     if (normalizedCommand === "help") {
-      return "Commands: status city | villains | missions | gadgets | open <name> | capture/cap <villain> | deploy/dep <gadget> | resolve/res <mission> | scan gravemere | signal on | reset state | clear";
+      return "Commands: status city | villains | missions | gadgets | open <name> | capture/cap <villain> | deploy/dep <gadget> | resolve/res <mission> | scan gravemere | go <page> | whoami | signal on | reset state | clear";
+    }
+
+    if (normalizedCommand === "whoami") {
+      return `Authenticated operator: ${operatorName || "UNIDENTIFIED"}. Clearance: AEGIS BLACK.`;
+    }
+
+    if (normalizedCommand.startsWith("go ")) {
+      const pageAliases: Record<string, Page> = {
+        dashboard: "dashboard", home: "dashboard", gravemere: "gravemere",
+        missions: "missions", aegis: "aegis", arsenal: "aegis", terminal: "terminal",
+        logs: "logs", map: "map", profile: "profile",
+      };
+      const page = pageAliases[normalizedCommand.slice(3)];
+      if (!page) return "Navigation failed. Available: dashboard, gravemere, missions, aegis, map, profile, logs.";
+      window.setTimeout(() => onNavigate(page), 180);
+      return `Opening ${page.toUpperCase()} module...`;
     }
 
     if (normalizedCommand === "status city" || normalizedCommand === "status") {
@@ -115,6 +144,7 @@ export function Terminal({ soundEnabled }: TerminalProps) {
       const gadget = findByName(gadgets, query);
 
       if (villain) {
+        window.setTimeout(() => onOpenVillain(villain.name), 180);
         return `${villain.name}: ${villain.status}. Last location: ${villain.lastLocation}. Notes: ${villain.threatNotes}`;
       }
 
@@ -202,6 +232,8 @@ export function Terminal({ soundEnabled }: TerminalProps) {
     }
 
     const timestamp = Date.now();
+    commandHistory.current = [...commandHistory.current.filter((item) => item !== command), command];
+    historyIndex.current = commandHistory.current.length;
     const response = getResponse(command);
     const responseId = timestamp + 1;
 
@@ -229,7 +261,7 @@ export function Terminal({ soundEnabled }: TerminalProps) {
     <main className="terminal-page">
       <h1>Sentinel Terminal</h1>
 
-      <section className="terminal-window">
+      <section className="terminal-window" role="log" aria-live="polite" aria-label="Sentinel terminal output">
         {history.map((line) => (
           <p key={line.id} className={line.type}>
             {line.text}
@@ -240,13 +272,34 @@ export function Terminal({ soundEnabled }: TerminalProps) {
           <span>&gt;</span>
 
           <input
+            ref={inputRef}
             value={command}
             onChange={(event) => setCommand(event.target.value)}
             onKeyDown={(event) => {
               if (event.key === "Enter") {
                 executeCommand();
+              } else if (event.key === "ArrowUp") {
+                event.preventDefault();
+                historyIndex.current = Math.max(0, historyIndex.current - 1);
+                setCommand(commandHistory.current[historyIndex.current] ?? "");
+              } else if (event.key === "ArrowDown") {
+                event.preventDefault();
+                historyIndex.current = Math.min(commandHistory.current.length, historyIndex.current + 1);
+                setCommand(commandHistory.current[historyIndex.current] ?? "");
+              } else if (event.key === "Tab") {
+                event.preventDefault();
+                const dynamicCommands = [
+                  ...baseCommands,
+                  ...villains.flatMap((villain) => [`open ${villain.name}`, `capture ${villain.name}`]),
+                  ...missions.map((mission) => `resolve ${mission.title}`),
+                  ...gadgets.map((gadget) => `deploy ${gadget.name}`),
+                ];
+                const match = dynamicCommands.find((item) => item.toLowerCase().startsWith(command.toLowerCase()));
+                if (match) setCommand(match);
               }
             }}
+            aria-label="Sentinel command"
+            autoComplete="off"
             autoFocus
           />
         </div>

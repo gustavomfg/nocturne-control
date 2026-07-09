@@ -6,9 +6,10 @@ import "../styles/gadget-card.css";
 
 type GadgetCardProps = {
   gadget: Gadget;
+  onDeploy?: () => void;
 };
 
-export function GadgetCard({ gadget }: GadgetCardProps) {
+export function GadgetCard({ gadget, onDeploy }: GadgetCardProps) {
   const tiltCard = useTiltCard();
   const code = gadget.name
     .split(" ")
@@ -47,6 +48,15 @@ export function GadgetCard({ gadget }: GadgetCardProps) {
         <div className="power-bar">
           <div style={{ width: `${gadget.powerLevel}%` }} />
         </div>
+        {onDeploy && (
+          <button
+            className="card-action"
+            disabled={gadget.status === "MAINTENANCE"}
+            onClick={onDeploy}
+          >
+            {gadget.status === "MAINTENANCE" ? "Maintenance locked" : "Deploy to priority mission"}
+          </button>
+        )}
       </div>
     </article>
   );

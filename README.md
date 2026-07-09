@@ -6,9 +6,9 @@ The project simulates a noir city operations console for Nocturne City, with Gra
 
 ## Status
 
-This project now uses original fictional names, locations and dossiers. Local raster images for characters, backgrounds, profile art and screenshots were removed; the interface relies on CSS-driven HUD visuals, animated cards and the custom SVG map overlay.
+The current release expands the project from a visual dashboard into a connected local simulation. Operator identity, missions, targets, equipment and logs share versioned persistent state, while the interface provides responsive navigation, feedback and accessibility preferences.
 
-Latest upgrade: the Dashboard, navigation and card systems now use reusable inline HUD icons, smoother hover motion, fixed priority target layout and a consistent diagonal highlight effect across panels.
+All names, locations, dossiers and map artwork are original fictional material. The visual system uses CSS-driven HUD effects, reusable inline icons and a custom local SVG map without external image or map APIs.
 
 ## Features
 
@@ -18,31 +18,51 @@ Latest upgrade: the Dashboard, navigation and card systems now use reusable inli
 - Villain, mission and gadget cards using typed data, generated HUD sigils and fluid hover motion.
 - Interactive Sentinel Terminal with commands backed by real project data.
 - Local in-memory state with persistence via localStorage.
+- Personalized operator onboarding with a persistent name, boot greeting and editable profile identity.
+- Versioned saves with automatic migration plus full JSON import/export.
+- Connected simulation: target captures and gadget deployments affect mission risk and progress.
 - Leaflet-powered custom Nocturne district map with local SVG cartography, tactical markers and district intel.
 - Original operative profile file.
 - Interactive card tilt and responsive controls for desktop and mobile.
+- Lazy-loaded operational modules and keyboard-accessible terminal history/autocomplete.
+- Global command palette (`Ctrl/Cmd + K`), responsive mobile drawer and high-contrast preference.
+- Search, filtering and empty states across missions, targets and Aegis assets.
+- Toast feedback, custom confirmation dialogs, route skeletons and interactive dashboard shortcuts.
+- Map layer controls, fit-to-signals action and direct links to target/mission details.
+- Reducer and persistence regression tests powered by Vitest.
 
 ## Commands
 
 ```bash
-npm install
+npm ci
 npm run dev
-npm run build
 npm run lint
+npm run test
+npm run build
 npm run preview
 ```
 
+Use `npm install` only when intentionally changing dependencies. For normal development and CI, `npm ci` installs the exact versions recorded in `package-lock.json`.
+
+## Quality Checks
+
+```bash
+npm run lint
+npm run test
+npm run build
+```
+
+The test suite covers state migration, operator identity, connected mission actions and BootScreen interaction. GitHub Actions runs all three checks before publishing GitHub Pages.
+
 ## Deploy
 
-Build output is generated in `dist/` and is intentionally ignored by Git:
+Pushes to `main` are deployed by `.github/workflows/deploy.yml` after lint, tests and production build pass. The configured GitHub Pages base path matches the `gotham-control` repository:
 
 ```bash
 npm run build
 ```
 
-Publish the generated `dist/` folder with any static host such as Vercel, Netlify, GitHub Pages or a simple static server. The app does not require server-side rendering or private API keys.
-
-For GitHub Pages, confirm that `base` in `vite.config.ts` matches the repository path before building.
+Build output is generated in `dist/` and intentionally ignored. The application requires no backend, server-side rendering, external map service or private API keys.
 
 ## Terminal Commands
 
@@ -61,6 +81,8 @@ capture vesper
 resolve vesper
 scan gravemere
 signal on
+whoami
+go map
 reset state
 clear
 ```
@@ -72,6 +94,8 @@ clear
 - Vite
 - Leaflet
 - ESLint
+- Vitest
+- Testing Library
 - CSS by feature/style file
 
 ## Project Structure
@@ -82,12 +106,21 @@ src/data        Static Nocturne domain data
 src/pages       Main app screens
 src/styles      Theme and page/component CSS
 src/types       Domain TypeScript models
+src/utils       Asset, audio, slug and UI event helpers
 public/maps     Custom Nocturne map overlay
 ```
 
 ## Git Hygiene
 
 The repository ignores local env files, build output, dependency caches, provider state folders and private key/certificate formats. Keep `.env.example` as the only committed env file.
+
+## Dependency Safety
+
+- Runtime dependencies are limited to React and Leaflet.
+- Test tooling remains in `devDependencies`.
+- `package-lock.json` pins the complete dependency tree with integrity hashes.
+- Prefer `npm ci` for reproducible installs and review lockfile changes whenever dependencies are updated.
+- Run `npm audit` as an advisory check, while also reviewing package provenance and install scripts before adding new packages.
 
 ## Map System
 

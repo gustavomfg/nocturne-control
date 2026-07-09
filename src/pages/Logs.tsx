@@ -1,19 +1,44 @@
+import { useRef, useState } from "react";
 import { useNocturne } from "../state/useNocturne";
+import type { EventLog } from "../types";
 
 import "../styles/logs.css";
 
 export function Logs() {
-  const { logs } = useNocturne();
+  const state = useNocturne();
+  const { logs, importState } = state;
+  const [filter, setFilter] = useState<EventLog["type"] | "ALL">("ALL");
+  const [importMessage, setImportMessage] = useState("");
+  const fileInput = useRef<HTMLInputElement | null>(null);
+  const visibleLogs = filter === "ALL" ? logs : logs.filter((log) => log.type === filter);
 
-  function exportLogs() {
-    const blob = new Blob([JSON.stringify(logs, null, 2)], { type: "application/json" });
+  function exportState() {
+    const serializableState = {
+      schemaVersion: state.schemaVersion,
+      operatorName: state.operatorName,
+      villains: state.villains,
+      missions: state.missions,
+      gadgets: state.gadgets,
+      logs: state.logs,
+    };
+    const blob = new Blob([JSON.stringify(serializableState, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
 
     link.href = url;
-    link.download = "nocturne-control-logs.json";
+    link.download = "nocturne-control-save.json";
     link.click();
     URL.revokeObjectURL(url);
+  }
+
+  async function handleImport(file: File | undefined) {
+    if (!file) return;
+    try {
+      const value: unknown = JSON.parse(await file.text());
+      setImportMessage(importState(value) ? "Save restored successfully." : "Invalid or incompatible save.");
+    } catch {
+      setImportMessage("The selected file is not valid JSON.");
+    }
   }
 
   return (
@@ -26,12 +51,21 @@ export function Logs() {
 
         <div className="logs-actions">
           <strong>{logs.length} EVENTS</strong>
-          <button onClick={exportLogs}>Export JSON</button>
+          <button onClick={exportState}>Export save</button>
+          <button onClick={() => fileInput.current?.click()}>Import save</button>
+          <input ref={fileInput} type="file" accept="application/json,.json" hidden onChange={(event) => void handleImport(event.target.files?.[0])} />
         </div>
       </header>
 
-      <section className="logs-timeline">
-        {logs.map((log) => (
+      <div className="logs-filters" aria-label="Filter event timeline">
+        {(["ALL", "SYSTEM", "OPERATOR", "MISSION", "DEPLOY", "CAPTURE"] as const).map((type) => (
+          <button key={type} aria-pressed={filter === type} onClick={() => setFilter(type)}>{type}</button>
+        ))}
+      </div>
+      {importMessage && <p className="import-message" role="status">{importMessage}</p>}
+
+      <section className="logs-timeline" aria-live="polite">
+        {visibleLogs.map((log) => (
           <article key={log.id} className={`log-entry ${log.type.toLowerCase()}`}>
             <span>{log.timestamp}</span>
             <strong>{log.type}</strong>

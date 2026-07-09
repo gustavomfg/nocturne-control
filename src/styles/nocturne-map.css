@@ -87,6 +87,21 @@
   margin-bottom: 16px;
 }
 
+.map-toolbar > div {
+  display: flex;
+  gap: 7px;
+}
+.map-toolbar button,
+.map-intel article button {
+  padding: 6px 9px;
+  border: 1px solid rgba(214,179,90,.2);
+  color: var(--muted-strong);
+  background: rgba(0,0,0,.28);
+  cursor: pointer;
+}
+.map-toolbar button[aria-pressed="true"] { border-color: var(--signal); color: var(--signal); }
+.map-intel article button { margin-top: 12px; color: var(--signal); }
+
 .map-legend {
   margin-top: 16px;
   justify-content: flex-start;
@@ -379,6 +394,15 @@
 
   .map-panel {
     padding: 14px;
+  }
+
+  .map-toolbar {
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .map-toolbar > div {
+    flex-wrap: wrap;
   }
 
   .nocturne-leaflet-map {

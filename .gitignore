@@ -17,6 +17,8 @@ dist-ssr
 !.env.example
 .vite
 coverage
+*.lcov
+.nyc_output
 .cache
 .parcel-cache
 .turbo
@@ -28,11 +30,13 @@ coverage
 .netlify
 .firebase
 .wrangler
+.envrc
 
 # Test reports and generated screenshots
 playwright-report
 test-results
 screenshots
+storybook-static
 *.png.tmp
 *.webm
 *.mp4

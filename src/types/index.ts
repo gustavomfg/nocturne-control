@@ -3,6 +3,6 @@ export type Page = "dashboard" | "gravemere" | "missions" | "aegis" | "terminal"
 export type EventLog = {
   id: number;
   timestamp: string;
-  type: "CAPTURE" | "DEPLOY" | "MISSION" | "SYSTEM";
+  type: "CAPTURE" | "DEPLOY" | "MISSION" | "SYSTEM" | "OPERATOR";
   message: string;
 };

@@ -4,7 +4,13 @@ import { useNocturne } from "../state/useNocturne";
 import "../styles/aegis-arsenal.css";
 
 export function AegisArsenal() {
-  const { gadgets } = useNocturne();
+  const { gadgets, deployGadget } = useNocturne();
+  const [query, setQuery] = useState("");
+  const [status, setStatus] = useState("ALL");
+  const visibleGadgets = useMemo(() => gadgets.filter((gadget) =>
+    (status === "ALL" || gadget.status === status) &&
+    `${gadget.name} ${gadget.category}`.toLowerCase().includes(query.toLowerCase())
+  ), [gadgets, query, status]);
 
   return (
     <main className="aegis">
@@ -16,12 +22,20 @@ export function AegisArsenal() {
 
         <strong>LAB STATUS: ACTIVE</strong>
       </header>
+      <div className="collection-toolbar">
+        <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search Aegis assets..." aria-label="Search Aegis assets" />
+        <select value={status} onChange={(event) => setStatus(event.target.value)} aria-label="Filter asset status">
+          <option value="ALL">All statuses</option><option value="AVAILABLE">Available</option><option value="DEPLOYED">Deployed</option><option value="MAINTENANCE">Maintenance</option>
+        </select>
+      </div>
 
       <section className="gadgets-grid">
-        {gadgets.map((gadget) => (
-          <GadgetCard key={gadget.id} gadget={gadget} />
+        {visibleGadgets.map((gadget) => (
+          <GadgetCard key={gadget.id} gadget={gadget} onDeploy={() => deployGadget(gadget.id)} />
         ))}
+        {visibleGadgets.length === 0 && <div className="collection-empty"><strong>No asset indexed</strong><p>Try a different name or status.</p></div>}
       </section>
     </main>
   );
 }
+import { useMemo, useState } from "react";

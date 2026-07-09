@@ -1,20 +1,14 @@
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useState } from "react";
 
 import { BootScreen } from "./components/BootScreen";
 import { Sidebar } from "./components/Sidebar";
 
-import { Dashboard } from "./pages/Dashboard";
-import { Gravemere } from "./pages/Gravemere";
-import { Missions } from "./pages/Missions";
-import { Terminal } from "./pages/Terminal";
-import { AegisArsenal } from "./pages/AegisArsenal";
-import { Logs } from "./pages/Logs";
-import { VillainDetail } from "./pages/VillainDetail";
-import { NocturneMap } from "./pages/NocturneMap";
-import { Profile } from "./pages/Profile";
-import { NotFound } from "./pages/NotFound";
 import { NocturneEffects } from "./components/NocturneEffects";
+import { RouteSkeleton } from "./components/RouteSkeleton";
+import { ToastViewport } from "./components/ToastViewport";
+import { CommandPalette } from "./components/CommandPalette";
 import { slugify } from "./utils/slug";
+import { useNocturne } from "./state/useNocturne";
 
 import type { Page } from "./types";
 
@@ -31,6 +25,16 @@ const pageRoutes: Record<Page, string> = {
 
 const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
 const basePathFull = import.meta.env.BASE_URL;
+const Dashboard = lazy(() => import("./pages/Dashboard").then((module) => ({ default: module.Dashboard })));
+const Gravemere = lazy(() => import("./pages/Gravemere").then((module) => ({ default: module.Gravemere })));
+const Missions = lazy(() => import("./pages/Missions").then((module) => ({ default: module.Missions })));
+const Terminal = lazy(() => import("./pages/Terminal").then((module) => ({ default: module.Terminal })));
+const AegisArsenal = lazy(() => import("./pages/AegisArsenal").then((module) => ({ default: module.AegisArsenal })));
+const Logs = lazy(() => import("./pages/Logs").then((module) => ({ default: module.Logs })));
+const VillainDetail = lazy(() => import("./pages/VillainDetail").then((module) => ({ default: module.VillainDetail })));
+const NocturneMap = lazy(() => import("./pages/NocturneMap").then((module) => ({ default: module.NocturneMap })));
+const Profile = lazy(() => import("./pages/Profile").then((module) => ({ default: module.Profile })));
+const NotFound = lazy(() => import("./pages/NotFound").then((module) => ({ default: module.NotFound })));
 
 function toAppPath(path: string) {
   return `${basePath}${path}` || path;
@@ -95,13 +99,30 @@ function storeBoolean(key: string, value: boolean) {
 }
 
 function App() {
-  const [boot, setBoot] = useState(true);
+  const { operatorName, setOperatorName } = useNocturne();
+  const [boot, setBoot] = useState(() => {
+    try {
+      return !sessionStorage.getItem("nocturne-boot-complete");
+    } catch {
+      return true;
+    }
+  });
   const [route, setRoute] = useState<AppRoute>(() => getRouteFromPath(window.location.pathname));
   const [effectsEnabled, setEffectsEnabled] = useState(() =>
     loadStoredBoolean("nocturne-effects-enabled", !window.matchMedia("(prefers-reduced-motion: reduce)").matches)
   );
   const [soundEnabled, setSoundEnabled] = useState(() => loadStoredBoolean("nocturne-sound-enabled", true));
+  const [paletteOpen, setPaletteOpen] = useState(false);
+  const [highContrast, setHighContrast] = useState(() => loadStoredBoolean("nocturne-high-contrast", false));
   const activePage = route.page;
+  const finishBoot = useCallback(() => {
+    try {
+      sessionStorage.setItem("nocturne-boot-complete", "true");
+    } catch {
+      // Session storage is optional.
+    }
+    setBoot(false);
+  }, []);
 
   useEffect(() => {
     if (window.location.pathname === basePathFull || window.location.pathname === basePathFull.replace(/\/$/, "")) {
@@ -125,6 +146,21 @@ function App() {
     storeBoolean("nocturne-sound-enabled", soundEnabled);
   }, [soundEnabled]);
 
+  useEffect(() => {
+    storeBoolean("nocturne-high-contrast", highContrast);
+  }, [highContrast]);
+
+  useEffect(() => {
+    function handleShortcut(event: KeyboardEvent) {
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        setPaletteOpen((open) => !open);
+      }
+    }
+    window.addEventListener("keydown", handleShortcut);
+    return () => window.removeEventListener("keydown", handleShortcut);
+  }, []);
+
   function handleChangePage(page: Page) {
     setRoute({ page });
     window.history.pushState(null, "", toAppPath(pageRoutes[page]));
@@ -143,12 +179,14 @@ function App() {
   }
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setBoot(false);
-    }, 7500);
-
-    return () => clearTimeout(timer);
-  }, []);
+    if (!boot) {
+      window.requestAnimationFrame(() => {
+        const heading = document.querySelector<HTMLElement>(".page-transition main h1");
+        heading?.setAttribute("tabindex", "-1");
+        heading?.focus();
+      });
+    }
+  }, [activePage, boot, route.villainSlug]);
 
   function renderPage() {
     if (route.villainSlug) {
@@ -157,7 +195,7 @@ function App() {
 
     switch (activePage) {
       case "dashboard":
-        return <Dashboard />;
+        return <Dashboard onNavigate={handleChangePage} onOpenVillain={handleOpenVillain} />;
 
       case "gravemere":
         return <Gravemere onOpenVillain={handleOpenVillain} />;
@@ -169,13 +207,19 @@ function App() {
         return <AegisArsenal />;
 
       case "terminal":
-        return <Terminal soundEnabled={soundEnabled} />;
+        return (
+          <Terminal
+            soundEnabled={soundEnabled}
+            onNavigate={handleChangePage}
+            onOpenVillain={handleOpenVillain}
+          />
+        );
 
       case "logs":
         return <Logs />;
 
       case "map":
-        return <NocturneMap />;
+        return <NocturneMap onOpenVillain={handleOpenVillain} onOpenMissions={() => handleChangePage("missions")} />;
 
       case "profile":
         return <Profile />;
@@ -184,19 +228,25 @@ function App() {
         return <NotFound onGoHome={() => handleChangePage("dashboard")} />;
 
       default:
-        return <Dashboard />;
+        return <Dashboard onNavigate={handleChangePage} onOpenVillain={handleOpenVillain} />;
     }
   }
 
   if (boot) {
-    return <BootScreen />;
+    return (
+      <BootScreen
+        operatorName={operatorName}
+        onConfirmName={setOperatorName}
+        onComplete={finishBoot}
+      />
+    );
   }
 
   return (
     <>
       <NocturneEffects enabled={effectsEnabled} />
 
-      <div className="app-layout">
+      <div className={`app-layout ${highContrast ? "high-contrast" : ""}`}>
         <Sidebar
           activePage={activePage === "notFound" ? "dashboard" : activePage}
           onChangePage={handleChangePage}
@@ -204,11 +254,25 @@ function App() {
           onToggleEffects={() => setEffectsEnabled((currentValue) => !currentValue)}
           soundEnabled={soundEnabled}
           onToggleSound={() => setSoundEnabled((currentValue) => !currentValue)}
+          onOpenPalette={() => setPaletteOpen(true)}
+          highContrast={highContrast}
+          onToggleContrast={() => setHighContrast((value) => !value)}
         />
 
         <div key={`${activePage}-${route.villainSlug ?? "index"}`} className="page-transition">
-          {renderPage()}
+          <Suspense fallback={<RouteSkeleton />}>
+            {renderPage()}
+          </Suspense>
         </div>
+        <ToastViewport />
+        <CommandPalette
+          open={paletteOpen}
+          onClose={() => setPaletteOpen(false)}
+          onNavigate={handleChangePage}
+          onToggleEffects={() => setEffectsEnabled((value) => !value)}
+          onToggleSound={() => setSoundEnabled((value) => !value)}
+          onToggleContrast={() => setHighContrast((value) => !value)}
+        />
       </div>
     </>
   );

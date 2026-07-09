@@ -7,6 +7,11 @@ import { asset } from "../utils/assets";
 
 import "../styles/nocturne-map.css";
 
+type NocturneMapProps = {
+  onOpenVillain?: (name: string) => void;
+  onOpenMissions?: () => void;
+};
+
 const districts: NocturneDistrictMap[] = [
   {
     id: "gravemere",
@@ -61,9 +66,12 @@ function getDistrictForValue(value: string) {
   return districts.find((district) => matchesDistrict(value, district.id)) ?? districts[0];
 }
 
-export function NocturneMap() {
+export function NocturneMap({ onOpenVillain, onOpenMissions }: NocturneMapProps) {
   const { villains, missions } = useNocturne();
   const [activeDistrictId, setActiveDistrictId] = useState("gravemere");
+  const [showMissions, setShowMissions] = useState(true);
+  const [showTargets, setShowTargets] = useState(true);
+  const [fitAllToken, setFitAllToken] = useState(0);
   const activeDistrict = districts.find((district) => district.id === activeDistrictId) ?? districts[0];
 
   const districtVillains = useMemo(
@@ -98,17 +106,24 @@ export function NocturneMap() {
         <div className="map-panel">
           <div className="map-toolbar">
             <span>AEGIS CARTOGRAPHY / LEAFLET GRID</span>
-            <span>CUSTOM NOCTURNE OVERLAY / SIGNAL MODE</span>
+            <div>
+              <button aria-pressed={showMissions} onClick={() => setShowMissions((value) => !value)}>Missions</button>
+              <button aria-pressed={showTargets} onClick={() => setShowTargets((value) => !value)}>Targets</button>
+              <button onClick={() => setFitAllToken((value) => value + 1)}>Fit signals</button>
+            </div>
           </div>
 
           <LeafletNocturneMap
             imageUrl={asset("/maps/nocturne-custom-map.svg")}
             districts={districts}
             activeDistrictId={activeDistrict.id}
-            activeMissionPins={activeMissionPins}
-            escapedVillainPins={escapedVillainPins}
+            activeMissionPins={showMissions ? activeMissionPins : []}
+            escapedVillainPins={showTargets ? escapedVillainPins : []}
             getDistrictForValue={getDistrictForValue}
             onSelectDistrict={setActiveDistrictId}
+            onOpenVillain={onOpenVillain}
+            onOpenMissions={onOpenMissions}
+            fitAllToken={fitAllToken}
           />
 
           <div className="map-location-menu" aria-label="Nocturne landmark signals">
@@ -133,12 +148,14 @@ export function NocturneMap() {
             <span>Targets</span>
             <strong>{districtVillains.length || "NONE"}</strong>
             <p>{districtVillains.map((villain) => villain.name).join(" / ") || "No villain signal in this sector."}</p>
+            {districtVillains[0] && <button onClick={() => onOpenVillain?.(districtVillains[0].name)}>Open target file</button>}
           </article>
 
           <article>
             <span>Missions</span>
             <strong>{districtMissions.length || "NONE"}</strong>
             <p>{districtMissions.map((mission) => mission.title).join(" / ") || "No active mission assigned to this district."}</p>
+            {districtMissions[0] && <button onClick={onOpenMissions}>Open mission control</button>}
           </article>
 
           <article>

@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { useNocturne } from "../state/useNocturne";
 
 import "../styles/profile.css";
 
 export function Profile() {
-  const { missions, gadgets } = useNocturne();
+  const { operatorName, setOperatorName, missions, gadgets } = useNocturne();
+  const [name, setName] = useState(operatorName);
   const activeCases = missions.filter((mission) => mission.status === "ACTIVE").length;
   const deployedAssets = gadgets.filter((gadget) => gadget.status === "DEPLOYED").length;
 
@@ -12,13 +14,15 @@ export function Profile() {
       <header className="profile-header">
         <div>
           <span>FIELD OPERATIVE FILE</span>
-          <h1>Orion Vale / Night Sentinel</h1>
+          <h1>{operatorName || "Unknown Operator"} / Night Sentinel</h1>
           <p>Field readiness, active case load and current tactical equipment state.</p>
         </div>
       </header>
 
       <section className="profile-hero">
-        <div className="profile-sigil" aria-hidden="true">NV</div>
+        <div className="profile-sigil" aria-hidden="true">
+          {(operatorName || "NS").split(" ").map((part) => part[0]).join("").slice(0, 2).toUpperCase()}
+        </div>
 
         <div>
           <span>ACTIVE OPERATIVE</span>
@@ -50,6 +54,18 @@ export function Profile() {
           <h2>Current Protocol</h2>
           <p>Maintain Gravemere containment priority. Avoid public exposure unless Night Signal relay confirms civilian risk escalation.</p>
         </article>
+
+        <form className="profile-card profile-wide profile-identity" onSubmit={(event) => {
+          event.preventDefault();
+          setOperatorName(name);
+        }}>
+          <h2>Operator Identity</h2>
+          <label htmlFor="profile-name">Display name</label>
+          <div>
+            <input id="profile-name" value={name} maxLength={32} onChange={(event) => setName(event.target.value)} />
+            <button type="submit" disabled={!name.trim() || name.trim() === operatorName}>Update identity</button>
+          </div>
+        </form>
       </section>
     </main>
   );

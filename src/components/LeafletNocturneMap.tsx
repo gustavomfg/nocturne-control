@@ -22,6 +22,9 @@ type LeafletNocturneMapProps = {
   escapedVillainPins: Villain[];
   getDistrictForValue: (value: string) => NocturneDistrictMap;
   onSelectDistrict: (districtId: string) => void;
+  onOpenVillain?: (name: string) => void;
+  onOpenMissions?: () => void;
+  fitAllToken?: number;
 };
 
 const mapBounds: L.LatLngBoundsExpression = [[0, 0], [1000, 1400]];
@@ -31,9 +34,15 @@ function toLeafletPoint(point: [number, number]): L.LatLngExpression {
 }
 
 function createMarkerIcon(type: "district" | "mission" | "villain", label: string, active = false) {
+  const content = document.createElement("div");
+  const signal = document.createElement("span");
+  const text = document.createElement("strong");
+  text.textContent = label;
+  content.append(signal, text);
+
   return L.divIcon({
     className: `nocturne-leaflet-marker ${type} ${active ? "active" : ""}`,
-    html: `<span></span><strong>${label}</strong>`,
+    html: content,
     iconSize: [120, 34],
     iconAnchor: [14, 17],
   });
@@ -47,6 +56,9 @@ export function LeafletNocturneMap({
   escapedVillainPins,
   getDistrictForValue,
   onSelectDistrict,
+  onOpenVillain,
+  onOpenMissions,
+  fitAllToken = 0,
 }: LeafletNocturneMapProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<L.Map | null>(null);
@@ -153,6 +165,7 @@ export function LeafletNocturneMap({
         direction: "top",
         className: "nocturne-map-tooltip",
       });
+      marker.on("click", () => onOpenMissions?.());
       signalLayer.addLayer(marker);
     });
 
@@ -166,9 +179,10 @@ export function LeafletNocturneMap({
         direction: "top",
         className: "nocturne-map-tooltip",
       });
+      marker.on("click", () => onOpenVillain?.(villain.name));
       signalLayer.addLayer(marker);
     });
-  }, [activeMissionPins, escapedVillainPins, getDistrictForValue]);
+  }, [activeMissionPins, escapedVillainPins, getDistrictForValue, onOpenMissions, onOpenVillain]);
 
   useEffect(() => {
     const map = mapRef.current;
@@ -183,6 +197,10 @@ export function LeafletNocturneMap({
       duration: 0.75,
     });
   }, [activeDistrictId, districts]);
+
+  useEffect(() => {
+    if (fitAllToken > 0) mapRef.current?.fitBounds(mapBounds, { animate: true, padding: [20, 20] });
+  }, [fitAllToken]);
 
   return <div className="nocturne-leaflet-map" ref={containerRef} aria-label="Custom Nocturne Leaflet map" />;
 }

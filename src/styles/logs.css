@@ -48,6 +48,31 @@
   gap: 14px;
 }
 
+.logs-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.logs-filters button {
+  padding: 7px 10px;
+  border: 1px solid var(--panel-border);
+  color: var(--muted);
+  background: var(--panel-soft);
+  cursor: pointer;
+}
+
+.logs-filters button[aria-pressed="true"] {
+  border-color: var(--signal);
+  color: var(--signal);
+}
+
+.import-message {
+  margin-bottom: 18px;
+  color: #8ea97e;
+}
+
 .log-entry {
   position: relative;
   padding: 18px 20px 18px 28px;

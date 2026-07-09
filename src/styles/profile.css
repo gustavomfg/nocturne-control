@@ -104,6 +104,39 @@
   grid-column: 1 / -1;
 }
 
+.profile-identity label {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--muted);
+}
+
+.profile-identity > div {
+  display: flex;
+  gap: 12px;
+}
+
+.profile-identity input {
+  flex: 1;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--panel-border);
+  outline: none;
+  background: rgba(0, 0, 0, 0.36);
+}
+
+.profile-identity button {
+  padding: 10px 14px;
+  border: 1px solid rgba(214, 179, 90, 0.34);
+  color: var(--signal);
+  background: rgba(214, 179, 90, 0.07);
+  cursor: pointer;
+}
+
+.profile-identity button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
 @media (max-width: 640px) {
   .profile-page {
     padding: 28px 18px;

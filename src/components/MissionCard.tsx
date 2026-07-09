@@ -6,9 +6,10 @@ import "../styles/mission-card.css";
 
 type MissionCardProps = {
   mission: Mission;
+  onResolve?: () => void;
 };
 
-export function MissionCard({ mission }: MissionCardProps) {
+export function MissionCard({ mission, onResolve }: MissionCardProps) {
   const tiltCard = useTiltCard();
   const code = mission.title
     .split(" ")
@@ -57,6 +58,15 @@ export function MissionCard({ mission }: MissionCardProps) {
         <div className="mission-progress-bar">
           <div style={{ width: `${mission.progress}%` }} />
         </div>
+        {onResolve && (
+          <button
+            className="card-action"
+            disabled={mission.status === "COMPLETED"}
+            onClick={onResolve}
+          >
+            {mission.status === "COMPLETED" ? "Operation complete" : "Resolve operation"}
+          </button>
+        )}
       </div>
     </article>
   );
