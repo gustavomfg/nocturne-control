@@ -1,13 +1,17 @@
+import { useMemo, useState } from "react";
 import { MissionCard } from "../components/MissionCard";
+import { MissionPlanner } from "../components/MissionPlanner";
 import { useNocturne } from "../state/useNocturne";
+import type { Mission } from "../types/mission";
 
 import "../styles/missions.css";
 
 export function Missions() {
-  const { missions, resolveMission } = useNocturne();
+  const { missions, gadgets, missionPlans, resolveMission, planMission } = useNocturne();
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("ALL");
   const [sort, setSort] = useState("risk");
+  const [planningMission, setPlanningMission] = useState<Mission | null>(null);
   const visibleMissions = useMemo(() => missions
     .filter((mission) => status === "ALL" || mission.status === status)
     .filter((mission) => `${mission.title} ${mission.district}`.toLowerCase().includes(query.toLowerCase()))
@@ -36,11 +40,17 @@ export function Missions() {
 
       <section className="missions-grid">
         {visibleMissions.map((mission) => (
-          <MissionCard key={mission.id} mission={mission} onResolve={() => resolveMission(mission.id)} />
+          <MissionCard
+            key={mission.id}
+            mission={mission}
+            onResolve={() => resolveMission(mission.id)}
+            onPlan={() => setPlanningMission(mission)}
+            planned={missionPlans.some((plan) => plan.missionId === mission.id)}
+          />
         ))}
         {visibleMissions.length === 0 && <div className="collection-empty"><strong>No mission signal found</strong><p>Adjust the current search or status filter.</p></div>}
       </section>
+      <MissionPlanner mission={planningMission} gadgets={gadgets} onClose={() => setPlanningMission(null)} onSubmit={planMission} />
     </main>
   );
 }
-import { useMemo, useState } from "react";

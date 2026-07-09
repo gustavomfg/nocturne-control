@@ -139,6 +139,13 @@ export function NocturneMap({ onOpenVillain, onOpenMissions }: NocturneMapProps)
             <span><i className="legend-villain" /> Escaped target</span>
             <span><i className="legend-district" /> Selected district</span>
           </div>
+          <section className="sr-only" aria-label="Map signal summary">
+            <h2>Map signals</h2>
+            <ul>
+              {activeMissionPins.map((mission) => <li key={`mission-${mission.id}`}>Active mission: {mission.title}, {mission.district}, risk {mission.riskLevel}%.</li>)}
+              {escapedVillainPins.map((villain) => <li key={`target-${villain.id}`}>Escaped target: {villain.name}, last signal {villain.lastLocation}.</li>)}
+            </ul>
+          </section>
         </div>
 
         <aside className="map-intel">

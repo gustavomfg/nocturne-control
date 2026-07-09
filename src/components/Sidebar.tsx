@@ -26,7 +26,9 @@ const navItems: Array<{ page: Page; label: string; icon: Parameters<typeof Inter
   { page: "aegis", label: "Aegis Lab", icon: "shield" },
   { page: "terminal", label: "Terminal", icon: "terminal" },
   { page: "map", label: "Map", icon: "map" },
+  { page: "campaign", label: "Night Watch", icon: "radar" },
   { page: "profile", label: "Profile", icon: "profile" },
+  { page: "editor", label: "Scenario Editor", icon: "editor" },
   { page: "logs", label: "Logs", icon: "archive" },
 ];
 

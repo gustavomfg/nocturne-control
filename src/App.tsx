@@ -21,6 +21,8 @@ const pageRoutes: Record<Page, string> = {
   logs: "/logs",
   map: "/map",
   profile: "/profile",
+  campaign: "/campaign",
+  editor: "/editor",
 };
 
 const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
@@ -34,6 +36,8 @@ const Logs = lazy(() => import("./pages/Logs").then((module) => ({ default: modu
 const VillainDetail = lazy(() => import("./pages/VillainDetail").then((module) => ({ default: module.VillainDetail })));
 const NocturneMap = lazy(() => import("./pages/NocturneMap").then((module) => ({ default: module.NocturneMap })));
 const Profile = lazy(() => import("./pages/Profile").then((module) => ({ default: module.Profile })));
+const Campaign = lazy(() => import("./pages/Campaign").then((module) => ({ default: module.Campaign })));
+const ScenarioEditor = lazy(() => import("./pages/ScenarioEditor").then((module) => ({ default: module.ScenarioEditor })));
 const NotFound = lazy(() => import("./pages/NotFound").then((module) => ({ default: module.NotFound })));
 
 function toAppPath(path: string) {
@@ -74,6 +78,11 @@ function getRouteFromPath(pathname: string): AppRoute {
   };
 }
 
+function getRouteFromLocation() {
+  const redirectedPath = new URLSearchParams(window.location.search).get("p");
+  return getRouteFromPath(redirectedPath || window.location.pathname);
+}
+
 function loadStoredBoolean(key: string, fallback: boolean) {
   let storedValue: string | null;
 
@@ -107,7 +116,7 @@ function App() {
       return true;
     }
   });
-  const [route, setRoute] = useState<AppRoute>(() => getRouteFromPath(window.location.pathname));
+  const [route, setRoute] = useState<AppRoute>(getRouteFromLocation);
   const [effectsEnabled, setEffectsEnabled] = useState(() =>
     loadStoredBoolean("nocturne-effects-enabled", !window.matchMedia("(prefers-reduced-motion: reduce)").matches)
   );
@@ -125,12 +134,16 @@ function App() {
   }, []);
 
   useEffect(() => {
+    const redirectedPath = new URLSearchParams(window.location.search).get("p");
+    if (redirectedPath) {
+      window.history.replaceState(null, "", `${redirectedPath}${window.location.hash}`);
+    }
     if (window.location.pathname === basePathFull || window.location.pathname === basePathFull.replace(/\/$/, "")) {
       window.history.replaceState(null, "", toAppPath(pageRoutes.dashboard));
     }
 
     function handlePopState() {
-      setRoute(getRouteFromPath(window.location.pathname));
+      setRoute(getRouteFromLocation());
     }
 
     window.addEventListener("popstate", handlePopState);
@@ -223,6 +236,12 @@ function App() {
 
       case "profile":
         return <Profile />;
+
+      case "campaign":
+        return <Campaign />;
+
+      case "editor":
+        return <ScenarioEditor />;
 
       case "notFound":
         return <NotFound onGoHome={() => handleChangePage("dashboard")} />;

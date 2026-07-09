@@ -64,4 +64,30 @@ describe("Nocturne state", () => {
     expect(state.operatorName).toBe("Barbara");
     expect(state.logs[0].message).toContain("Barbara");
   });
+
+  it("rejects incomplete save data instead of restoring a state that would break the interface", () => {
+    const invalid = {
+      ...initialState,
+      villains: [{ id: 1, name: "Incomplete target" }],
+    };
+
+    expect(migrateState(invalid)).toBeNull();
+  });
+
+  it("records a mission plan and applies its advantage when the watch advances", () => {
+    const planned = nocturneReducer(initialState, {
+      type: "PLAN_MISSION",
+      missionId: 1,
+      strategy: "STEALTH",
+      gadgetIds: [3],
+      unit: "Night Watch",
+      timestamp: "22:13:00",
+    });
+    const advanced = nocturneReducer(planned, { type: "ADVANCE_CAMPAIGN", timestamp: "22:14:00" });
+
+    expect(planned.missionPlans).toHaveLength(1);
+    expect(advanced.missions.find((mission) => mission.id === 1)?.progress).toBe(96);
+    expect(advanced.missionPlans).toHaveLength(0);
+    expect(advanced.campaign.turn).toBe(2);
+  });
 });

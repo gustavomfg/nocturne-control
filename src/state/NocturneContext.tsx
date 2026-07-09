@@ -6,12 +6,17 @@ import { gadgets as initialGadgets } from "../data/gadgets";
 import { missions as initialMissions } from "../data/missions";
 import { villains as initialVillains } from "../data/villains";
 import type { EventLog } from "../types";
+import type { Achievement, CampaignState } from "../types";
+import type { Mission } from "../types/mission";
 import { notify } from "../utils/uiEvents";
 import { NocturneContext } from "./nocturneContext";
 import type { NocturneAction, NocturneState } from "./nocturneContext";
 
 const STORAGE_KEY = "nocturne-control-state";
-export const SCHEMA_VERSION = 2;
+export const SCHEMA_VERSION = 3;
+const MAX_LOGS = 500;
+
+const defaultCampaign: CampaignState = { night: 1, turn: 1, intel: 24, cityStability: 58 };
 
 export const initialState: NocturneState = {
   schemaVersion: SCHEMA_VERSION,
@@ -27,6 +32,9 @@ export const initialState: NocturneState = {
       message: "Nocturne Control Center initialized.",
     },
   ],
+  campaign: defaultCampaign,
+  missionPlans: [],
+  achievements: [],
 };
 
 function createLog(type: EventLog["type"], message: string, timestamp: string): EventLog {
@@ -38,6 +46,21 @@ function createLog(type: EventLog["type"], message: string, timestamp: string): 
   };
 }
 
+function prependLog(logs: EventLog[], log: EventLog) {
+  return [log, ...logs].slice(0, MAX_LOGS);
+}
+
+function unlockAchievement(state: NocturneState, achievement: Achievement, timestamp: string): Pick<NocturneState, "achievements" | "logs"> {
+  if (state.achievements.some((item) => item.id === achievement.id)) {
+    return { achievements: state.achievements, logs: state.logs };
+  }
+
+  return {
+    achievements: [...state.achievements, { ...achievement, unlockedAt: timestamp }],
+    logs: prependLog(state.logs, createLog("ACHIEVEMENT", `Archive unlocked: ${achievement.title}.`, timestamp)),
+  };
+}
+
 export function isNocturneState(value: unknown): value is NocturneState {
   if (!value || typeof value !== "object") {
     return false;
@@ -46,12 +69,22 @@ export function isNocturneState(value: unknown): value is NocturneState {
   const state = value as Partial<NocturneState>;
   const hasNumberId = (item: unknown) =>
     Boolean(item && typeof item === "object" && typeof (item as { id?: unknown }).id === "number");
-  const hasNamedRecord = (item: unknown) =>
-    hasNumberId(item) && typeof (item as { name?: unknown }).name === "string";
-  const hasMissionRecord = (item: unknown) =>
-    hasNumberId(item) && typeof (item as { title?: unknown }).title === "string";
-  const hasLogRecord = (item: unknown) =>
-    hasNumberId(item) && typeof (item as { message?: unknown }).message === "string";
+  const hasNamedRecord = (item: unknown) => hasNumberId(item) &&
+    typeof (item as { name?: unknown }).name === "string" &&
+    typeof (item as { status?: unknown }).status === "string";
+  const hasMissionRecord = (item: unknown) => hasNumberId(item) &&
+    typeof (item as { title?: unknown }).title === "string" &&
+    typeof (item as { district?: unknown }).district === "string" &&
+    typeof (item as { status?: unknown }).status === "string" &&
+    typeof (item as { progress?: unknown }).progress === "number" &&
+    typeof (item as { riskLevel?: unknown }).riskLevel === "number" &&
+    Array.isArray((item as { villainIds?: unknown }).villainIds) &&
+    Array.isArray((item as { recommendedGadgetIds?: unknown }).recommendedGadgetIds);
+  const hasLogRecord = (item: unknown) => hasNumberId(item) &&
+    typeof (item as { timestamp?: unknown }).timestamp === "string" &&
+    typeof (item as { type?: unknown }).type === "string" &&
+    typeof (item as { message?: unknown }).message === "string";
+  const campaign = state.campaign;
 
   return (
     state.schemaVersion === SCHEMA_VERSION &&
@@ -66,7 +99,14 @@ export function isNocturneState(value: unknown): value is NocturneState {
     state.gadgets.length > 0 &&
     state.gadgets.every(hasNamedRecord) &&
     Array.isArray(state.logs) &&
-    state.logs.every(hasLogRecord)
+    state.logs.length <= MAX_LOGS &&
+    state.logs.every(hasLogRecord) &&
+    Boolean(campaign && typeof campaign.night === "number" && typeof campaign.turn === "number" &&
+      typeof campaign.intel === "number" && typeof campaign.cityStability === "number") &&
+    Array.isArray(state.missionPlans) &&
+    state.missionPlans.every((plan) => typeof plan.missionId === "number" && typeof plan.strategy === "string" &&
+      Array.isArray(plan.gadgetIds) && typeof plan.unit === "string" && typeof plan.preparedAt === "string") &&
+    Array.isArray(state.achievements)
   );
 }
 
@@ -76,10 +116,21 @@ export function migrateState(value: unknown): NocturneState | null {
   }
 
   const state = value as Partial<NocturneState>;
+  const legacyMissions = Array.isArray(state.missions) ? state.missions.map((mission) => ({
+    ...mission,
+    villainIds: Array.isArray((mission as { villainIds?: unknown }).villainIds) ? (mission as { villainIds: number[] }).villainIds : [],
+    recommendedGadgetIds: Array.isArray((mission as { recommendedGadgetIds?: unknown }).recommendedGadgetIds)
+      ? (mission as { recommendedGadgetIds: number[] }).recommendedGadgetIds : [],
+  })) : state.missions;
   const migrated = {
     ...state,
     schemaVersion: SCHEMA_VERSION,
     operatorName: typeof state.operatorName === "string" ? state.operatorName : "",
+    missions: legacyMissions,
+    campaign: state.campaign ?? defaultCampaign,
+    missionPlans: Array.isArray(state.missionPlans) ? state.missionPlans : [],
+    achievements: Array.isArray(state.achievements) ? state.achievements : [],
+    logs: Array.isArray(state.logs) ? state.logs.slice(0, MAX_LOGS) : state.logs,
   };
 
   return isNocturneState(migrated) ? migrated : null;
@@ -122,10 +173,7 @@ export function nocturneReducer(state: NocturneState, action: NocturneAction): N
       return {
         ...state,
         operatorName,
-        logs: [
-          createLog("OPERATOR", `Operator identity confirmed: ${operatorName}.`, action.timestamp),
-          ...state.logs,
-        ],
+        logs: prependLog(state.logs, createLog("OPERATOR", `Operator identity confirmed: ${operatorName}.`, action.timestamp)),
       };
     }
 
@@ -142,8 +190,7 @@ export function nocturneReducer(state: NocturneState, action: NocturneAction): N
           item.id === action.villainId ? { ...item, status: "CAPTURED" } : item
         ),
         missions: state.missions.map((mission) => {
-          const isRelated = mission.description.toLowerCase().includes(villain.name.toLowerCase()) ||
-            mission.title.toLowerCase().includes(villain.name.toLowerCase());
+          const isRelated = mission.villainIds.includes(villain.id);
 
           return isRelated && mission.status !== "COMPLETED"
             ? {
@@ -153,10 +200,13 @@ export function nocturneReducer(state: NocturneState, action: NocturneAction): N
               }
             : mission;
         }),
-        logs: [
-          createLog("CAPTURE", `${villain.name} captured near ${villain.lastLocation}.`, action.timestamp),
-          ...state.logs,
-        ],
+        ...unlockAchievement(state, {
+          id: "first-capture",
+          title: "Containment Confirmed",
+          description: "Capture a priority target.",
+          unlockedAt: action.timestamp,
+        }, action.timestamp),
+        logs: prependLog(state.logs, createLog("CAPTURE", `${villain.name} captured near ${villain.lastLocation}.`, action.timestamp)),
       };
     }
 
@@ -201,14 +251,11 @@ export function nocturneReducer(state: NocturneState, action: NocturneAction): N
             eta: progress === 100 ? "COMPLETE" : mission.eta,
           };
         }),
-        logs: [
-          createLog(
+        logs: prependLog(state.logs, createLog(
             "DEPLOY",
             `${gadget.name} deployed${targetMission ? ` to ${targetMission.title}` : ""}. Power level now ${nextPowerLevel}%.`,
             action.timestamp
-          ),
-          ...state.logs,
-        ],
+          )),
       };
     }
 
@@ -226,10 +273,69 @@ export function nocturneReducer(state: NocturneState, action: NocturneAction): N
             ? { ...item, status: "COMPLETED", progress: 100, riskLevel: 0, eta: "COMPLETE" }
             : item
         ),
-        logs: [
-          createLog("MISSION", `${mission.title} resolved by ${mission.assignedUnit}.`, action.timestamp),
-          ...state.logs,
-        ],
+        ...unlockAchievement(state, {
+          id: "first-resolution",
+          title: "Night Resolved",
+          description: "Resolve an operational mission.",
+          unlockedAt: action.timestamp,
+        }, action.timestamp),
+        logs: prependLog(state.logs, createLog("MISSION", `${mission.title} resolved by ${mission.assignedUnit}.`, action.timestamp)),
+      };
+    }
+
+    case "PLAN_MISSION": {
+      const mission = state.missions.find((item) => item.id === action.missionId);
+      if (!mission || mission.status === "COMPLETED" || !action.unit.trim()) return state;
+
+      const missionPlans = [
+        ...state.missionPlans.filter((plan) => plan.missionId !== action.missionId),
+        { missionId: action.missionId, strategy: action.strategy, gadgetIds: action.gadgetIds, unit: action.unit.trim().slice(0, 48), preparedAt: action.timestamp },
+      ];
+      const achievement = unlockAchievement(state, {
+        id: "first-plan", title: "Prepared Operator", description: "Submit a tactical mission plan.", unlockedAt: action.timestamp,
+      }, action.timestamp);
+      return {
+        ...state,
+        missionPlans,
+        achievements: achievement.achievements,
+        logs: prependLog(achievement.logs, createLog("PLAN", `${mission.title} prepared: ${action.strategy.toLowerCase()} protocol assigned.`, action.timestamp)),
+      };
+    }
+
+    case "ADVANCE_CAMPAIGN": {
+      const openMissions = state.missions.filter((mission) => mission.status !== "COMPLETED");
+      const plannedIds = new Set(state.missionPlans.map((plan) => plan.missionId));
+      const missions = state.missions.map((mission) => {
+        if (mission.status === "COMPLETED") return mission;
+        const prepared = plannedIds.has(mission.id);
+        const progressGain = prepared ? 14 : 4;
+        const riskChange = prepared ? -10 : 7;
+        const progress = Math.min(100, mission.progress + progressGain);
+        const status: Mission["status"] = progress === 100 ? "COMPLETED" : "ACTIVE";
+        return { ...mission, progress, riskLevel: Math.max(0, Math.min(100, mission.riskLevel + riskChange)), status, eta: progress === 100 ? "COMPLETE" : mission.eta };
+      });
+      const stabilityDelta = openMissions.length === 0 ? 8 : Math.round(openMissions.filter((mission) => plannedIds.has(mission.id)).length * 3 - openMissions.length * 2);
+      const campaign = {
+        night: state.campaign.night + (state.campaign.turn >= 3 ? 1 : 0),
+        turn: state.campaign.turn >= 3 ? 1 : state.campaign.turn + 1,
+        intel: Math.min(100, state.campaign.intel + 6 + plannedIds.size * 2),
+        cityStability: Math.max(0, Math.min(100, state.campaign.cityStability + stabilityDelta)),
+      };
+      const achievement = campaign.night >= 2 ? unlockAchievement(state, {
+        id: "night-two", title: "Second Watch", description: "Advance into the second operational night.", unlockedAt: action.timestamp,
+      }, action.timestamp) : { achievements: state.achievements, logs: state.logs };
+      return {
+        ...state, missions, campaign, missionPlans: [], achievements: achievement.achievements,
+        logs: prependLog(achievement.logs, createLog("CAMPAIGN", `Watch advanced. City stability ${campaign.cityStability}%; intelligence ${campaign.intel}%.`, action.timestamp)),
+      };
+    }
+
+    case "ADD_MISSION": {
+      if (state.missions.some((mission) => mission.id === action.mission.id)) return state;
+      return {
+        ...state,
+        missions: [...state.missions, action.mission],
+        logs: prependLog(state.logs, createLog("SYSTEM", `Custom scenario mission added: ${action.mission.title}.`, action.timestamp)),
       };
     }
 
@@ -237,9 +343,7 @@ export function nocturneReducer(state: NocturneState, action: NocturneAction): N
       return {
         ...initialState,
         operatorName: state.operatorName,
-        logs: [
-          createLog("SYSTEM", `Operational state reset by ${state.operatorName || "unknown operator"}.`, "SYSTEM RESET"),
-        ],
+        logs: [createLog("SYSTEM", `Operational state reset by ${state.operatorName || "unknown operator"}.`, "SYSTEM RESET")],
       };
 
     default:
@@ -297,6 +401,21 @@ export function NocturneProvider({ children }: { children: ReactNode }) {
           const mission = state.missions.find((item) => item.id === missionId);
           dispatch({ type: "RESOLVE_MISSION", missionId, timestamp: getTimestamp() });
           if (mission?.status !== "COMPLETED") notify({ title: "Operation complete", message: mission?.title, tone: "success" });
+        },
+        planMission: (missionId, strategy, gadgetIds, unit) => {
+          const mission = state.missions.find((item) => item.id === missionId);
+          dispatch({ type: "PLAN_MISSION", missionId, strategy, gadgetIds, unit, timestamp: getTimestamp() });
+          if (mission) notify({ title: "Plan committed", message: `${mission.title} is ready for the next watch.`, tone: "success" });
+        },
+        advanceCampaign: () => {
+          dispatch({ type: "ADVANCE_CAMPAIGN", timestamp: getTimestamp() });
+          notify({ title: "Watch advanced", message: "Mission consequences have been recalculated." });
+        },
+        addMission: (mission) => {
+          if (state.missions.some((item) => item.id === mission.id)) return false;
+          dispatch({ type: "ADD_MISSION", mission, timestamp: getTimestamp() });
+          notify({ title: "Scenario indexed", message: mission.title, tone: "success" });
+          return true;
         },
         resetState: () => dispatch({ type: "RESET_STATE" }),
       }}

@@ -232,3 +232,4 @@
     transform: translate3d(4px, 4px, 0) scale(1.04);
   }
 }
+.villain-card-button { display: block; width: 100%; color: inherit; text-align: left; font: inherit; cursor: pointer; }

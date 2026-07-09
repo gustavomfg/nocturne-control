@@ -20,6 +20,9 @@ export function Logs() {
       missions: state.missions,
       gadgets: state.gadgets,
       logs: state.logs,
+      campaign: state.campaign,
+      missionPlans: state.missionPlans,
+      achievements: state.achievements,
     };
     const blob = new Blob([JSON.stringify(serializableState, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
@@ -33,6 +36,10 @@ export function Logs() {
 
   async function handleImport(file: File | undefined) {
     if (!file) return;
+    if (file.size > 1_000_000) {
+      setImportMessage("Save rejected: files must be smaller than 1 MB.");
+      return;
+    }
     try {
       const value: unknown = JSON.parse(await file.text());
       setImportMessage(importState(value) ? "Save restored successfully." : "Invalid or incompatible save.");

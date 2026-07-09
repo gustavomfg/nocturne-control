@@ -53,6 +53,7 @@ storybook-static
 
 # Local screenshots and raster references are intentionally kept out of git.
 images/
+Imagens/
 public/cards/
 public/backgrounds/
 public/profile/

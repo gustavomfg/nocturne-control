@@ -244,15 +244,17 @@
   pointer-events: auto;
 }
 
-.nocturne-leaflet-marker span {
+.nocturne-leaflet-marker .marker-core {
+  position: relative;
   flex: 0 0 auto;
   width: 12px;
   height: 12px;
   border: 1px solid currentColor;
-  border-radius: 50%;
   background: currentColor;
-  box-shadow: 0 0 18px currentColor;
+  box-shadow: 0 0 0 4px rgba(3, 4, 5, 0.76), 0 0 18px currentColor;
 }
+
+.nocturne-leaflet-marker .marker-core::after { content: ""; position: absolute; inset: 3px; border: 1px solid #08090b; }
 
 .nocturne-leaflet-marker strong {
   display: none;
@@ -275,6 +277,8 @@
   height: 34px !important;
 }
 
+.nocturne-leaflet-marker.district .marker-core { border-radius: 50%; }
+
 .nocturne-leaflet-marker.district strong {
   display: block;
 }
@@ -291,15 +295,23 @@
   color: #8ea97e;
 }
 
+.nocturne-leaflet-marker.mission .marker-core { transform: rotate(45deg); }
+.nocturne-leaflet-marker.mission .marker-core::after { inset: 2px; }
+
 .nocturne-leaflet-marker.villain {
   color: #c46a60;
 }
 
-.nocturne-leaflet-marker.mission span,
-.nocturne-leaflet-marker.villain span,
-.nocturne-leaflet-marker.district.active span {
+.nocturne-leaflet-marker.villain .marker-core { border-radius: 50% 50% 50% 0; transform: rotate(-45deg); }
+.nocturne-leaflet-marker.villain .marker-core::after { inset: 3px; }
+
+.nocturne-leaflet-marker.mission .marker-core,
+.nocturne-leaflet-marker.villain .marker-core,
+.nocturne-leaflet-marker.district.active .marker-core {
   animation: leafletSignalPulse 1.8s ease-in-out infinite;
 }
+.nocturne-leaflet-marker.mission .marker-core { animation-name: leafletMissionPulse; }
+.nocturne-leaflet-marker.villain .marker-core { animation-name: leafletVillainPulse; }
 
 .nocturne-map-tooltip {
   border: 1px solid rgba(214, 179, 90, 0.22);
@@ -324,6 +336,16 @@
     opacity: 1;
     transform: scale(1.16);
   }
+}
+
+@keyframes leafletMissionPulse {
+  0%, 100% { opacity: .62; transform: rotate(45deg) scale(.88); }
+  50% { opacity: 1; transform: rotate(45deg) scale(1.16); }
+}
+
+@keyframes leafletVillainPulse {
+  0%, 100% { opacity: .62; transform: rotate(-45deg) scale(.88); }
+  50% { opacity: 1; transform: rotate(-45deg) scale(1.16); }
 }
 
 .map-location-menu {

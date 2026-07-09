@@ -13,3 +13,7 @@ createRoot(document.getElementById("root")!).render(
     </NocturneProvider>
   </StrictMode>
 );
+
+if ("serviceWorker" in navigator && import.meta.env.PROD) {
+  void navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`);
+}

@@ -1,0 +1,9 @@
+{
+  "name": "Nocturne Control Center",
+  "short_name": "Nocturne",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#020203",
+  "theme_color": "#050505",
+  "description": "A local-first fictional tactical operations console."
+}

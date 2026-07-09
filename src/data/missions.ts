@@ -12,6 +12,8 @@ export const missions: Mission[] = [
     eta: "00:18:40",
     riskLevel: 94,
     description: "Analyze rogue signal bursts tied to Vesper sightings.",
+    villainIds: [1],
+    recommendedGadgetIds: [3, 4],
   },
   {
     id: 2,
@@ -24,6 +26,8 @@ export const missions: Mission[] = [
     eta: "01:05:00",
     riskLevel: 68,
     description: "Reinforce security systems after suspicious network access.",
+    villainIds: [2],
+    recommendedGadgetIds: [2],
   },
   {
     id: 3,
@@ -36,6 +40,8 @@ export const missions: Mission[] = [
     eta: "00:42:15",
     riskLevel: 52,
     description: "Monitor street-level crime and gang movement.",
+    villainIds: [],
+    recommendedGadgetIds: [1, 3],
   },
   {
     id: 4,
@@ -48,5 +54,7 @@ export const missions: Mission[] = [
     eta: "02:12:30",
     riskLevel: 87,
     description: "Locate missing Aegis experimental equipment.",
+    villainIds: [4],
+    recommendedGadgetIds: [1, 2],
   },
 ];

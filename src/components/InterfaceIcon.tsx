@@ -10,11 +10,13 @@ type IconName =
   | "mission"
   | "power"
   | "profile"
+  | "radar"
   | "reset"
   | "shield"
   | "sound"
   | "terminal"
-  | "target";
+  | "target"
+  | "editor";
 
 type InterfaceIconProps = SVGProps<SVGSVGElement> & {
   name: IconName;
@@ -88,6 +90,14 @@ const paths: Record<IconName, ReactElement> = {
       <path d="M5 21a7 7 0 0 1 14 0" />
     </>
   ),
+  radar: (
+    <>
+      <circle cx="12" cy="12" r="8.5" />
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 3.5v8.5l5.7 3.4" />
+      <path d="M4 12H2M22 12h-2M12 4V2M12 22v-2" />
+    </>
+  ),
   reset: (
     <>
       <path d="M5 12a7 7 0 1 0 2.05-4.95L5 9" />
@@ -123,6 +133,13 @@ const paths: Record<IconName, ReactElement> = {
       <path d="M12 19v3" />
       <path d="M2 12h3" />
       <path d="M19 12h3" />
+    </>
+  ),
+  editor: (
+    <>
+      <path d="M5 4h10l4 4v12H5z" />
+      <path d="M15 4v5h5" />
+      <path d="M8 15l6-6 2 2-6 6H8z" />
     </>
   ),
 };

@@ -13,4 +13,6 @@ export type Mission = {
   eta: string;
   riskLevel: number;
   description: string;
+  villainIds: number[];
+  recommendedGadgetIds: number[];
 };

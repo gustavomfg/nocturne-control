@@ -7,9 +7,11 @@ import "../styles/mission-card.css";
 type MissionCardProps = {
   mission: Mission;
   onResolve?: () => void;
+  onPlan?: () => void;
+  planned?: boolean;
 };
 
-export function MissionCard({ mission, onResolve }: MissionCardProps) {
+export function MissionCard({ mission, onResolve, onPlan, planned = false }: MissionCardProps) {
   const tiltCard = useTiltCard();
   const code = mission.title
     .split(" ")
@@ -65,6 +67,11 @@ export function MissionCard({ mission, onResolve }: MissionCardProps) {
             onClick={onResolve}
           >
             {mission.status === "COMPLETED" ? "Operation complete" : "Resolve operation"}
+          </button>
+        )}
+        {onPlan && mission.status !== "COMPLETED" && (
+          <button className="card-action" onClick={onPlan}>
+            {planned ? "Revise tactical plan" : "Plan operation"}
           </button>
         )}
       </div>

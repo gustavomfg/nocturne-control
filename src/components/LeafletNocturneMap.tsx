@@ -35,15 +35,11 @@ function toLeafletPoint(point: [number, number]): L.LatLngExpression {
 
 function createMarkerIcon(type: "district" | "mission" | "villain", label: string, active = false) {
   const isDistrict = type === "district";
-  const content = document.createElement("div");
-  const signal = document.createElement("span");
-  const text = document.createElement("strong");
-  text.textContent = label;
-  content.append(signal, text);
+  const safeLabel = label.replace(/[&<>"]/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[character] ?? character);
 
   return L.divIcon({
     className: `nocturne-leaflet-marker ${type} ${active ? "active" : ""}`,
-    html: content,
+    html: `<span class="marker-core" aria-hidden="true"></span><strong>${safeLabel}</strong>`,
     iconSize: isDistrict ? [150, 34] : [28, 28],
     iconAnchor: isDistrict ? [14, 17] : [14, 14],
   });
@@ -102,8 +98,6 @@ export function LeafletNocturneMap({
       .addTo(map);
     districtLayerRef.current = L.layerGroup().addTo(map);
     signalLayerRef.current = L.layerGroup().addTo(map);
-    L.control.zoom({ position: "bottomleft" }).addTo(map);
-
     mapRef.current = map;
     window.setTimeout(() => map.invalidateSize(), 0);
 
@@ -206,5 +200,5 @@ export function LeafletNocturneMap({
     if (fitAllToken > 0) mapRef.current?.fitBounds(mapBounds, { animate: true, padding: [20, 20] });
   }, [fitAllToken]);
 
-  return <div className="nocturne-leaflet-map" ref={containerRef} aria-label="Custom Nocturne Leaflet map" />;
+  return <div className="nocturne-leaflet-map" ref={containerRef} role="region" aria-label="Interactive Nocturne city map. Use the district and landmark controls to change the selected sector." />;
 }

@@ -26,7 +26,7 @@ type TerminalProps = {
 const baseCommands = [
   "help", "status city", "list villains", "list missions", "list gadgets",
   "scan gravemere", "signal on", "go dashboard", "go map", "go missions",
-  "go gravemere", "go aegis", "go logs", "go profile", "clear", "reset state",
+  "go gravemere", "go aegis", "go logs", "go profile", "go campaign", "go editor", "clear", "reset state",
 ];
 
 export function Terminal({ soundEnabled, onNavigate, onOpenVillain }: TerminalProps) {
@@ -100,10 +100,10 @@ export function Terminal({ soundEnabled, onNavigate, onOpenVillain }: TerminalPr
       const pageAliases: Record<string, Page> = {
         dashboard: "dashboard", home: "dashboard", gravemere: "gravemere",
         missions: "missions", aegis: "aegis", arsenal: "aegis", terminal: "terminal",
-        logs: "logs", map: "map", profile: "profile",
+        logs: "logs", map: "map", profile: "profile", campaign: "campaign", watch: "campaign", editor: "editor",
       };
       const page = pageAliases[normalizedCommand.slice(3)];
-      if (!page) return "Navigation failed. Available: dashboard, gravemere, missions, aegis, map, profile, logs.";
+      if (!page) return "Navigation failed. Available: dashboard, gravemere, missions, aegis, map, profile, logs, campaign, editor.";
       window.setTimeout(() => onNavigate(page), 180);
       return `Opening ${page.toUpperCase()} module...`;
     }
@@ -261,7 +261,7 @@ export function Terminal({ soundEnabled, onNavigate, onOpenVillain }: TerminalPr
     <main className="terminal-page">
       <h1>Sentinel Terminal</h1>
 
-      <section className="terminal-window" role="log" aria-live="polite" aria-label="Sentinel terminal output">
+      <section className="terminal-window" role="log" aria-live="off" aria-label="Sentinel terminal output">
         {history.map((line) => (
           <p key={line.id} className={line.type}>
             {line.text}

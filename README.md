@@ -2,23 +2,27 @@
 
 Original noir tactical control interface built with React, TypeScript, Vite and Leaflet.
 
-Nocturne Control Center is a fictional city operations console for Nocturne City. It combines a live dashboard, mission control, target files, Aegis equipment, a local SVG district map, logs, profile state and an interactive terminal into one connected simulation.
+Nocturne Control Center is a fictional city operations console for Nocturne City. It combines a live dashboard, mission planning, target files, Aegis equipment, a local SVG district map, campaign progression, logs, profile state and an interactive terminal into one connected simulation.
 
 All names, districts, dossiers, missions, gadgets and map artwork are original fictional material. The app does not use external map APIs, backend services or private API keys.
 
 ## Highlights
 
 - Connected local simulation for missions, villains, gadgets, logs and operator identity.
+- Night Watch campaign loop with tactical plans, three-turn watches, city stability, intelligence, achievements and an operational replay.
+- Mission planner with field-unit assignment, selectable operational protocols and deployable Aegis assets.
+- Local Scenario Editor for adding original mission briefs to the current simulation.
 - Tactical dashboard with radar, priority mission, priority target, incident feed and threat breakdown.
-- Leaflet-powered custom city map using `CRS.Simple` and a local SVG overlay.
-- District intel panel, compact tactical map markers and direct links into missions or target files.
+- Leaflet-powered custom city map using `CRS.Simple`, a local SVG overlay and custom mission, target and district signals.
+- District intel panel, keyboard-accessible signal summary and direct links into missions or target files.
 - Mission, villain and gadget collections with search, filters, empty states and responsive cards.
 - Sentinel Terminal with commands backed by the same application state.
-- Persistent operator onboarding, editable profile, JSON import/export and reset flow.
-- Global command palette with `Ctrl/Cmd + K`.
+- Persistent operator onboarding, editable profile, validated JSON import/export (1 MB maximum) and reset flow.
+- Global command palette with `Ctrl/Cmd + K`, search, arrow-key navigation and Enter selection.
 - Optional interface effects, sound toggle, high-contrast mode and reduced-motion support.
 - Responsive sidebar/drawer navigation for desktop and mobile.
 - Toast feedback, confirmation dialogs, route skeletons and typed reducer tests.
+- Installable local-first PWA with an offline service worker.
 
 ## Tech Stack
 
@@ -66,7 +70,7 @@ npm run test
 npm run build
 ```
 
-The test suite covers state migration, operator identity preservation, connected mission actions and boot screen behavior.
+The test suite covers state migration and validation, operator identity preservation, connected mission actions, campaign turns and boot screen behavior.
 
 ## App Routes
 
@@ -78,6 +82,8 @@ The test suite covers state migration, operator identity preservation, connected
 | `/aegis` | Gadget inventory and deployment controls |
 | `/terminal` | Command-line interface into the app state |
 | `/map` | Local Leaflet district map and signal intel |
+| `/campaign` | Night Watch campaign, achievements and operation replay |
+| `/editor` | Local development tool for original scenario missions |
 | `/profile` | Operator profile and save import/export |
 | `/logs` | Operational event history |
 
@@ -100,6 +106,8 @@ scan gravemere
 signal on
 whoami
 go map
+go campaign
+go editor
 reset state
 clear
 ```
@@ -112,12 +120,22 @@ The map uses Leaflet with a simple coordinate system and a local SVG overlay:
 public/maps/nocturne-custom-map.svg
 ```
 
-There is no Google Maps, Mapbox, tile server or external cartography dependency. District selection uses local bounds and markers from `src/pages/NocturneMap.tsx`.
+There is no Google Maps, Mapbox, tile server or external cartography dependency. District selection uses local bounds and custom Leaflet marker markup from `src/pages/NocturneMap.tsx` and `src/components/LeafletNocturneMap.tsx`.
+
+## Campaign and Local Scenarios
+
+Use **Plan operation** in Mission Control to assign a unit, protocol and assets. Then use **Advance watch** in Night Watch to simulate the next operational turn. Prepared operations progress faster while reducing risk; the resulting actions appear in the operational replay and can unlock archive achievements.
+
+The Scenario Editor adds a local mission to the persistent simulation. New scenarios begin as waiting operations and become visible as active map signals when the campaign advances.
+
+## Offline and Deep Links
+
+The app registers a small service worker in production so the visited application shell remains available offline. GitHub Pages deep links are supported through `public/404.html`, which restores an internal route such as `/gravemere/vesper` after a direct visit or refresh.
 
 ## Project Structure
 
 ```text
-public/maps     Custom Nocturne map overlay
+public           Custom map, PWA manifest, service worker and Pages fallback
 src/components  Shared UI components
 src/data        Static fictional domain data
 src/hooks       UI interaction hooks
@@ -150,7 +168,7 @@ The repository ignores:
 - coverage, reports, generated screenshots and cache folders
 - local agent/session metadata (`.agents/`, `.codex/`)
 - private key/certificate formats
-- local raster asset folders that are not cleared for repository use
+- local raster asset and screenshot folders that are not cleared for repository use
 
 Keep committed assets original, lightweight and cleared for public use.
 

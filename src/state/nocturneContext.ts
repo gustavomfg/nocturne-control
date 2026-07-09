@@ -1,6 +1,6 @@
 import { createContext } from "react";
 
-import type { EventLog } from "../types";
+import type { Achievement, CampaignState, EventLog, MissionPlan, MissionStrategy } from "../types";
 import type { Gadget } from "../types/gadget";
 import type { Mission } from "../types/mission";
 import type { Villain } from "../types/villain";
@@ -12,6 +12,9 @@ export type NocturneState = {
   missions: Mission[];
   gadgets: Gadget[];
   logs: EventLog[];
+  campaign: CampaignState;
+  missionPlans: MissionPlan[];
+  achievements: Achievement[];
 };
 
 export type NocturneAction =
@@ -20,6 +23,9 @@ export type NocturneAction =
   | { type: "CAPTURE_VILLAIN"; villainId: number; timestamp: string }
   | { type: "DEPLOY_GADGET"; gadgetId: number; timestamp: string }
   | { type: "RESOLVE_MISSION"; missionId: number; timestamp: string }
+  | { type: "PLAN_MISSION"; missionId: number; strategy: MissionStrategy; gadgetIds: number[]; unit: string; timestamp: string }
+  | { type: "ADVANCE_CAMPAIGN"; timestamp: string }
+  | { type: "ADD_MISSION"; mission: Mission; timestamp: string }
   | { type: "RESET_STATE" };
 
 export type NocturneContextValue = NocturneState & {
@@ -28,6 +34,9 @@ export type NocturneContextValue = NocturneState & {
   captureVillain: (villainId: number) => void;
   deployGadget: (gadgetId: number) => void;
   resolveMission: (missionId: number) => void;
+  planMission: (missionId: number, strategy: MissionStrategy, gadgetIds: number[], unit: string) => void;
+  advanceCampaign: () => void;
+  addMission: (mission: Mission) => boolean;
   resetState: () => void;
 };
 

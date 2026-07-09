@@ -17,20 +17,7 @@ export function VillainCard({ villain, onOpen }: VillainCardProps) {
     .join("")
     .slice(0, 2);
 
-  return (
-    <article
-      className="villain-card"
-      {...tiltCard}
-      onClick={onOpen}
-      onKeyDown={(event) => {
-        if ((event.key === "Enter" || event.key === " ") && onOpen) {
-          event.preventDefault();
-          onOpen();
-        }
-      }}
-      role={onOpen ? "button" : undefined}
-      tabIndex={onOpen ? 0 : undefined}
-    >
+  const content = <>
       <div className="villain-card-image">
         <InterfaceIcon name="target" />
         <span>{initials}</span>
@@ -64,6 +51,13 @@ export function VillainCard({ villain, onOpen }: VillainCardProps) {
       <p className="villain-description">{villain.description}</p>
 
       <p className="villain-description">{villain.threatNotes}</p>
-    </article>
-  );
+    </>;
+
+  if (onOpen) {
+    return <button type="button" className="villain-card villain-card-button" {...tiltCard} onClick={onOpen} aria-label={`Open target file: ${villain.name}`}>
+      {content}
+    </button>;
+  }
+
+  return <article className="villain-card" {...tiltCard}>{content}</article>;
 }
