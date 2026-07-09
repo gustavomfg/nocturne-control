@@ -56,7 +56,7 @@ The test suite covers state migration, operator identity, connected mission acti
 
 ## Deploy
 
-Pushes to `main` are deployed by `.github/workflows/deploy.yml` after lint, tests and production build pass. The configured GitHub Pages base path matches the `gotham-control` repository:
+Pushes to `main` are deployed by `.github/workflows/deploy.yml` after lint, tests and production build pass. The configured GitHub Pages base path matches the `nocturne-control` repository:
 
 ```bash
 npm run build
