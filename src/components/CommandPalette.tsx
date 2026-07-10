@@ -60,7 +60,7 @@ export function CommandPalette({
   }, [open]);
 
   return (
-    <dialog ref={dialogRef} className="command-palette" onCancel={onClose} onClose={onClose} onKeyDown={(event) => {
+    <dialog ref={dialogRef} className="command-palette" aria-label="Command palette" onCancel={onClose} onClose={onClose} onKeyDown={(event) => {
       if (event.key === "ArrowDown") { event.preventDefault(); setActiveIndex((index) => Math.min(results.length - 1, index + 1)); }
       if (event.key === "ArrowUp") { event.preventDefault(); setActiveIndex((index) => Math.max(0, index - 1)); }
       if (event.key === "Enter" && event.target === dialogRef.current) { event.preventDefault(); results[activeIndex]?.action(); onClose(); }
@@ -77,14 +77,18 @@ export function CommandPalette({
           }}
           placeholder="Search modules and commands..."
           aria-label="Search commands"
+          role="combobox"
+          aria-controls="command-results"
+          aria-expanded="true"
+          aria-activedescendant={results.length ? `command-option-${activeIndex}` : undefined}
           autoFocus
         />
         <kbd>ESC</kbd>
       </header>
-      <div className="command-results">
+      <div className="command-results" role="listbox" aria-label="Available commands" id="command-results">
         <small>COMMANDS</small>
         {results.map((command, index) => (
-          <button key={command.label} className={index === activeIndex ? "active" : ""} type="button" onMouseMove={() => setActiveIndex(index)} onClick={() => {
+          <button id={`command-option-${index}`} role="option" aria-selected={index === activeIndex} key={command.label} className={index === activeIndex ? "active" : ""} type="button" onMouseMove={() => setActiveIndex(index)} onClick={() => {
             command.action();
             onClose();
           }}>

@@ -1,6 +1,6 @@
 import { createContext } from "react";
 
-import type { Achievement, CampaignState, EventLog, MissionPlan, MissionStrategy } from "../types";
+import type { Achievement, CampaignState, EventLog, MissionPlan, MissionStrategy, WatchReport } from "../types";
 import type { Gadget } from "../types/gadget";
 import type { Mission } from "../types/mission";
 import type { Villain } from "../types/villain";
@@ -15,6 +15,7 @@ export type NocturneState = {
   campaign: CampaignState;
   missionPlans: MissionPlan[];
   achievements: Achievement[];
+  watchReports: WatchReport[];
 };
 
 export type NocturneAction =

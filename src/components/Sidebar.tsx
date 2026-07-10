@@ -43,9 +43,14 @@ export function Sidebar({
   highContrast,
   onToggleContrast,
 }: SidebarProps) {
-  const { operatorName, resetState } = useNocturne();
+  const { operatorName, resetState, missions, gadgets, logs } = useNocturne();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [confirmReset, setConfirmReset] = useState(false);
+  const badges: Partial<Record<Page, number>> = {
+    missions: missions.filter((mission) => mission.status !== "COMPLETED" && mission.riskLevel >= 70).length,
+    aegis: gadgets.filter((gadget) => gadget.status === "MAINTENANCE").length,
+    logs: logs.filter((log) => log.type === "ACHIEVEMENT").length,
+  };
 
   function changePage(page: Page) {
     playTone("click", soundEnabled);
@@ -73,7 +78,7 @@ export function Sidebar({
           >
             <InterfaceIcon name={item.icon} />
             <span>{item.label}</span>
-            <small>{item.page === activePage ? "ACTIVE" : ""}</small>
+            <small>{item.page === activePage ? "ACTIVE" : badges[item.page] ? <b aria-label={`${badges[item.page]} alerts`}>{badges[item.page]}</b> : ""}</small>
           </button>
         ))}
       </nav>

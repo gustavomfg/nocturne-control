@@ -1,6 +1,29 @@
 # Nocturne Control Center
 
-Original noir tactical control interface built with React, TypeScript, Vite and Leaflet.
+<p align="center">
+  <strong>A local-first noir tactical simulation for a city that never sleeps.</strong>
+</p>
+
+<p align="center">
+  <a href="https://guhdev-java.github.io/nocturne-control/">Live demo</a>
+  ·
+  <a href="#interface-tour">Interface tour</a>
+  ·
+  <a href="#getting-started">Run locally</a>
+</p>
+
+<p align="center">
+  <img alt="React" src="https://img.shields.io/badge/React-19-20232a?logo=react&logoColor=61dafb" />
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-6-1f2937?logo=typescript&logoColor=3178c6" />
+  <img alt="Vite" src="https://img.shields.io/badge/Vite-8-1f1b2d?logo=vite&logoColor=ffd166" />
+  <img alt="Tests" src="https://img.shields.io/badge/tests-12%20passing-1f3326" />
+</p>
+
+![Nocturne Control Center tactical dashboard](images/dashboard.png)
+
+<p align="center"><em>The live monitor brings mission pressure, escaped targets, Aegis readiness and city signals into one operational view.</em></p>
+
+---
 
 Nocturne Control Center is a fictional city operations console for Nocturne City. It combines a live dashboard, mission planning, target files, Aegis equipment, a local SVG district map, campaign progression, logs, profile state and an interactive terminal into one connected simulation.
 
@@ -10,6 +33,7 @@ All names, districts, dossiers, missions, gadgets and map artwork are original f
 
 - Connected local simulation for missions, villains, gadgets, logs and operator identity.
 - Night Watch campaign loop with tactical plans, three-turn watches, city stability, intelligence, achievements and an operational replay.
+- Strategy-aware planning forecasts and after-action watch reports with progress, risk, intelligence and asset power consequences.
 - Mission planner with field-unit assignment, selectable operational protocols and deployable Aegis assets.
 - Local Scenario Editor for adding original mission briefs to the current simulation.
 - Tactical dashboard with radar, priority mission, priority target, incident feed and threat breakdown.
@@ -24,6 +48,44 @@ All names, districts, dossiers, missions, gadgets and map artwork are original f
 - Toast feedback, confirmation dialogs, route skeletons and typed reducer tests.
 - Installable local-first PWA with an offline service worker.
 
+## Interface Tour
+
+### Mission Control
+
+![Mission Control with active operations](images/mission-control.png)
+
+Mission Control is the tactical queue for every operation in Nocturne City. Operators can search and filter cases, compare risk and progress, resolve objectives, or prepare a plan with a field unit, protocol and deployable assets. Strategies produce different consequences, while recommended equipment adds operational synergy.
+
+### District Surveillance
+
+![Interactive Nocturne district map](images/nocturne-map.png)
+
+The map uses Leaflet with a completely local SVG city grid—no external tiles or map API. Mission signals, escaped targets and selectable districts are connected to the same simulation state, while the intelligence rail summarizes threat pressure and provides direct routes to relevant files.
+
+### Operator Profile
+
+![Night Sentinel operator profile](images/operator-profile.png)
+
+The operator file reflects the current simulation: active case load, deployed equipment and identity are derived from persistent application state. The operator name can be edited without resetting campaign progress and is preserved through operational resets.
+
+### Scenario Editor
+
+![Local mission scenario editor](images/scenario-editor.png)
+
+The local editor creates original mission briefs without a backend. New scenarios enter Mission Control as waiting operations, become part of the campaign loop and appear as live map signals after the watch advances.
+
+## How the Simulation Connects
+
+```text
+Plan mission ──► Select protocol and assets ──► Advance watch
+      │                                             │
+      └── Mission Control                    After-action report
+                                                    │
+                         Map ◄── Shared state ──► Logs / Dashboard
+```
+
+Actions are not isolated to one screen. Capturing a target changes related mission pressure; deploying an asset consumes power; planning modifies the next watch; and every consequence is reflected across reports, logs, map signals and dashboard metrics.
+
 ## Tech Stack
 
 - React 19
@@ -34,6 +96,8 @@ All names, districts, dossiers, missions, gadgets and map artwork are original f
 - Vitest
 - Testing Library
 - CSS organized by page/component
+
+The application deliberately keeps its runtime small: there is no backend, authentication provider, external map service or component framework.
 
 ## Getting Started
 
@@ -47,6 +111,8 @@ The development server uses the Vite base path configured for the GitHub Pages r
 ```text
 /nocturne-control/
 ```
+
+For another deployment path, set `VITE_BASE_PATH` before building.
 
 Use `npm install` only when intentionally changing dependencies. For normal development and CI, `npm ci` installs the exact dependency tree from `package-lock.json`.
 
@@ -70,7 +136,7 @@ npm run test
 npm run build
 ```
 
-The test suite covers state migration and validation, operator identity preservation, connected mission actions, campaign turns and boot screen behavior.
+The test suite covers state migration and validation, operator identity preservation, connected mission actions, strategy consequences, campaign turns, achievement logs, watch reports and boot screen behavior.
 
 ## App Routes
 
@@ -82,7 +148,7 @@ The test suite covers state migration and validation, operator identity preserva
 | `/aegis` | Gadget inventory and deployment controls |
 | `/terminal` | Command-line interface into the app state |
 | `/map` | Local Leaflet district map and signal intel |
-| `/campaign` | Night Watch campaign, achievements and operation replay |
+| `/campaign` | Night Watch campaign, forecasts, after-action reports and replay |
 | `/editor` | Local development tool for original scenario missions |
 | `/profile` | Operator profile and save import/export |
 | `/logs` | Operational event history |
@@ -124,7 +190,9 @@ There is no Google Maps, Mapbox, tile server or external cartography dependency.
 
 ## Campaign and Local Scenarios
 
-Use **Plan operation** in Mission Control to assign a unit, protocol and assets. Then use **Advance watch** in Night Watch to simulate the next operational turn. Prepared operations progress faster while reducing risk; the resulting actions appear in the operational replay and can unlock archive achievements.
+Use **Plan operation** in Mission Control to assign a unit, protocol and assets. The planner previews progress, risk, intelligence, power cost and equipment synergy before the plan is committed. Then use **Advance watch** in Night Watch to simulate the next turn and inspect its after-action report.
+
+`STEALTH` reduces exposure, `DIRECT` favors fast progress, and `SURVEILLANCE` produces stronger intelligence. Recommended gadgets improve the operation but consume power during the watch.
 
 The Scenario Editor adds a local mission to the persistent simulation. New scenarios begin as waiting operations and become visible as active map signals when the campaign advances.
 
@@ -136,8 +204,10 @@ The app registers a small service worker in production so the visited applicatio
 
 ```text
 public           Custom map, PWA manifest, service worker and Pages fallback
+images           Curated screenshots used by this README
 src/components  Shared UI components
 src/data        Static fictional domain data
+src/domain      Pure mission forecasting rules
 src/hooks       UI interaction hooks
 src/pages       Main app screens
 src/state       Reducer, context, persistence and tests
@@ -165,12 +235,12 @@ The repository ignores:
 
 - dependency and build output (`node_modules/`, `dist/`)
 - local env files while keeping `.env.example`
-- coverage, reports, generated screenshots and cache folders
+- coverage, reports, generated test screenshots and cache folders
 - local agent/session metadata (`.agents/`, `.codex/`)
 - private key/certificate formats
-- local raster asset and screenshot folders that are not cleared for repository use
+- local raster asset folders that are not cleared for repository use
 
-Keep committed assets original, lightweight and cleared for public use.
+The curated screenshots in `images/` are intentionally tracked as project documentation. Keep other committed assets original, lightweight and cleared for public use.
 
 ## License / Usage
 

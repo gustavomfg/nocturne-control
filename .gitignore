@@ -51,8 +51,8 @@ storybook-static
 *.p12
 *.crt
 
-# Local screenshots and raster references are intentionally kept out of git.
-images/
+# Local raster references are intentionally kept out of git. Curated README
+# screenshots in images/ are versioned as project documentation.
 Imagens/
 public/cards/
 public/backgrounds/

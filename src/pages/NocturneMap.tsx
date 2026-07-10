@@ -90,6 +90,9 @@ export function NocturneMap({ onOpenVillain, onOpenMissions }: NocturneMapProps)
     () => villains.filter((villain) => villain.status === "ESCAPED"),
     [villains]
   );
+  const districtRisk = districtMissions.length
+    ? Math.round(districtMissions.reduce((total, mission) => total + mission.riskLevel, 0) / districtMissions.length)
+    : 0;
 
   return (
     <main className="nocturne-map-page">
@@ -150,6 +153,13 @@ export function NocturneMap({ onOpenVillain, onOpenMissions }: NocturneMapProps)
 
         <aside className="map-intel">
           <h2>District Intel</h2>
+
+          <article className="district-risk-card">
+            <span>Threat pressure</span>
+            <strong>{districtRisk}%</strong>
+            <div className="district-risk-meter" role="meter" aria-label={`${activeDistrict.name} threat pressure`} aria-valuemin={0} aria-valuemax={100} aria-valuenow={districtRisk}><i style={{ width: `${districtRisk}%` }} /></div>
+            <p>{districtRisk >= 70 ? "Critical operational pressure. Prepared assets recommended." : districtRisk >= 40 ? "Elevated signals require continued observation." : "Sector pressure remains within controlled limits."}</p>
+          </article>
 
           <article>
             <span>Targets</span>

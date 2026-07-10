@@ -45,11 +45,12 @@ function toAppPath(path: string) {
 }
 
 function getRelativePath(pathname: string) {
-  if (basePath && pathname.startsWith(basePath)) {
-    return pathname.slice(basePath.length) || "/";
+  const cleanPath = pathname.split(/[?#]/, 1)[0];
+  if (basePath && cleanPath.startsWith(basePath)) {
+    return cleanPath.slice(basePath.length) || "/";
   }
 
-  return pathname;
+  return cleanPath;
 }
 
 type AppRoute = {
@@ -136,7 +137,10 @@ function App() {
   useEffect(() => {
     const redirectedPath = new URLSearchParams(window.location.search).get("p");
     if (redirectedPath) {
-      window.history.replaceState(null, "", `${redirectedPath}${window.location.hash}`);
+      const restoredUrl = new URL(redirectedPath, window.location.origin);
+      if (restoredUrl.origin === window.location.origin) {
+        window.history.replaceState(null, "", `${restoredUrl.pathname}${restoredUrl.search}${window.location.hash}`);
+      }
     }
     if (window.location.pathname === basePathFull || window.location.pathname === basePathFull.replace(/\/$/, "")) {
       window.history.replaceState(null, "", toAppPath(pageRoutes.dashboard));

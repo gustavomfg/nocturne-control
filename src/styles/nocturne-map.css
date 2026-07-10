@@ -496,3 +496,5 @@
     border-bottom: 1px solid rgba(139, 164, 180, 0.22);
   }
 }
+.district-risk-meter { height: 6px; margin: 10px 0 12px; overflow: hidden; border: 1px solid rgba(163,58,50,.25); background: rgba(255,255,255,.04); }
+.district-risk-meter i { display: block; height: 100%; background: linear-gradient(90deg, var(--success), var(--signal) 55%, var(--danger)); box-shadow: 0 0 14px rgba(163,58,50,.34); transition: width .45s var(--ease-fluid); }

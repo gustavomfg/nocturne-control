@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Redirecting to Nocturne Control</title>
     <script>
-      const base = "/nocturne-control/";
+      const firstSegment = window.location.pathname.split("/").filter(Boolean)[0];
+      const base = firstSegment ? `/${firstSegment}/` : "/";
       const path = window.location.pathname + window.location.search;
       window.location.replace(base + "?p=" + encodeURIComponent(path) + window.location.hash);
     </script>

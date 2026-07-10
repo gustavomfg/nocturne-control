@@ -86,8 +86,28 @@ describe("Nocturne state", () => {
     const advanced = nocturneReducer(planned, { type: "ADVANCE_CAMPAIGN", timestamp: "22:14:00" });
 
     expect(planned.missionPlans).toHaveLength(1);
-    expect(advanced.missions.find((mission) => mission.id === 1)?.progress).toBe(96);
+    expect(advanced.missions.find((mission) => mission.id === 1)?.progress).toBe(99);
     expect(advanced.missionPlans).toHaveLength(0);
     expect(advanced.campaign.turn).toBe(2);
+    expect(advanced.watchReports[0].outcomes).toHaveLength(4);
+  });
+
+  it("keeps both the action and achievement entries in the timeline", () => {
+    const state = nocturneReducer(initialState, { type: "CAPTURE_VILLAIN", villainId: 1, timestamp: "22:15:00" });
+
+    expect(state.logs.slice(0, 2).map((log) => log.type)).toEqual(["CAPTURE", "ACHIEVEMENT"]);
+  });
+
+  it("rejects out-of-range and unknown imported domain values", () => {
+    expect(migrateState({ ...initialState, missions: [{ ...initialState.missions[0], progress: 140 }] })).toBeNull();
+    expect(migrateState({ ...initialState, gadgets: [{ ...initialState.gadgets[0], status: "BROKEN" }] })).toBeNull();
+  });
+
+  it("applies distinct campaign consequences for direct and stealth protocols", () => {
+    const direct = nocturneReducer(nocturneReducer(initialState, { type: "PLAN_MISSION", missionId: 2, strategy: "DIRECT", gadgetIds: [], unit: "Unit A", timestamp: "22:16:00" }), { type: "ADVANCE_CAMPAIGN", timestamp: "22:17:00" });
+    const stealth = nocturneReducer(nocturneReducer(initialState, { type: "PLAN_MISSION", missionId: 2, strategy: "STEALTH", gadgetIds: [], unit: "Unit A", timestamp: "22:16:00" }), { type: "ADVANCE_CAMPAIGN", timestamp: "22:17:00" });
+
+    expect(direct.missions[1].progress).toBeGreaterThan(stealth.missions[1].progress);
+    expect(direct.missions[1].riskLevel).toBeGreaterThan(stealth.missions[1].riskLevel);
   });
 });

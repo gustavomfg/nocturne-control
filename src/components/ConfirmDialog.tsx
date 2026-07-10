@@ -27,9 +27,9 @@ export function ConfirmDialog({
   }, [open]);
 
   return (
-    <dialog ref={dialogRef} className="nocturne-dialog" onCancel={onClose} onClose={onClose}>
+    <dialog ref={dialogRef} className="nocturne-dialog" aria-labelledby="confirm-dialog-title" onCancel={onClose} onClose={onClose}>
       <span>AEGIS CONFIRMATION</span>
-      <h2>{title}</h2>
+      <h2 id="confirm-dialog-title">{title}</h2>
       <p>{message}</p>
       <div>
         <button type="button" onClick={onClose}>Cancel</button>

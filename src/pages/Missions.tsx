@@ -48,7 +48,7 @@ export function Missions() {
             planned={missionPlans.some((plan) => plan.missionId === mission.id)}
           />
         ))}
-        {visibleMissions.length === 0 && <div className="collection-empty"><strong>No mission signal found</strong><p>Adjust the current search or status filter.</p></div>}
+        {visibleMissions.length === 0 && <div className="collection-empty"><strong>No mission signal found</strong><p>Adjust the current search or status filter.</p><button type="button" onClick={() => { setQuery(""); setStatus("ALL"); }}>Clear filters</button></div>}
       </section>
       <MissionPlanner mission={planningMission} gadgets={gadgets} onClose={() => setPlanningMission(null)} onSubmit={planMission} />
     </main>

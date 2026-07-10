@@ -190,6 +190,7 @@ input {
 .collection-toolbar input:focus, .collection-toolbar select:focus { border-color: rgba(214,179,90,.5); }
 .collection-empty { grid-column: 1 / -1; padding: 44px; border: 1px dashed var(--panel-border); color: var(--muted); text-align: center; }
 .collection-empty strong { display: block; margin-bottom: 8px; color: var(--signal); }
+.collection-empty button { margin-top: 12px; padding: 9px 12px; border: 1px solid rgba(214,179,90,.4); color: var(--signal); background: rgba(214,179,90,.07); cursor: pointer; }
 
 @media (max-width: 640px) {
   .collection-toolbar { flex-direction: column; margin-top: 0; }

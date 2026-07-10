@@ -102,6 +102,7 @@
   letter-spacing: 1.5px;
   white-space: nowrap;
 }
+.sidebar nav button small b { display: inline-grid; place-items: center; min-width: 20px; height: 20px; padding: 0 5px; border: 1px solid rgba(163,58,50,.55); border-radius: 50%; color: #e2a39e; background: rgba(163,58,50,.16); font: 700 .62rem var(--font-code); }
 
 .palette-trigger kbd {
   position: relative;

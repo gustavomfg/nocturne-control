@@ -65,7 +65,7 @@ export function Logs() {
       </header>
 
       <div className="logs-filters" aria-label="Filter event timeline">
-        {(["ALL", "SYSTEM", "OPERATOR", "MISSION", "DEPLOY", "CAPTURE"] as const).map((type) => (
+        {(["ALL", "SYSTEM", "OPERATOR", "MISSION", "PLAN", "CAMPAIGN", "ACHIEVEMENT", "DEPLOY", "CAPTURE"] as const).map((type) => (
           <button key={type} aria-pressed={filter === type} onClick={() => setFilter(type)}>{type}</button>
         ))}
       </div>
