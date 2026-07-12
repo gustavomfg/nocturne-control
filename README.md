@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <a href="https://guhdev-java.github.io/nocturne-control/">Live demo</a>
+  <a href="https://gustavomfg.github.io/nocturne-control/">Live demo</a>
   ·
   <a href="#interface-tour">Interface tour</a>
   ·

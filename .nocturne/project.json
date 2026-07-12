@@ -1,0 +1,17 @@
+{
+  "name": "Nocturne-control-center",
+  "stack": [
+    "Node.js",
+    "React",
+    "Vite"
+  ],
+  "primaryLanguage": "TypeScript",
+  "commands": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "preview": "vite preview"
+  }
+}
