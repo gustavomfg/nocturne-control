@@ -4,7 +4,7 @@
   padding: 46px;
 
   background:
-    radial-gradient(circle at 80% 0, rgba(163, 58, 50, 0.08), transparent 30rem),
+    radial-gradient(circle at 80% 0, rgba(228, 93, 98, 0.08), transparent 30rem),
     transparent;
   color: var(--text);
 }
@@ -32,9 +32,9 @@
 
   padding: 10px 14px;
 
-  border: 1px solid rgba(163, 58, 50, 0.38);
-  color: #c46a60;
-  background: rgba(163, 58, 50, 0.08);
+  border: 1px solid rgba(228, 93, 98, 0.38);
+  color: #e8797e;
+  background: rgba(228, 93, 98, 0.08);
 }
 
 .villains-grid {

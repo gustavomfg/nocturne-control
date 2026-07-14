@@ -1,13 +1,17 @@
 .villain-card {
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  height: 100%;
   --tilt-x: 0deg;
   --tilt-y: 0deg;
   --glare-x: 50%;
   --glare-y: 0%;
-  border: 1px solid rgba(214, 179, 90, 0.14);
+  border: 1px solid rgba(139, 92, 246, 0.14);
   background:
-    radial-gradient(circle at 50% 0, rgba(214, 179, 90, 0.08), transparent 36%),
+    radial-gradient(circle at 50% 0, rgba(139, 92, 246, 0.08), transparent 36%),
     linear-gradient(135deg, rgba(255, 255, 255, 0.035), transparent 55%),
     var(--panel);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.025), 0 18px 54px rgba(0, 0, 0, 0.42);
@@ -29,7 +33,7 @@
   z-index: 2;
   pointer-events: none;
   opacity: 0;
-  background: radial-gradient(circle at var(--glare-x) var(--glare-y), rgba(214, 179, 90, 0.08), transparent 42%);
+  background: radial-gradient(circle at var(--glare-x) var(--glare-y), rgba(139, 92, 246, 0.08), transparent 42%);
   transition: opacity 0.2s ease;
 }
 
@@ -39,7 +43,7 @@
   inset: -40% -80%;
   z-index: 3;
   pointer-events: none;
-  background: linear-gradient(115deg, transparent 42%, rgba(214, 179, 90, 0.1), transparent 58%);
+  background: linear-gradient(115deg, transparent 42%, rgba(139, 92, 246, 0.1), transparent 58%);
   opacity: 0;
   transform: translateX(-18%) rotate(8deg);
   transition: opacity 0.24s var(--ease-fluid), transform 0.72s var(--ease-snap);
@@ -47,8 +51,8 @@
 
 .villain-card:hover {
   transform: perspective(1200px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) translateY(-4px);
-  border-color: rgba(214, 179, 90, 0.3);
-  box-shadow: 0 22px 62px rgba(0, 0, 0, 0.54), 0 0 20px rgba(214, 179, 90, 0.055);
+  border-color: rgba(139, 92, 246, 0.3);
+  box-shadow: 0 22px 62px rgba(0, 0, 0, 0.54), 0 0 20px rgba(139, 92, 246, 0.055);
 }
 
 .villain-card:hover::before {
@@ -65,11 +69,14 @@
   display: grid;
   place-items: center;
   height: 168px;
+  min-height: 168px;
+  max-height: 168px;
+  flex: 0 0 168px;
   overflow: hidden;
-  border-bottom: 1px solid rgba(214, 179, 90, 0.14);
+  border-bottom: 1px solid rgba(139, 92, 246, 0.14);
   background:
-    radial-gradient(circle at 50% 44%, rgba(163, 58, 50, 0.18), transparent 26%),
-    repeating-linear-gradient(90deg, rgba(214, 179, 90, 0.038), rgba(214, 179, 90, 0.038) 1px, transparent 1px, transparent 28px),
+    radial-gradient(circle at 50% 44%, rgba(228, 93, 98, 0.18), transparent 26%),
+    repeating-linear-gradient(90deg, rgba(139, 92, 246, 0.038), rgba(139, 92, 246, 0.038) 1px, transparent 1px, transparent 28px),
     #030303;
   transform: translateZ(6px);
 }
@@ -92,12 +99,12 @@
   place-items: center;
   width: 116px;
   aspect-ratio: 1;
-  border: 1px solid rgba(214, 179, 90, 0.26);
+  border: 1px solid rgba(139, 92, 246, 0.26);
   color: var(--signal);
-  background: rgba(214, 179, 90, 0.055);
+  background: rgba(139, 92, 246, 0.055);
   font-size: 2.5rem;
   letter-spacing: 4px;
-  text-shadow: 0 0 22px rgba(214, 179, 90, 0.28);
+  text-shadow: 0 0 22px rgba(139, 92, 246, 0.28);
   transition: transform 0.45s ease, filter 0.45s ease;
 }
 
@@ -106,8 +113,8 @@
   z-index: 1;
   width: 132px;
   height: 132px;
-  color: rgba(214, 179, 90, 0.15);
-  filter: drop-shadow(0 0 24px rgba(214, 179, 90, 0.12));
+  color: rgba(139, 92, 246, 0.15);
+  filter: drop-shadow(0 0 24px rgba(139, 92, 246, 0.12));
   animation: cardIconFloat 5.4s var(--ease-fluid) infinite alternate;
 }
 
@@ -118,7 +125,7 @@
 
 .villain-card:hover .villain-card-image .interface-icon {
   transform: scale(1.08) rotate(5deg);
-  color: rgba(214, 179, 90, 0.24);
+  color: rgba(139, 92, 246, 0.24);
 }
 
 .villains-grid .villain-card:nth-child(2) {
@@ -184,21 +191,21 @@
 }
 
 .status.captured {
-  color: #8ea97e;
-  border: 1px solid rgba(102, 138, 91, 0.38);
-  background: rgba(102, 138, 91, 0.08);
+  color: #6fd3a5;
+  border: 1px solid rgba(69, 184, 131, 0.38);
+  background: rgba(69, 184, 131, 0.08);
 }
 
 .status.escaped {
-  color: #c46a60;
-  border: 1px solid rgba(163, 58, 50, 0.38);
-  background: rgba(163, 58, 50, 0.08);
+  color: #e8797e;
+  border: 1px solid rgba(228, 93, 98, 0.38);
+  background: rgba(228, 93, 98, 0.08);
 }
 
 .status.unknown {
-  color: #8ba4b4;
-  border: 1px solid rgba(95, 127, 146, 0.38);
-  background: rgba(95, 127, 146, 0.08);
+  color: #a78bfa;
+  border: 1px solid rgba(139, 92, 246, 0.38);
+  background: rgba(139, 92, 246, 0.08);
 }
 
 .villain-info {
@@ -232,4 +239,4 @@
     transform: translate3d(4px, 4px, 0) scale(1.04);
   }
 }
-.villain-card-button { display: block; width: 100%; color: inherit; text-align: left; font: inherit; cursor: pointer; }
+.villain-card-button { width: 100%; appearance: none; padding: 0; color: inherit; text-align: left; font: inherit; cursor: pointer; }

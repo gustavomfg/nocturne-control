@@ -4,7 +4,7 @@
   padding: 46px;
 
   background:
-    radial-gradient(circle at 80% 0, rgba(95, 127, 146, 0.08), transparent 30rem),
+    radial-gradient(circle at 80% 0, rgba(139, 92, 246, 0.08), transparent 30rem),
     transparent;
   color: var(--text);
 }
@@ -31,9 +31,9 @@
   height: fit-content;
   padding: 10px 14px;
 
-  border: 1px solid rgba(95, 127, 146, 0.36);
-  color: #8ba4b4;
-  background: rgba(95, 127, 146, 0.08);
+  border: 1px solid rgba(139, 92, 246, 0.36);
+  color: #a78bfa;
+  background: rgba(139, 92, 246, 0.08);
 }
 
 .gadgets-grid {

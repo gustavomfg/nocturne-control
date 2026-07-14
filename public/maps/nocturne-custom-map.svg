@@ -1,15 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 1000">
   <defs>
     <linearGradient id="water" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#071218"/>
-      <stop offset="1" stop-color="#102b35"/>
+      <stop offset="0" stop-color="#0b0b10"/>
+      <stop offset="1" stop-color="#151222"/>
     </linearGradient>
     <linearGradient id="land" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#15181b"/>
-      <stop offset="1" stop-color="#0a0c0f"/>
+      <stop offset="0" stop-color="#18181c"/>
+      <stop offset="1" stop-color="#0d0d11"/>
     </linearGradient>
     <pattern id="grid" width="42" height="42" patternUnits="userSpaceOnUse">
-      <path d="M42 0H0v42" fill="none" stroke="#5f7f92" stroke-opacity=".12" stroke-width="1"/>
+      <path d="M42 0H0v42" fill="none" stroke="#71717a" stroke-opacity=".12" stroke-width="1"/>
     </pattern>
     <filter id="glow">
       <feGaussianBlur stdDeviation="5" result="blur"/>
@@ -23,25 +23,25 @@
   <rect width="1400" height="1000" fill="url(#water)"/>
   <rect width="1400" height="1000" fill="url(#grid)" opacity=".55"/>
 
-  <path d="M55 705 C175 642 283 689 397 641 C520 589 598 515 738 552 C875 589 980 527 1114 458 C1242 392 1330 412 1400 456 L1400 1000 L0 1000 L0 760 Z" fill="#0b2029" opacity=".9"/>
-  <path d="M88 724 C202 665 295 701 406 657 C528 608 604 535 735 570 C872 607 988 545 1126 476 C1238 420 1326 426 1400 470" fill="none" stroke="#8ba4b4" stroke-opacity=".35" stroke-width="5" stroke-dasharray="18 18"/>
+  <path d="M55 705 C175 642 283 689 397 641 C520 589 598 515 738 552 C875 589 980 527 1114 458 C1242 392 1330 412 1400 456 L1400 1000 L0 1000 L0 760 Z" fill="#111119" opacity=".9"/>
+  <path d="M88 724 C202 665 295 701 406 657 C528 608 604 535 735 570 C872 607 988 545 1126 476 C1238 420 1326 426 1400 470" fill="none" stroke="#71717a" stroke-opacity=".35" stroke-width="5" stroke-dasharray="18 18"/>
 
   <g id="districts" filter="url(#glow)">
-    <path id="gravemere" d="M115 145 L360 86 L508 205 L465 440 L227 480 L72 313 Z" fill="#211d18" stroke="#d6b35a" stroke-opacity=".52" stroke-width="3"/>
-    <path id="old-meridian" d="M492 132 L760 84 L923 238 L835 498 L570 462 L445 274 Z" fill="#191d1f" stroke="#d6b35a" stroke-opacity=".48" stroke-width="3"/>
-    <path id="financial" d="M890 136 L1185 82 L1314 282 L1200 530 L908 464 L822 254 Z" fill="#1a2229" stroke="#d6b35a" stroke-opacity=".48" stroke-width="3"/>
-    <path id="east-end" d="M226 523 L538 490 L678 687 L535 850 L190 796 L73 623 Z" fill="#17211c" stroke="#d6b35a" stroke-opacity=".42" stroke-width="3"/>
-    <path id="harbor" d="M690 548 L1006 520 L1276 648 L1215 872 L802 888 L596 735 Z" fill="#152630" stroke="#8ba4b4" stroke-opacity=".46" stroke-width="3"/>
+    <path id="gravemere" d="M115 145 L360 86 L508 205 L465 440 L227 480 L72 313 Z" fill="#191622" stroke="#8b5cf6" stroke-opacity=".52" stroke-width="3"/>
+    <path id="old-meridian" d="M492 132 L760 84 L923 238 L835 498 L570 462 L445 274 Z" fill="#18181c" stroke="#8b5cf6" stroke-opacity=".48" stroke-width="3"/>
+    <path id="financial" d="M890 136 L1185 82 L1314 282 L1200 530 L908 464 L822 254 Z" fill="#1a1822" stroke="#8b5cf6" stroke-opacity=".48" stroke-width="3"/>
+    <path id="east-end" d="M226 523 L538 490 L678 687 L535 850 L190 796 L73 623 Z" fill="#17191d" stroke="#8b5cf6" stroke-opacity=".42" stroke-width="3"/>
+    <path id="harbor" d="M690 548 L1006 520 L1276 648 L1215 872 L802 888 L596 735 Z" fill="#151521" stroke="#71717a" stroke-opacity=".46" stroke-width="3"/>
   </g>
 
   <g id="roads" fill="none" stroke-linecap="round">
-    <path d="M146 310 C318 229 500 284 691 226 C858 175 1055 181 1262 290" stroke="#e6e0d3" stroke-opacity=".27" stroke-width="6" stroke-dasharray="24 20"/>
-    <path d="M152 634 C339 575 505 637 690 588 C876 539 1040 574 1228 690" stroke="#e6e0d3" stroke-opacity=".26" stroke-width="7" stroke-dasharray="22 18"/>
-    <path d="M657 112 C620 268 626 459 701 780" stroke="#e6e0d3" stroke-opacity=".24" stroke-width="5" stroke-dasharray="20 18"/>
-    <path d="M462 440 C554 501 611 590 665 725" stroke="#8ba4b4" stroke-opacity=".38" stroke-width="13" stroke-dasharray="28 18"/>
-    <path d="M835 498 C954 557 1060 602 1225 648" stroke="#8ba4b4" stroke-opacity=".35" stroke-width="13" stroke-dasharray="28 18"/>
-    <path d="M508 205 C635 283 762 281 890 136" stroke="#d6b35a" stroke-opacity=".22" stroke-width="4" stroke-dasharray="12 12"/>
-    <path d="M535 850 C653 770 738 745 802 888" stroke="#d6b35a" stroke-opacity=".2" stroke-width="4" stroke-dasharray="12 12"/>
+    <path d="M146 310 C318 229 500 284 691 226 C858 175 1055 181 1262 290" stroke="#d4d4d8" stroke-opacity=".27" stroke-width="6" stroke-dasharray="24 20"/>
+    <path d="M152 634 C339 575 505 637 690 588 C876 539 1040 574 1228 690" stroke="#d4d4d8" stroke-opacity=".26" stroke-width="7" stroke-dasharray="22 18"/>
+    <path d="M657 112 C620 268 626 459 701 780" stroke="#d4d4d8" stroke-opacity=".24" stroke-width="5" stroke-dasharray="20 18"/>
+    <path d="M462 440 C554 501 611 590 665 725" stroke="#71717a" stroke-opacity=".38" stroke-width="13" stroke-dasharray="28 18"/>
+    <path d="M835 498 C954 557 1060 602 1225 648" stroke="#71717a" stroke-opacity=".35" stroke-width="13" stroke-dasharray="28 18"/>
+    <path d="M508 205 C635 283 762 281 890 136" stroke="#8b5cf6" stroke-opacity=".22" stroke-width="4" stroke-dasharray="12 12"/>
+    <path d="M535 850 C653 770 738 745 802 888" stroke="#8b5cf6" stroke-opacity=".2" stroke-width="4" stroke-dasharray="12 12"/>
   </g>
 
   <g id="city-blocks" fill="#d7d8d0" opacity=".18">
@@ -66,7 +66,7 @@
     <rect x="842" y="772" width="72" height="64"/>
   </g>
 
-  <g id="labels" font-family="Courier New, monospace" font-weight="700" fill="#e6e0d3" text-anchor="middle" letter-spacing="2">
+  <g id="labels" font-family="Courier New, monospace" font-weight="700" fill="#f4f4f5" text-anchor="middle" letter-spacing="2">
     <text x="292" y="292" font-size="29">GRAVEMERE</text>
     <text x="690" y="292" font-size="29">OLD MERIDIAN</text>
     <text x="1068" y="304" font-size="29">FINANCIAL</text>
@@ -74,17 +74,17 @@
     <text x="950" y="704" font-size="29">HARBOR</text>
   </g>
 
-  <g id="landmarks" font-family="Courier New, monospace" fill="#d6b35a" letter-spacing="1.6">
-    <circle cx="1080" cy="235" r="9" fill="#d6b35a"/>
+  <g id="landmarks" font-family="Courier New, monospace" fill="#a1a1aa" letter-spacing="1.6">
+    <circle cx="1080" cy="235" r="9" fill="#a78bfa"/>
     <text x="1098" y="241" font-size="19">AEGIS SPIRE</text>
-    <circle cx="286" cy="246" r="9" fill="#c46a60"/>
+    <circle cx="286" cy="246" r="9" fill="#e45d62"/>
     <text x="304" y="252" font-size="19">GRAVEMERE ARCHIVE</text>
-    <circle cx="678" cy="352" r="8" fill="#8ba4b4"/>
+    <circle cx="678" cy="352" r="8" fill="#8b5cf6"/>
     <text x="696" y="358" font-size="18">CITY HALL</text>
-    <circle cx="1008" cy="785" r="8" fill="#8ea97e"/>
+    <circle cx="1008" cy="785" r="8" fill="#45b883"/>
     <text x="1026" y="791" font-size="18">NOCTURNE STADIUM</text>
   </g>
 
-  <rect x="32" y="30" width="330" height="62" fill="#030405" fill-opacity=".62" stroke="#d6b35a" stroke-opacity=".32"/>
-  <text x="54" y="67" font-family="Courier New, monospace" font-size="22" font-weight="700" fill="#d6b35a" letter-spacing="3">NOCTURNE CITY GRID</text>
+  <rect x="32" y="30" width="330" height="62" fill="#09090b" fill-opacity=".72" stroke="#8b5cf6" stroke-opacity=".32"/>
+  <text x="54" y="67" font-family="Courier New, monospace" font-size="22" font-weight="700" fill="#a78bfa" letter-spacing="3">NOCTURNE CITY GRID</text>
 </svg>

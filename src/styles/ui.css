@@ -14,7 +14,7 @@
   justify-content: space-between;
   gap: 18px;
   padding: 16px 18px;
-  border: 1px solid rgba(214, 179, 90, 0.34);
+  border: 1px solid rgba(139, 92, 246, 0.34);
   border-left: 3px solid var(--signal);
   background: rgba(8, 10, 12, 0.96);
   box-shadow: 0 22px 70px rgba(0, 0, 0, 0.7);
@@ -31,7 +31,7 @@
 .nocturne-dialog {
   width: min(480px, calc(100vw - 32px));
   padding: 28px;
-  border: 1px solid rgba(214, 179, 90, 0.3);
+  border: 1px solid rgba(139, 92, 246, 0.3);
   color: var(--text);
   background: #090b0e;
   box-shadow: 0 30px 120px #000;
@@ -43,13 +43,13 @@
 .nocturne-dialog p { color: var(--muted-strong); line-height: 1.7; }
 .nocturne-dialog > div { display: flex; justify-content: flex-end; gap: 10px; margin-top: 26px; }
 .nocturne-dialog button { padding: 10px 14px; border: 1px solid var(--panel-border); color: var(--muted-strong); background: var(--panel-soft); cursor: pointer; }
-.nocturne-dialog button.danger { border-color: rgba(163, 58, 50, 0.6); color: #df8a81; }
+.nocturne-dialog button.danger { border-color: rgba(228, 93, 98, 0.6); color: #f08b8f; }
 
 .command-palette {
   width: min(660px, calc(100vw - 28px));
   max-height: min(680px, calc(100vh - 40px));
   padding: 0;
-  border: 1px solid rgba(214, 179, 90, 0.3);
+  border: 1px solid rgba(139, 92, 246, 0.3);
   color: var(--text);
   background: rgba(7, 9, 11, 0.98);
   box-shadow: 0 35px 140px #000;
@@ -61,14 +61,14 @@ kbd { padding: 3px 6px; border: 1px solid rgba(255,255,255,.12); border-radius: 
 .command-results { max-height: 510px; padding: 10px; overflow: auto; }
 .command-results > small { display: block; padding: 10px 10px 6px; color: var(--muted); letter-spacing: 2px; }
 .command-results button { display: flex; width: 100%; align-items: center; justify-content: space-between; padding: 12px; border: 1px solid transparent; color: var(--text); background: none; text-align: left; cursor: pointer; }
-.command-results button:hover, .command-results button:focus-visible { border-color: var(--panel-border); outline: none; background: rgba(214,179,90,.06); }
+.command-results button:hover, .command-results button:focus-visible { border-color: var(--panel-border); outline: none; background: rgba(139,92,246,.06); }
 .command-results button strong, .command-results button small { display: block; }
 .command-results button small { margin-top: 4px; color: var(--muted); }
 .command-results p { padding: 22px 12px; color: var(--muted); }
 .command-palette footer { display: flex; gap: 16px; padding: 10px 18px; border-top: 1px solid var(--panel-border); color: var(--muted); font-size: .7rem; }
 
 .route-skeleton { min-height: 100vh; padding: 46px; }
-.skeleton-line, .skeleton-card { background: linear-gradient(90deg, rgba(255,255,255,.035), rgba(214,179,90,.09), rgba(255,255,255,.035)); background-size: 240% 100%; animation: skeletonFlow 1.3s linear infinite; }
+.skeleton-line, .skeleton-card { background: linear-gradient(90deg, rgba(255,255,255,.035), rgba(139,92,246,.09), rgba(255,255,255,.035)); background-size: 240% 100%; animation: skeletonFlow 1.3s linear infinite; }
 .skeleton-line { width: 32%; height: 13px; margin-bottom: 12px; }
 .skeleton-line.wide { width: 55%; height: 38px; }
 .route-skeleton section { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 42px; }

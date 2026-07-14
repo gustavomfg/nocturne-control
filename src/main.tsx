@@ -5,6 +5,7 @@ import App from "./App";
 import { NocturneProvider } from "./state/NocturneContext";
 import "./styles/global.css";
 import "./styles/ui.css";
+import "./styles/nocturne-theme.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

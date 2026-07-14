@@ -1,194 +1,151 @@
 ---
-name: Nocturne Control Center
-description: Original noir tactical control interface for a fictional city simulation.
+name: Nocturne
+product: Nocturne Control Center
+description: Premium dark product interface shared across the Nocturne ecosystem.
 colors:
-  bg: "#050505"
-  bg-deep: "#020203"
-  panel: "#0c0e11e0"
-  panel-soft: "#12151ac7"
-  panel-border: "#d6b35a29"
-  text: "#e6e0d3"
-  muted: "#85817a"
-  muted-strong: "#aaa394"
-  signal: "#d6b35a"
-  signal-dim: "#8f7332"
-  danger: "#a33a32"
-  success: "#668a5b"
-  tech: "#5f7f92"
+  bg: "#09090B"
+  bg-deep: "#070708"
+  surface: "#111217"
+  card: "#18181C"
+  border: "#2A2A33"
+  text: "#F4F4F5"
+  muted: "#71717A"
+  muted-strong: "#A1A1AA"
+  primary: "#8B5CF6"
+  primary-bright: "#A78BFA"
+  primary-dim: "#6D4BC3"
+  warning: "#D6AD60"
+  danger: "#E45D62"
+  success: "#45B883"
 typography:
   display:
     fontFamily: '"IBM Plex Mono", "Cascadia Code", "Courier New", monospace'
     fontWeight: 700
-    lineHeight: 1.1
-    letterSpacing: "3px to 5px"
-  headline:
-    fontFamily: '"IBM Plex Mono", "Cascadia Code", "Courier New", monospace'
-    fontWeight: 700
-    lineHeight: 1.2
-    letterSpacing: "2px to 3px"
   body:
     fontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
     fontWeight: 400
-    lineHeight: 1.6
-  label:
-    fontFamily: '"IBM Plex Mono", "Cascadia Code", "Courier New", monospace'
-    fontSize: "0.65rem to 0.75rem"
-    fontWeight: 700
-    letterSpacing: "1.5px to 3px"
-rounded:
-  keycap: "3px"
-  circular: "50%"
-spacing:
-  xs: "6px"
-  sm: "10px"
-  md: "16px"
-  lg: "24px"
-  xl: "46px"
-components:
-  panel:
-    backgroundColor: "{colors.panel}"
-    textColor: "{colors.text}"
-  button-signal:
-    backgroundColor: "#d6b35a0f"
-    textColor: "{colors.signal}"
-    padding: "10px 14px"
-  input-command:
-    backgroundColor: "#080a0cd6"
-    textColor: "{colors.muted-strong}"
-    padding: "10px 12px"
 ---
 
-# Design System: Nocturne Control Center
+# Design System: Nocturne
 
-## 1. Overview
+## 1. Direção visual
 
-**Creative North Star: "The Rain-Slick Operations Desk"**
+Nocturne é uma interface de produto escura, precisa e discreta. Control e Codex compartilham a mesma atmosfera, paleta, hierarquia e linguagem de interação. A experiência deve parecer premium e tecnológica, sem recorrer a neon excessivo, estética gamer ou cyberpunk.
 
-The system is a dense fictional command interface viewed after midnight: black metal surfaces, amber signal light, radar green system states, blue technical hardware, and red risk warnings. It should feel like a working local console, not a landing page, not a replica of any real agency, and not a familiar franchise skin.
+Princípios:
 
-Density is part of the identity. Panels, maps, terminal output, cards, logs, and navigation should present information with confidence, using atmosphere as a layer over structure rather than a substitute for structure.
+- Escuridão tonal, nunca preto puro.
+- Violeta como assinatura de interação e navegação.
+- Cor semântica usada com disciplina.
+- Profundidade construída com contraste, bordas frias e sombras suaves.
+- Movimento curto e funcional, sempre respeitando redução de movimento.
+- Tipografia existente preservada: mono para sistema, sans-serif para leitura.
 
-**Key Characteristics:**
-- Dark, nearly black base surfaces with amber as the primary tactical signal.
-- Mono headings and labels paired with readable sans-serif body text.
-- Thin borders, scanlines, radar marks, corner brackets, and restrained glows.
-- Rectangular operational surfaces; circular forms are reserved for radar, markers, and pulses.
-- Optional atmospheric effects with high-contrast and reduced-motion support.
+## 2. Paleta
 
-## 2. Colors
+### Base
 
-The palette is noir-first: deep blacks carry the interface, amber marks command signal, green marks live status, blue marks technical equipment, and red marks danger.
+- Background — #09090B: fundo principal.
+- Deep background — #070708: áreas mais profundas e vinheta.
+- Surface — #111217: controles e superfícies secundárias.
+- Card — #18181C: cards e painéis elevados.
+- Border — #2A2A33: separação padrão, sem tonalidade amarela.
+- Text — #F4F4F5: conteúdo principal.
+- Muted — #71717A: metadados e conteúdo auxiliar.
+- Muted strong — #A1A1AA: textos secundários de maior importância.
 
-### Primary
-- **Signal Amber** (#d6b35a): Primary action, active signal, focus outline, command accents, skeleton shimmer, and tactical highlights. It should stay rare enough to feel important.
-- **Dim Signal Bronze** (#8f7332): Secondary amber tone for subdued tactical marks and inactive signal echoes.
+### Assinatura
 
-### Secondary
-- **Radar Green** (#668a5b): Online state, radar panels, system health, and resolved or stable statuses.
-- **Aegis Blue** (#5f7f92): Equipment, map intelligence, hardware systems, and technical overlays.
+- Nocturne Violet — #8B5CF6: ação principal, item ativo, seleção, links, gráficos e sinais.
+- Bright Violet — #A78BFA: texto ativo, ícones e realce de contraste.
+- Dim Violet — #6D4BC3: início de gradientes e elementos inativos relacionados à marca.
 
-### Tertiary
-- **Threat Red** (#a33a32): Reset, warning, mission risk, unresolved incidents, and destructive actions.
+### Semântica
 
-### Neutral
-- **Blackout Field** (#020203): Root background and deepest page base.
-- **Console Black** (#050505): Default body ground.
-- **Panel Alloy** (#0c0e11e0): Main panel surface.
-- **Soft Panel Alloy** (#12151ac7): Secondary control and toolbar surface.
-- **Warm Bone Text** (#e6e0d3): Primary text.
-- **Muted File Gray** (#85817a): Secondary text.
-- **Strong Muted File Gray** (#aaa394): Form text, explanatory copy, and stronger metadata.
+- Gold — #D6AD60: prioridade alta, warning, manutenção e informação excepcional.
+- Danger — #E45D62: falha, perigo, alvo hostil e estado crítico.
+- Success — #45B883: conectado, operacional, concluído e estável.
 
-### Named Rules
+O dourado nunca representa interação genérica. Vermelho e verde não são decorativos.
 
-**The Fictional Signal Rule.** Color may suggest tactical function, but it must not invoke real agencies, real map products, or recognizable franchise palettes.
+## 3. Superfícies e elevação
 
-**The Amber Budget Rule.** Amber is for command, focus, active state, and signal. Avoid coating whole screens in amber glow.
+Painéis usam superfícies sólidas com gradientes radiais de baixa opacidade. A separação entre níveis deve continuar visível mesmo sem cor de destaque.
 
-## 3. Typography
+- Bordas em #2A2A33.
+- Estado ativo pode usar violeta com alpha entre 0.22 e 0.42.
+- Sombras principais entre 18px e 70px, sempre escuras e suaves.
+- Glow violeta limitado a alpha baixo, geralmente abaixo de 0.10.
+- Glow semântico só aparece no elemento que comunica o estado.
 
-**Display Font:** IBM Plex Mono with Cascadia Code and Courier New fallbacks.
-**Body Font:** Inter with system sans fallbacks.
-**Label/Mono Font:** IBM Plex Mono.
+## 4. Componentes
 
-**Character:** The type system reads like filed intelligence: mono for labels, headings, badges, keycaps, and terminal surfaces; sans for readable operational copy.
+### Botões
 
-### Hierarchy
-- **Display** (bold, uppercase, 3px to 5px letter spacing): Page titles and major system headings.
-- **Headline** (bold, uppercase, 2px to 3px letter spacing): Panel headings, module names, and dossier titles.
-- **Title** (bold mono or semibold sans): Card titles, dialog headings, and command results.
-- **Body** (regular sans, 1.45 to 1.7 line-height): Explanatory copy, logs, mission descriptions, and profile text.
-- **Label** (0.65rem to 0.75rem mono, uppercase, 1.5px to 3px letter spacing): Status badges, metadata, nav state, radar readouts, and toolbar labels.
+- Primário: fundo violeta discreto, borda violeta e texto claro.
+- Hover: aumento pequeno de contraste, glow mínimo e elevação curta.
+- Active: redução sutil de brilho, preservando feedback tátil existente.
+- Disabled: opacidade reduzida e cursor bloqueado.
+- Danger: vermelho somente em ações destrutivas.
 
-### Named Rules
+### Inputs
 
-**The Filed, Not Posterized Rule.** Do not use oversized display typography inside compact tools, sidebars, dialogs, cards, or command results. The product is a console first.
+- Fundo profundo e neutro.
+- Borda fria no repouso.
+- Placeholder cinza discreto.
+- Focus violeta com anel de baixa opacidade.
+- Estados disabled preservam legibilidade e semântica.
 
-## 4. Elevation
+### Sidebar
 
-Depth is a hybrid of tonal layering, thin borders, inset darkness, and heavy black shadows. Surfaces should feel embedded in the console until interaction lifts or illuminates them.
+- Superfície #111217 sobre fundo profundo.
+- Item ativo em violeta, com rail e glow discretos.
+- Hover usa preenchimento violeta de baixa opacidade.
+- Badges de alerta continuam vermelhos; status operacional continua verde.
 
-### Shadow Vocabulary
-- **Heavy Console Shadow** (`0 28px 90px rgba(0, 0, 0, 0.62)`): Main panels and framed page modules.
-- **Raised Card Shadow** (`0 18px 54px rgba(0, 0, 0, 0.42)`): Cards at rest.
-- **Active Card Shadow** (`0 22px 62px rgba(0, 0, 0, 0.54), 0 0 20px rgba(214, 179, 90, 0.055)`): Hovered or focused amber-signaled cards.
-- **Modal Blackout Shadow** (`0 35px 140px #000`): Command palette and critical dialogs.
-- **Inset Radar Depth** (`inset 0 0 40px rgba(0, 0, 0, 0.32)`): Radar frames, terminal panes, and embedded readouts.
+### Cards
 
-### Named Rules
+- Fundo #18181C.
+- Borda neutra no repouso.
+- Hover violeta discreto para cards interativos.
+- Conteúdo e espaçamento estrutural permanecem definidos pelo produto.
+- Cards de prioridade podem usar dourado; cards de ameaça mantêm vermelho.
 
-**The Console Depth Rule.** Shadows deepen the tool; they do not create glass cards. Blur is allowed for modal backdrops, not as the default surface material.
+### Radar e mapas
 
-## 5. Components
+- Grade e linhas estruturais em cinza escuro.
+- Varredura, contatos e missões em violeta.
+- Alvos/perigo em vermelho.
+- Pressão e risco usam escala verde → dourado → vermelho.
+- Controles ativos e marcadores de distrito selecionado usam violeta.
 
-### Buttons
+### Progresso e gráficos
 
-- **Shape:** Rectangular, sharp, bordered controls; keycaps may use a small 3px radius.
-- **Primary:** Amber text on a low-alpha amber surface with a thin amber border and compact tactical padding.
-- **Hover / Focus:** Border brightens, surface gains a subtle amber fill, and `:focus-visible` uses a 2px amber outline with 3px offset.
-- **Danger:** Red border and red-tinted text, used only for reset or destructive flows.
+- Progresso padrão e energia principal usam gradiente violeta.
+- Risco usa apenas a escala semântica.
+- Vermelho nunca representa progresso normal.
 
-### Chips
+## 5. Acessibilidade e movimento
 
-- **Style:** Mono labels, thin borders, low-alpha tinted backgrounds, and concise status text.
-- **State:** Active and selected states earn brighter border contrast; inactive states stay muted.
+- Todo foco de teclado deve permanecer claramente visível.
+- O modo de alto contraste deve reforçar bordas e textos neutros.
+- Animações decorativas devem ser removidas com prefers-reduced-motion.
+- Cor nunca deve ser o único indicador de um estado crítico.
 
-### Cards / Containers
+## 6. Regras de consistência
 
-- **Corner Style:** Mostly square corners; avoid decorative rounding except circular radar and marker elements.
-- **Background:** `var(--panel)` or `var(--panel-soft)` over deep black.
-- **Shadow Strategy:** Resting cards use black depth; active cards add a faint amber or blue glow.
-- **Border:** Thin amber, green, blue, or red borders with low alpha based on semantic role.
-- **Internal Padding:** 16px to 24px for cards, 28px to 46px for page-level modules.
+### Fazer
 
-### Inputs / Fields
+- Aplicar melhorias pequenas e coerentes em toda a interface.
+- Usar violeta para interação, seleção e dados principais.
+- Preservar a atmosfera escura com contraste entre superfícies.
+- Manter dourado raro para que informações excepcionais tenham peso.
+- Compartilhar os mesmos tokens entre todas as telas.
 
-- **Style:** Dark embedded fields with thin amber-tinted borders and muted-strong text.
-- **Focus:** Border shifts toward amber; browser outline is replaced only when the custom focus state remains visible.
-- **Error / Disabled:** Disabled controls reduce opacity and keep cursor semantics; destructive confirmations use explicit dialog copy.
+### Evitar
 
-### Navigation
-
-The sidebar is the operating rail: dense, icon-led, mono-labeled, and stateful. Active routes show both color and text state. Mobile collapses to a drawer with a backdrop rather than turning the whole app into a landing-page stack.
-
-### Signature Component
-
-Radar, map signals, terminal output, boot initialization, and command palette form the signature interaction set. They should remain fictional, data-backed where possible, and restrained enough that user control stays ahead of spectacle.
-
-## 6. Do's and Don'ts
-
-### Do:
-
-- **Do** keep every dossier, place, operator artifact, route, and map element original to Nocturne.
-- **Do** use amber (#d6b35a) for command and focus, green (#668a5b) for online or stable state, blue (#5f7f92) for equipment and intelligence, and red (#a33a32) for danger.
-- **Do** preserve keyboard access, focus visibility, high-contrast mode, and reduced-motion behavior whenever adding effects.
-- **Do** prefer dense, readable product UI over marketing hero composition.
-- **Do** let actions echo across state, logs, terminal feedback, missions, and map signals when the feature implies connected simulation.
-
-### Don't:
-
-- **Don't** use real agencies, real cities, real maps, real villains, real corporate brands, real logos, or real dossiers.
-- **Don't** imitate Gotham, Batman-adjacent interfaces, Marvel/DC command centers, CIA/FBI/police dashboards, Google Maps, military targeting software, Bloomberg terminals, cyberpunk neon templates, generic SaaS admin dashboards, glassmorphism-heavy AI mockups, or purple-gradient dark-mode products.
-- **Don't** use gradient text, nested cards, decorative glass surfaces, or colored side-stripe borders greater than 1px.
-- **Don't** make amber a background theme; it is a signal, not the room.
-- **Don't** add atmospheric motion without a reduced-motion path and a user-facing way to calm the interface when appropriate.
+- Não usar amarelo ou dourado como cor dominante.
+- Não adicionar neon intenso, gradientes de texto ou glassmorphism decorativo.
+- Não transformar a interface em estética gamer, militar ou cyberpunk.
+- Não usar preto puro como superfície principal.
+- Não alterar layout, comportamento ou hierarquia para resolver uma questão apenas visual.

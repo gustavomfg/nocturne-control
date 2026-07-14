@@ -30,9 +30,9 @@
 .map-header strong {
   height: fit-content;
   padding: 10px 14px;
-  border: 1px solid rgba(214, 179, 90, 0.34);
+  border: 1px solid rgba(139, 92, 246, 0.34);
   color: var(--signal);
-  background: rgba(214, 179, 90, 0.07);
+  background: rgba(139, 92, 246, 0.07);
 }
 
 .map-layout {
@@ -46,7 +46,7 @@
 .map-intel article {
   border: 1px solid var(--panel-border);
   background:
-    linear-gradient(135deg, rgba(214, 179, 90, 0.035), transparent 48%),
+    linear-gradient(135deg, rgba(139, 92, 246, 0.035), transparent 48%),
     var(--panel-soft);
   box-shadow: 0 18px 58px rgba(0, 0, 0, 0.36);
 }
@@ -112,7 +112,7 @@
 .map-intel article button {
   min-height: 32px;
   padding: 6px 9px;
-  border: 1px solid rgba(214,179,90,.2);
+  border: 1px solid rgba(139,92,246,.2);
   color: var(--muted-strong);
   background: rgba(0,0,0,.28);
   cursor: pointer;
@@ -140,11 +140,11 @@
 }
 
 .legend-mission {
-  background: #8ea97e;
+  background: #6fd3a5;
 }
 
 .legend-villain {
-  background: #c46a60;
+  background: #e8797e;
 }
 
 .legend-district {
@@ -161,7 +161,7 @@
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.055);
   background:
-    radial-gradient(circle at 50% 30%, rgba(95, 127, 146, 0.12), transparent 30rem),
+    radial-gradient(circle at 50% 30%, rgba(139, 92, 246, 0.12), transparent 30rem),
     linear-gradient(180deg, rgba(3, 4, 5, 0.24), rgba(0, 0, 0, 0.64)),
     #020304;
   box-shadow:
@@ -186,10 +186,10 @@
 }
 
 .nocturne-leaflet-map::after {
-  border: 1px solid rgba(214, 179, 90, 0.12);
+  border: 1px solid rgba(139, 92, 246, 0.12);
   background:
-    linear-gradient(90deg, rgba(214, 179, 90, 0.18), transparent 14%, transparent 86%, rgba(214, 179, 90, 0.18)),
-    linear-gradient(180deg, rgba(214, 179, 90, 0.16), transparent 16%, transparent 84%, rgba(214, 179, 90, 0.16));
+    linear-gradient(90deg, rgba(139, 92, 246, 0.18), transparent 14%, transparent 86%, rgba(139, 92, 246, 0.18)),
+    linear-gradient(180deg, rgba(139, 92, 246, 0.16), transparent 16%, transparent 84%, rgba(139, 92, 246, 0.16));
   opacity: 0.28;
 }
 
@@ -208,7 +208,7 @@
 .nocturne-leaflet-map .leaflet-control-zoom {
   margin: 14px;
   overflow: hidden;
-  border: 1px solid rgba(214, 179, 90, 0.22);
+  border: 1px solid rgba(139, 92, 246, 0.22);
   background: rgba(3, 4, 5, 0.72);
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.34);
 }
@@ -217,7 +217,7 @@
   width: 32px;
   height: 32px;
   border: 0;
-  border-bottom: 1px solid rgba(214, 179, 90, 0.16);
+  border-bottom: 1px solid rgba(139, 92, 246, 0.16);
   background: rgba(3, 4, 5, 0.72);
   color: var(--signal);
   line-height: 32px;
@@ -225,7 +225,7 @@
 }
 
 .nocturne-leaflet-map .leaflet-control-zoom a:hover {
-  background: rgba(214, 179, 90, 0.12);
+  background: rgba(139, 92, 246, 0.12);
   color: var(--text);
 }
 
@@ -292,14 +292,14 @@
 }
 
 .nocturne-leaflet-marker.mission {
-  color: #8ea97e;
+  color: #6fd3a5;
 }
 
 .nocturne-leaflet-marker.mission .marker-core { transform: rotate(45deg); }
 .nocturne-leaflet-marker.mission .marker-core::after { inset: 2px; }
 
 .nocturne-leaflet-marker.villain {
-  color: #c46a60;
+  color: #e8797e;
 }
 
 .nocturne-leaflet-marker.villain .marker-core { border-radius: 50% 50% 50% 0; transform: rotate(-45deg); }
@@ -314,7 +314,7 @@
 .nocturne-leaflet-marker.villain .marker-core { animation-name: leafletVillainPulse; }
 
 .nocturne-map-tooltip {
-  border: 1px solid rgba(214, 179, 90, 0.22);
+  border: 1px solid rgba(139, 92, 246, 0.22);
   background: rgba(3, 4, 5, 0.86);
   color: var(--text);
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.42);
@@ -323,7 +323,7 @@
 }
 
 .nocturne-map-tooltip::before {
-  border-top-color: rgba(214, 179, 90, 0.22);
+  border-top-color: rgba(139, 92, 246, 0.22);
 }
 
 @keyframes leafletSignalPulse {
@@ -355,11 +355,11 @@
   grid-template-columns: auto repeat(4, minmax(0, 1fr));
   width: 100%;
   margin-top: 12px;
-  border: 1px solid rgba(139, 164, 180, 0.32);
+  border: 1px solid rgba(167, 139, 250, 0.32);
   background:
     linear-gradient(180deg, rgba(14, 39, 52, 0.86), rgba(4, 8, 11, 0.72)),
     rgba(4, 8, 11, 0.76);
-  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.34), inset 0 0 28px rgba(95, 127, 146, 0.08);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.34), inset 0 0 28px rgba(139, 92, 246, 0.08);
   backdrop-filter: blur(8px);
 }
 
@@ -368,9 +368,9 @@
   align-items: center;
   min-width: 0;
   padding: 10px 12px;
-  border-right: 1px solid rgba(139, 164, 180, 0.22);
+  border-right: 1px solid rgba(167, 139, 250, 0.22);
   border-bottom: 0;
-  color: #8ba4b4;
+  color: #a78bfa;
   font-size: 0.72rem;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -403,15 +403,15 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: rgba(214, 179, 90, 0.72);
-  box-shadow: 0 0 12px rgba(214, 179, 90, 0.28);
+  background: rgba(139, 92, 246, 0.72);
+  box-shadow: 0 0 12px rgba(139, 92, 246, 0.28);
   transform: translateY(-50%);
 }
 
 .map-location-menu button:hover,
 .map-location-menu button:focus-visible {
   color: var(--text);
-  background: rgba(139, 164, 180, 0.09);
+  background: rgba(167, 139, 250, 0.09);
 }
 
 .map-intel {
@@ -493,8 +493,8 @@
   .map-location-menu span {
     grid-column: 1 / -1;
     border-right: 0;
-    border-bottom: 1px solid rgba(139, 164, 180, 0.22);
+    border-bottom: 1px solid rgba(167, 139, 250, 0.22);
   }
 }
-.district-risk-meter { height: 6px; margin: 10px 0 12px; overflow: hidden; border: 1px solid rgba(163,58,50,.25); background: rgba(255,255,255,.04); }
-.district-risk-meter i { display: block; height: 100%; background: linear-gradient(90deg, var(--success), var(--signal) 55%, var(--danger)); box-shadow: 0 0 14px rgba(163,58,50,.34); transition: width .45s var(--ease-fluid); }
+.district-risk-meter { height: 6px; margin: 10px 0 12px; overflow: hidden; border: 1px solid rgba(228,93,98,.25); background: rgba(255,255,255,.04); }
+.district-risk-meter i { display: block; height: 100%; background: linear-gradient(90deg, var(--success), var(--signal) 55%, var(--danger)); box-shadow: 0 0 14px rgba(228,93,98,.34); transition: width .45s var(--ease-fluid); }

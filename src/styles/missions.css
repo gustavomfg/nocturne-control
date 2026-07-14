@@ -4,7 +4,7 @@
   padding: 46px;
 
   background:
-    radial-gradient(circle at 80% 0, rgba(214, 179, 90, 0.07), transparent 30rem),
+    radial-gradient(circle at 80% 0, rgba(139, 92, 246, 0.07), transparent 30rem),
     transparent;
   color: var(--text);
 }
@@ -31,9 +31,9 @@
   height: fit-content;
   padding: 10px 14px;
 
-  border: 1px solid rgba(214, 179, 90, 0.34);
+  border: 1px solid rgba(139, 92, 246, 0.34);
   color: var(--signal);
-  background: rgba(214, 179, 90, 0.07);
+  background: rgba(139, 92, 246, 0.07);
 }
 
 .missions-grid {

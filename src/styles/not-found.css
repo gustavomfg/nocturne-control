@@ -37,8 +37,8 @@
 
 .not-found-page button {
   padding: 10px 14px;
-  border: 1px solid rgba(214, 179, 90, 0.32);
+  border: 1px solid rgba(139, 92, 246, 0.32);
   color: var(--signal);
-  background: rgba(214, 179, 90, 0.08);
+  background: rgba(139, 92, 246, 0.08);
   cursor: pointer;
 }

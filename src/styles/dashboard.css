@@ -6,7 +6,7 @@
 
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.018), transparent 260px),
-    radial-gradient(circle at top right, rgba(214, 179, 90, 0.08), transparent 34rem),
+    radial-gradient(circle at top right, rgba(139, 92, 246, 0.08), transparent 34rem),
     transparent;
 
   color: var(--text);
@@ -37,10 +37,10 @@
 
   padding: 10px 14px;
 
-  border: 1px solid rgba(102, 138, 91, 0.32);
-  color: #8ea97e;
-  background: rgba(102, 138, 91, 0.07);
-  box-shadow: inset 0 0 14px rgba(102, 138, 91, 0.03);
+  border: 1px solid rgba(69, 184, 131, 0.32);
+  color: #6fd3a5;
+  background: rgba(69, 184, 131, 0.07);
+  box-shadow: inset 0 0 14px rgba(69, 184, 131, 0.03);
 }
 
 .dashboard-content {
@@ -55,12 +55,12 @@
   overflow: hidden;
   padding: 24px;
 
-  border: 1px solid rgba(102, 138, 91, 0.24);
+  border: 1px solid rgba(69, 184, 131, 0.24);
   background:
-    linear-gradient(135deg, rgba(102, 138, 91, 0.045), transparent),
+    linear-gradient(135deg, rgba(69, 184, 131, 0.045), transparent),
     var(--panel);
 
-  box-shadow: 0 18px 54px rgba(0, 0, 0, 0.42), inset 0 0 34px rgba(102, 138, 91, 0.016);
+  box-shadow: 0 18px 54px rgba(0, 0, 0, 0.42), inset 0 0 34px rgba(69, 184, 131, 0.016);
   animation: panelRise 0.58s var(--ease-snap) both;
 }
 
@@ -70,7 +70,7 @@
   inset: -38% -78%;
   pointer-events: none;
   z-index: 2;
-  background: linear-gradient(115deg, transparent 42%, rgba(214, 179, 90, 0.1), transparent 58%);
+  background: linear-gradient(115deg, transparent 42%, rgba(139, 92, 246, 0.1), transparent 58%);
   opacity: 0;
   transform: translateX(-22%) rotate(8deg);
   transition: opacity 0.24s var(--ease-fluid), transform 0.7s var(--ease-snap);
@@ -84,7 +84,7 @@
 .radar-frame {
   position: relative;
   padding: 18px;
-  border: 1px solid rgba(102, 138, 91, 0.18);
+  border: 1px solid rgba(69, 184, 131, 0.18);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent),
     rgba(0, 0, 0, 0.42);
@@ -97,7 +97,7 @@
   position: absolute;
   width: 34px;
   height: 34px;
-  border-color: rgba(214, 179, 90, 0.34);
+  border-color: rgba(139, 92, 246, 0.34);
   border-style: solid;
   pointer-events: none;
 }
@@ -129,7 +129,7 @@
   margin-top: 24px;
   margin-bottom: 8px;
 
-  color: #8ea97e;
+  color: #6fd3a5;
   letter-spacing: 3px;
 }
 
@@ -147,20 +147,20 @@
 
   overflow: hidden;
 
-  border: 1px solid rgba(102, 138, 91, 0.34);
+  border: 1px solid rgba(69, 184, 131, 0.34);
   border-radius: 50%;
 
   background:
-    radial-gradient(circle at 50% 50%, rgba(102, 138, 91, 0.12) 1px, transparent 2px),
-    radial-gradient(circle, transparent 19%, rgba(102, 138, 91, 0.09) 20%, transparent 21%),
-    radial-gradient(circle, transparent 43%, rgba(102, 138, 91, 0.08) 44%, transparent 45%),
-    radial-gradient(circle, transparent 68%, rgba(102, 138, 91, 0.08) 69%, transparent 70%),
-    linear-gradient(145deg, rgba(102, 138, 91, 0.08), transparent 52%),
+    radial-gradient(circle at 50% 50%, rgba(69, 184, 131, 0.12) 1px, transparent 2px),
+    radial-gradient(circle, transparent 19%, rgba(69, 184, 131, 0.09) 20%, transparent 21%),
+    radial-gradient(circle, transparent 43%, rgba(69, 184, 131, 0.08) 44%, transparent 45%),
+    radial-gradient(circle, transparent 68%, rgba(69, 184, 131, 0.08) 69%, transparent 70%),
+    linear-gradient(145deg, rgba(69, 184, 131, 0.08), transparent 52%),
     #020302;
   background-size: 18px 18px, auto, auto, auto, auto, auto;
   box-shadow:
     inset 0 0 42px rgba(0, 0, 0, 0.78),
-    inset 0 0 24px rgba(102, 138, 91, 0.055),
+    inset 0 0 24px rgba(69, 184, 131, 0.055),
     0 0 28px rgba(0, 0, 0, 0.4);
 }
 
@@ -178,19 +178,19 @@
   position: absolute;
   inset: 50% 0 0 0;
 
-  border-top: 1px solid rgba(102, 138, 91, 0.22);
+  border-top: 1px solid rgba(69, 184, 131, 0.22);
 }
 
 .radar::after {
   inset: 0 50% 0 50%;
   border-top: none;
-  border-left: 1px solid rgba(102, 138, 91, 0.22);
+  border-left: 1px solid rgba(69, 184, 131, 0.22);
 }
 
 .radar-map {
   position: absolute;
   inset: 16%;
-  border: 1px solid rgba(214, 179, 90, 0.12);
+  border: 1px solid rgba(139, 92, 246, 0.12);
   border-radius: 43% 57% 49% 51%;
   opacity: 0.42;
 }
@@ -199,7 +199,7 @@
 .radar-map::after {
   content: "";
   position: absolute;
-  background: rgba(214, 179, 90, 0.16);
+  background: rgba(139, 92, 246, 0.16);
 }
 
 .radar-map::before {
@@ -223,7 +223,7 @@
   inset: 50%;
   width: 20px;
   height: 20px;
-  border: 1px solid rgba(102, 138, 91, 0.2);
+  border: 1px solid rgba(69, 184, 131, 0.2);
   border-radius: 50%;
   transform: translate(-50%, -50%) scale(0.2);
   animation: radarPulse 4.2s ease-out infinite;
@@ -253,8 +253,8 @@
   width: 46%;
   height: 1px;
   transform-origin: left center;
-  background: linear-gradient(90deg, rgba(102, 138, 91, 0.56), rgba(102, 138, 91, 0.12), transparent);
-  box-shadow: 0 0 10px rgba(102, 138, 91, 0.2);
+  background: linear-gradient(90deg, rgba(69, 184, 131, 0.56), rgba(69, 184, 131, 0.12), transparent);
+  box-shadow: 0 0 10px rgba(69, 184, 131, 0.2);
 }
 
 .radar-sweep::after {
@@ -266,7 +266,7 @@
   height: 18px;
   transform: translateY(-50%) rotate(-7deg);
   transform-origin: left center;
-  background: linear-gradient(90deg, rgba(102, 138, 91, 0.12), transparent);
+  background: linear-gradient(90deg, rgba(69, 184, 131, 0.12), transparent);
   opacity: 0.26;
   filter: blur(5px);
 }
@@ -277,9 +277,9 @@
   border-radius: 50%;
   pointer-events: none;
   background:
-    radial-gradient(circle at 30% 22%, rgba(214, 179, 90, 0.08), transparent 2px),
-    radial-gradient(circle at 68% 74%, rgba(102, 138, 91, 0.08), transparent 2px),
-    radial-gradient(circle at 42% 61%, rgba(102, 138, 91, 0.07), transparent 1px);
+    radial-gradient(circle at 30% 22%, rgba(139, 92, 246, 0.08), transparent 2px),
+    radial-gradient(circle at 68% 74%, rgba(69, 184, 131, 0.08), transparent 2px),
+    radial-gradient(circle at 42% 61%, rgba(69, 184, 131, 0.07), transparent 1px);
   opacity: 0.18;
 }
 
@@ -291,7 +291,7 @@
 
   border-radius: 50%;
   background: var(--signal);
-  box-shadow: 0 0 10px rgba(214, 179, 90, 0.38);
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.38);
   animation: contactPulse 3.8s ease-in-out infinite;
 }
 
@@ -299,7 +299,7 @@
   content: "";
   position: absolute;
   inset: -7px;
-  border: 1px solid rgba(214, 179, 90, 0.22);
+  border: 1px solid rgba(139, 92, 246, 0.22);
   border-radius: 50%;
   opacity: 0.26;
 }
@@ -368,7 +368,7 @@
   cursor: pointer;
   transition: border-color .2s, color .2s, background .2s;
 }
-.quick-actions button:hover { border-color: rgba(214,179,90,.4); color: var(--signal); background: rgba(214,179,90,.05); }
+.quick-actions button:hover { border-color: rgba(139,92,246,.4); color: var(--signal); background: rgba(139,92,246,.05); }
 .quick-actions button:disabled { opacity: .48; cursor: not-allowed; }
 .quick-actions span {
   min-width: 0;
@@ -396,7 +396,7 @@
 
   border: 1px solid var(--panel-border);
   background:
-    linear-gradient(135deg, rgba(214, 179, 90, 0.028), transparent),
+    linear-gradient(135deg, rgba(139, 92, 246, 0.028), transparent),
     var(--panel-soft);
 
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
@@ -409,8 +409,8 @@
 
 .status-grid button:hover {
   transform: translateY(-1px);
-  border-color: rgba(214, 179, 90, 0.34);
-  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.34), 0 0 10px rgba(214, 179, 90, 0.032);
+  border-color: rgba(139, 92, 246, 0.34);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.34), 0 0 10px rgba(139, 92, 246, 0.032);
 }
 
 .status-grid button:focus-visible,
@@ -437,7 +437,7 @@
   overflow-wrap: anywhere;
   color: var(--signal);
   font-size: 1.34rem;
-  text-shadow: 0 0 10px rgba(214, 179, 90, 0.1);
+  text-shadow: 0 0 10px rgba(139, 92, 246, 0.1);
 }
 
 .status-grid button > span {
@@ -467,7 +467,7 @@
   overflow: hidden;
   border: 1px solid var(--panel-border);
   background:
-    linear-gradient(135deg, rgba(214, 179, 90, 0.024), transparent),
+    linear-gradient(135deg, rgba(139, 92, 246, 0.024), transparent),
     var(--panel-soft);
   color: inherit;
   text-align: left;
@@ -479,8 +479,8 @@
 .command-grid article:hover,
 .command-grid .panel-button:hover:not(:disabled) {
   transform: translateY(-2px);
-  border-color: rgba(214, 179, 90, 0.28);
-  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.4), 0 0 12px rgba(214, 179, 90, 0.035);
+  border-color: rgba(139, 92, 246, 0.28);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.4), 0 0 12px rgba(139, 92, 246, 0.035);
 }
 
 .command-grid .panel-button:disabled {
@@ -506,11 +506,11 @@
 .priority-panel {
   grid-area: priority;
   min-height: 220px;
-  border-color: rgba(214, 179, 90, 0.36);
+  border-color: rgba(139, 92, 246, 0.36);
   background:
-    linear-gradient(135deg, rgba(214, 179, 90, 0.05), transparent 68%),
+    linear-gradient(135deg, rgba(139, 92, 246, 0.05), transparent 68%),
     var(--panel);
-  box-shadow: 0 22px 62px rgba(0, 0, 0, 0.44), 0 0 16px rgba(214, 179, 90, 0.04);
+  box-shadow: 0 22px 62px rgba(0, 0, 0, 0.44), 0 0 16px rgba(139, 92, 246, 0.04);
 }
 
 .priority-target-panel {
@@ -560,14 +560,14 @@
 .threat-meter {
   height: 10px;
   overflow: hidden;
-  border: 1px solid rgba(214, 179, 90, 0.22);
-  background: rgba(214, 179, 90, 0.06);
+  border: 1px solid rgba(139, 92, 246, 0.22);
+  background: rgba(139, 92, 246, 0.06);
 }
 
 .threat-meter div {
   height: 100%;
   background: linear-gradient(90deg, var(--success), var(--signal), var(--danger));
-  box-shadow: 0 0 10px rgba(214, 179, 90, 0.16);
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.16);
 }
 
 .threat-breakdown {
@@ -579,7 +579,7 @@
 .threat-breakdown span {
   min-width: 0;
   padding: 12px;
-  border: 1px solid rgba(214, 179, 90, 0.12);
+  border: 1px solid rgba(139, 92, 246, 0.12);
   background: rgba(0, 0, 0, 0.18);
 }
 
@@ -629,7 +629,7 @@
   height: 6px;
   border-radius: 50%;
   background: var(--signal);
-  box-shadow: 0 0 8px rgba(214, 179, 90, 0.24);
+  box-shadow: 0 0 8px rgba(139, 92, 246, 0.24);
 }
 
 .priority-target-panel p {
@@ -657,10 +657,10 @@
   width: 96px;
   height: 118px;
   overflow: hidden;
-  border: 1px solid rgba(163, 58, 50, 0.34);
+  border: 1px solid rgba(228, 93, 98, 0.34);
   background:
-    radial-gradient(circle at 50% 42%, rgba(163, 58, 50, 0.18), transparent 38%),
-    linear-gradient(135deg, rgba(214, 179, 90, 0.045), transparent 54%),
+    radial-gradient(circle at 50% 42%, rgba(228, 93, 98, 0.18), transparent 38%),
+    linear-gradient(135deg, rgba(139, 92, 246, 0.045), transparent 54%),
     rgba(5, 5, 5, 0.72);
   box-shadow: 0 14px 30px rgba(0, 0, 0, 0.32);
 }
@@ -670,7 +670,7 @@
   content: "";
   position: absolute;
   inset: 10px;
-  border: 1px solid rgba(214, 179, 90, 0.12);
+  border: 1px solid rgba(139, 92, 246, 0.12);
   pointer-events: none;
 }
 
@@ -687,8 +687,8 @@
   z-index: 1;
   width: 70px;
   height: 70px;
-  color: rgba(214, 179, 90, 0.16);
-  filter: drop-shadow(0 0 10px rgba(214, 179, 90, 0.1));
+  color: rgba(139, 92, 246, 0.16);
+  filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.1));
 }
 
 .target-sigil span {
@@ -700,12 +700,12 @@
   aspect-ratio: 1;
   margin: 0;
   padding: 0;
-  border: 1px solid rgba(163, 58, 50, 0.36);
-  color: #df8a81;
-  background: rgba(163, 58, 50, 0.1);
+  border: 1px solid rgba(228, 93, 98, 0.36);
+  color: #f08b8f;
+  background: rgba(228, 93, 98, 0.1);
   font-size: 1.35rem;
   letter-spacing: 2px;
-  text-shadow: 0 0 10px rgba(163, 58, 50, 0.18);
+  text-shadow: 0 0 10px rgba(228, 93, 98, 0.18);
 }
 
 .target-file strong {
@@ -721,9 +721,9 @@
   display: inline-block;
   margin-bottom: 12px;
   padding: 5px 8px;
-  border: 1px solid rgba(163, 58, 50, 0.38);
-  color: #df8a81;
-  background: rgba(163, 58, 50, 0.08);
+  border: 1px solid rgba(228, 93, 98, 0.38);
+  color: #f08b8f;
+  background: rgba(228, 93, 98, 0.08);
   font-size: 0.72rem;
   letter-spacing: 1.5px;
 }
@@ -750,14 +750,14 @@
 .target-confidence-bar {
   height: 8px;
   overflow: hidden;
-  border: 1px solid rgba(163, 58, 50, 0.26);
-  background: rgba(163, 58, 50, 0.07);
+  border: 1px solid rgba(228, 93, 98, 0.26);
+  background: rgba(228, 93, 98, 0.07);
 }
 
 .target-confidence-bar div {
   height: 100%;
-  background: linear-gradient(90deg, #5b1e1a, var(--danger), var(--signal));
-  box-shadow: 0 0 10px rgba(163, 58, 50, 0.2);
+  background: linear-gradient(90deg, #7f2d35, var(--danger), var(--signal));
+  box-shadow: 0 0 10px rgba(228, 93, 98, 0.2);
 }
 
 .status-grid button:nth-child(2) {

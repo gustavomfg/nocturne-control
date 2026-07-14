@@ -123,10 +123,10 @@ export function LeafletNocturneMap({
     districts.forEach((district) => {
       const active = district.id === activeDistrictId;
       const rectangle = L.rectangle(district.bounds, {
-        color: active ? "#d6b35a" : "#8ba4b4",
+        color: active ? "#a78bfa" : "#52525b",
         weight: active ? 2 : 1,
         opacity: active ? 0.8 : 0.28,
-        fillColor: active ? "#d6b35a" : "#5f7f92",
+        fillColor: active ? "#8b5cf6" : "#27272a",
         fillOpacity: active ? 0.1 : 0.035,
         interactive: true,
         className: "nocturne-district-hitbox",

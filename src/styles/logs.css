@@ -33,9 +33,9 @@
 .logs-actions button {
   height: fit-content;
   padding: 10px 14px;
-  border: 1px solid rgba(214, 179, 90, 0.34);
+  border: 1px solid rgba(139, 92, 246, 0.34);
   color: var(--signal);
-  background: rgba(214, 179, 90, 0.07);
+  background: rgba(139, 92, 246, 0.07);
 }
 
 .logs-actions button {
@@ -70,7 +70,7 @@
 
 .import-message {
   margin-bottom: 18px;
-  color: #8ea97e;
+  color: #6fd3a5;
 }
 
 .log-entry {
