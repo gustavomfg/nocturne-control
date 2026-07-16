@@ -133,5 +133,8 @@ describe("Nocturne state", () => {
     expect(advanced.campaign.intel).toBe(initialState.campaign.intel + 4 + evaluation.intelGain);
     expect(advanced.watchReports[0].gadgetsDrained).toEqual(evaluation.gadgetPowerCosts);
     expect(advanced.gadgets.find((gadget) => gadget.id === 3)?.powerLevel).toBe(0);
+    expect(advanced.missionPlans).toHaveLength(0);
+    expect(advanced.logs[0].type).toBe("CAMPAIGN");
+    expect(advanced.logs[0].message).toContain(`intelligence ${advanced.campaign.intel}%`);
   });
 });
