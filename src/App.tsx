@@ -7,36 +7,11 @@ import { NocturneEffects } from "./components/NocturneEffects.tsx";
 import { RouteSkeleton } from "./components/RouteSkeleton.tsx";
 import { ToastViewport } from "./components/ToastViewport.tsx";
 import { CommandPalette } from "./components/CommandPalette.tsx";
+import { moduleByPage, moduleByPath } from "./modules.ts";
 import { slugify } from "./utils/slug.ts";
 import { useNocturne } from "./state/useNocturne.ts";
 
 import type { Page } from "./types";
-
-const pageRoutes: Record<Page, string> = {
-  dashboard: "/dashboard",
-  gravemere: "/gravemere",
-  missions: "/missions",
-  aegis: "/aegis",
-  terminal: "/terminal",
-  logs: "/logs",
-  map: "/map",
-  profile: "/profile",
-  campaign: "/campaign",
-  editor: "/editor",
-};
-
-const pageTitles: Record<Page, string> = {
-  dashboard: "Dashboard",
-  gravemere: "Gravemere Archive",
-  missions: "Missions",
-  aegis: "Aegis Lab",
-  terminal: "Sentinel Terminal",
-  logs: "Event Timeline",
-  map: "Nocturne Map",
-  profile: "Operator Profile",
-  campaign: "Night Watch",
-  editor: "Scenario Editor",
-};
 
 const appTitle = "Nocturne Control Center";
 
@@ -75,11 +50,12 @@ type AppRoute = {
 
 function getRouteFromPath(pathname: string): AppRoute {
   const relativePath = getRelativePath(pathname);
+  const gravemerePath = moduleByPage.gravemere.path;
 
-  if (relativePath.startsWith("/gravemere/") && relativePath.length > "/gravemere/".length) {
+  if (relativePath.startsWith(`${gravemerePath}/`) && relativePath.length > `${gravemerePath}/`.length) {
     return {
       page: "gravemere",
-      villainSlug: relativePath.replace("/gravemere/", ""),
+      villainSlug: relativePath.slice(`${gravemerePath}/`.length),
     };
   }
 
@@ -87,10 +63,10 @@ function getRouteFromPath(pathname: string): AppRoute {
     return { page: "dashboard" };
   }
 
-  const route = Object.entries(pageRoutes).find(([, path]) => path === relativePath);
+  const route = moduleByPath.get(relativePath);
 
   return {
-    page: route ? route[0] as Page : "notFound",
+    page: route?.page ?? "notFound",
   };
 }
 
@@ -159,7 +135,7 @@ function App() {
       }
     }
     if (window.location.pathname === basePathFull || window.location.pathname === basePathFull.replace(/\/$/, "")) {
-      window.history.replaceState(null, "", toAppPath(pageRoutes.dashboard));
+      window.history.replaceState(null, "", toAppPath(moduleByPage.dashboard.path));
     }
 
     function handlePopState() {
@@ -189,7 +165,7 @@ function App() {
       : undefined;
     const routeTitle = route.villainSlug
       ? `${villain?.name ?? "Target"} Dossier`
-      : activePage === "notFound" ? "Page Not Found" : pageTitles[activePage];
+      : activePage === "notFound" ? "Page Not Found" : moduleByPage[activePage].title;
 
     document.title = `${routeTitle} — ${appTitle}`;
   }, [activePage, route.villainSlug, villains]);
@@ -211,19 +187,19 @@ function App() {
 
   function handleChangePage(page: Page) {
     setRoute({ page });
-    window.history.pushState(null, "", toAppPath(pageRoutes[page]));
+    window.history.pushState(null, "", toAppPath(moduleByPage[page].path));
   }
 
   function handleOpenVillain(villainName: string) {
     const villainSlug = slugify(villainName);
 
     setRoute({ page: "gravemere", villainSlug });
-    window.history.pushState(null, "", toAppPath(`/gravemere/${villainSlug}`));
+    window.history.pushState(null, "", toAppPath(`${moduleByPage.gravemere.path}/${villainSlug}`));
   }
 
   function handleBackToGravemere() {
     setRoute({ page: "gravemere" });
-    window.history.pushState(null, "", toAppPath(pageRoutes.gravemere));
+    window.history.pushState(null, "", toAppPath(moduleByPage.gravemere.path));
   }
 
   useEffect(() => {

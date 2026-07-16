@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { Page } from "../types";
+import { moduleCatalog } from "../modules.ts";
 import { InterfaceIcon } from "./InterfaceIcon.tsx";
 import { useNocturne } from "../state/useNocturne.ts";
 import { playTone } from "../utils/audio.ts";
@@ -20,19 +21,6 @@ type SidebarProps = {
   mobileOpen: boolean;
   onMobileOpenChange: (open: boolean) => void;
 };
-
-const navItems: Array<{ page: Page; label: string; icon: Parameters<typeof InterfaceIcon>[0]["name"] }> = [
-  { page: "dashboard", label: "Dashboard", icon: "dashboard" },
-  { page: "gravemere", label: "Gravemere", icon: "target" },
-  { page: "missions", label: "Missions", icon: "mission" },
-  { page: "aegis", label: "Aegis Lab", icon: "shield" },
-  { page: "terminal", label: "Terminal", icon: "terminal" },
-  { page: "map", label: "Map", icon: "map" },
-  { page: "campaign", label: "Night Watch", icon: "radar" },
-  { page: "profile", label: "Profile", icon: "profile" },
-  { page: "editor", label: "Scenario Editor", icon: "editor" },
-  { page: "logs", label: "Logs", icon: "archive" },
-];
 
 export function Sidebar({
   activePage,
@@ -130,7 +118,7 @@ export function Sidebar({
       <p className="operator-chip">OPERATOR / {operatorName || "UNIDENTIFIED"}</p>
 
       <nav>
-        {navItems.map((item) => (
+        {moduleCatalog.map((item) => (
           <button
             key={item.page}
             className={activePage === item.page ? "active" : ""}

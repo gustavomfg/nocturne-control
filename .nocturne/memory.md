@@ -29,3 +29,5 @@ Decisões, arquitetura e informações aprendidas pelo agente.
 {"type":"suggestion-decision","title":"Tornar importação de saves completa e segura","status":"applied","recordedAt":"2026-07-16T16:18:48.085Z"}
 {"type":"suggestion-decision","title":"Impedir dupla alocação de gadgets em planos simultâneos","status":"accepted","recordedAt":"2026-07-16T16:19:36.079Z"}
 {"type":"suggestion-decision","title":"Impedir dupla alocação de gadgets em planos simultâneos","status":"applied","recordedAt":"2026-07-16T16:21:44.539Z"}
+{"type":"suggestion-decision","title":"Centralizar o catálogo de rotas e módulos","status":"accepted","recordedAt":"2026-07-16T16:22:18.256Z"}
+{"type":"suggestion-decision","title":"Centralizar o catálogo de rotas e módulos","status":"applied","recordedAt":"2026-07-16T16:25:16.711Z"}

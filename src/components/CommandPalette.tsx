@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
+import { moduleCatalog } from "../modules.ts";
 import type { Page } from "../types";
 
 type CommandPaletteProps = {
@@ -11,18 +12,11 @@ type CommandPaletteProps = {
   onToggleContrast: () => void;
 };
 
-const navigationCommands: Array<{ label: string; detail: string; page: Page }> = [
-  { label: "Open Dashboard", detail: "Live tactical overview", page: "dashboard" },
-  { label: "Open Gravemere", detail: "Target archive", page: "gravemere" },
-  { label: "Open Missions", detail: "Operations and objectives", page: "missions" },
-  { label: "Open Aegis Lab", detail: "Equipment and deployments", page: "aegis" },
-  { label: "Open Terminal", detail: "Sentinel command console", page: "terminal" },
-  { label: "Open Map", detail: "District surveillance", page: "map" },
-  { label: "Open Profile", detail: "Operator identity", page: "profile" },
-  { label: "Open Logs", detail: "Operational timeline", page: "logs" },
-  { label: "Open Night Watch", detail: "Campaign and operational replay", page: "campaign" },
-  { label: "Open Scenario Editor", detail: "Create local mission scenarios", page: "editor" },
-];
+const navigationCommands = moduleCatalog.map((module) => ({
+  label: `Open ${module.label}`,
+  detail: module.description,
+  page: module.page,
+}));
 
 export function CommandPalette({
   open,

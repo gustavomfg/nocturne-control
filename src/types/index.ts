@@ -1,4 +1,4 @@
-export type Page = "dashboard" | "gravemere" | "missions" | "aegis" | "terminal" | "logs" | "map" | "profile" | "campaign" | "editor";
+export type { Page } from "../modules.ts";
 
 export type EventLog = {
   id: number;

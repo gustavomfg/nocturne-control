@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
+import { moduleCatalog, pageAliases } from "../modules.ts";
 import { useNocturne } from "../state/useNocturne.ts";
 import type { TerminalLine } from "../types/terminal.ts";
 import type { Page } from "../types";
@@ -25,8 +26,9 @@ type TerminalProps = {
 
 const baseCommands = [
   "help", "status city", "list villains", "list missions", "list gadgets",
-  "scan gravemere", "signal on", "go dashboard", "go map", "go missions",
-  "go gravemere", "go aegis", "go logs", "go profile", "go campaign", "go editor", "clear", "reset state",
+  "scan gravemere", "signal on",
+  ...moduleCatalog.flatMap((module) => module.aliases.map((alias) => `go ${alias}`)),
+  "clear", "reset state",
 ];
 
 export function Terminal({ soundEnabled, onNavigate, onOpenVillain }: TerminalProps) {
@@ -97,13 +99,8 @@ export function Terminal({ soundEnabled, onNavigate, onOpenVillain }: TerminalPr
     }
 
     if (normalizedCommand.startsWith("go ")) {
-      const pageAliases: Record<string, Page> = {
-        dashboard: "dashboard", home: "dashboard", gravemere: "gravemere",
-        missions: "missions", aegis: "aegis", arsenal: "aegis", terminal: "terminal",
-        logs: "logs", map: "map", profile: "profile", campaign: "campaign", watch: "campaign", editor: "editor",
-      };
       const page = pageAliases[normalizedCommand.slice(3)];
-      if (!page) return "Navigation failed. Available: dashboard, gravemere, missions, aegis, map, profile, logs, campaign, editor.";
+      if (!page) return `Navigation failed. Available: ${moduleCatalog.map((module) => module.page).join(", ")}.`;
       window.setTimeout(() => onNavigate(page), 180);
       return `Opening ${page.toUpperCase()} module...`;
     }
