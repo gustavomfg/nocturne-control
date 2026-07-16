@@ -11,3 +11,5 @@ Decisões, arquitetura e informações aprendidas pelo agente.
 {"type":"suggestion-decision","title":"Garantir que a PWA funcione offline desde a primeira instalação","status":"applied","recordedAt":"2026-07-16T01:30:50.924Z"}
 {"type":"suggestion-decision","title":"Excluir missões concluídas das métricas distritais do mapa","status":"accepted","recordedAt":"2026-07-16T01:31:34.972Z"}
 {"type":"suggestion-decision","title":"Excluir missões concluídas das métricas distritais do mapa","status":"applied","recordedAt":"2026-07-16T01:32:24.360Z"}
+{"type":"suggestion-decision","title":"Unificar previsão e execução das regras de missão","status":"accepted","recordedAt":"2026-07-16T01:34:03.227Z"}
+{"type":"suggestion-decision","title":"Unificar previsão e execução das regras de missão","status":"applied","recordedAt":"2026-07-16T01:36:42.175Z"}

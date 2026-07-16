@@ -4,7 +4,7 @@ import type { MissionStrategy } from "../types";
 import type { Gadget } from "../types/gadget.ts";
 import type { Mission } from "../types/mission.ts";
 import { InterfaceIcon } from "./InterfaceIcon.tsx";
-import { forecastMission } from "../domain/missionPlanning.ts";
+import { evaluateMissionPlan } from "../domain/missionPlanning.ts";
 
 import "../styles/campaign.css";
 
@@ -21,7 +21,7 @@ export function MissionPlanner({ mission, gadgets, onClose, onSubmit }: MissionP
   const [unit, setUnit] = useState("");
   const [gadgetIds, setGadgetIds] = useState<number[]>([]);
   const availableGadgets = useMemo(() => gadgets.filter((gadget) => gadget.status !== "MAINTENANCE"), [gadgets]);
-  const forecast = useMemo(() => mission ? forecastMission(mission, strategy, gadgetIds, gadgets) : null, [gadgetIds, gadgets, mission, strategy]);
+  const forecast = useMemo(() => mission ? evaluateMissionPlan(mission, strategy, gadgetIds, gadgets) : null, [gadgetIds, gadgets, mission, strategy]);
 
   useEffect(() => {
     const dialog = dialogRef.current;

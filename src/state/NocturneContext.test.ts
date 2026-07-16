@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 
+import { evaluateMissionPlan } from "../domain/missionPlanning.ts";
 import {
   initialState,
   migrateState,
@@ -109,5 +110,28 @@ describe("Nocturne state", () => {
 
     expect(direct.missions[1].progress).toBeGreaterThan(stealth.missions[1].progress);
     expect(direct.missions[1].riskLevel).toBeGreaterThan(stealth.missions[1].riskLevel);
+  });
+
+  it("applies the same mission evaluation shown by the planner", () => {
+    const mission = initialState.missions[0];
+    const gadgets = initialState.gadgets.map((gadget) => gadget.id === 3 ? { ...gadget, powerLevel: 8 } : gadget);
+    const state = { ...initialState, gadgets };
+    const evaluation = evaluateMissionPlan(mission, "STEALTH", [3], gadgets);
+    const planned = nocturneReducer(state, {
+      type: "PLAN_MISSION",
+      missionId: mission.id,
+      strategy: "STEALTH",
+      gadgetIds: [3],
+      unit: "Night Watch",
+      timestamp: "22:18:00",
+    });
+    const advanced = nocturneReducer(planned, { type: "ADVANCE_CAMPAIGN", timestamp: "22:19:00" });
+    const outcome = advanced.watchReports[0].outcomes.find((item) => item.missionId === mission.id);
+
+    expect(outcome?.progressAfter).toBe(evaluation.projectedProgress);
+    expect(outcome?.riskAfter).toBe(evaluation.projectedRisk);
+    expect(advanced.campaign.intel).toBe(initialState.campaign.intel + 4 + evaluation.intelGain);
+    expect(advanced.watchReports[0].gadgetsDrained).toEqual(evaluation.gadgetPowerCosts);
+    expect(advanced.gadgets.find((gadget) => gadget.id === 3)?.powerLevel).toBe(0);
   });
 });

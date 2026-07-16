@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 import { gadgets as initialGadgets } from "../data/gadgets.ts";
 import { missions as initialMissions } from "../data/missions.ts";
 import { villains as initialVillains } from "../data/villains.ts";
+import { evaluateMissionPlan } from "../domain/missionPlanning.ts";
 import type { EventLog } from "../types";
 import type { Achievement, CampaignState } from "../types";
 import type { Mission } from "../types/mission.ts";
@@ -327,28 +328,22 @@ export function nocturneReducer(state: NocturneState, action: NocturneAction): N
       const plannedIds = new Set(state.missionPlans.map((plan) => plan.missionId));
       const outcomes: import("../types").MissionOutcome[] = [];
       const plansByMission = new Map(state.missionPlans.map((plan) => [plan.missionId, plan]));
+      const evaluationsByMission = new Map(state.missionPlans.flatMap((plan) => {
+        const mission = state.missions.find((item) => item.id === plan.missionId);
+        return mission ? [[plan.missionId, evaluateMissionPlan(mission, plan.strategy, plan.gadgetIds, state.gadgets)] as const] : [];
+      }));
       const missions = state.missions.map((mission) => {
         if (mission.status === "COMPLETED") return mission;
         const plan = plansByMission.get(mission.id);
-        const strategyEffects = plan ? {
-          STEALTH: { progress: 12, risk: -14 }, DIRECT: { progress: 20, risk: 3 }, SURVEILLANCE: { progress: 10, risk: -9 },
-        }[plan.strategy] : { progress: 4, risk: 7 };
-        const validAssets = plan?.gadgetIds.filter((id) => state.gadgets.some((gadget) => gadget.id === id && gadget.status !== "MAINTENANCE")) ?? [];
-        const synergy = validAssets.filter((id) => mission.recommendedGadgetIds.includes(id)).length;
-        const progressGain = strategyEffects.progress + validAssets.length * 2 + synergy * 3;
-        const riskChange = strategyEffects.risk - synergy * 3;
-        const progress = Math.min(100, mission.progress + progressGain);
+        const evaluation = evaluationsByMission.get(mission.id);
+        const progress = evaluation?.projectedProgress ?? Math.min(100, mission.progress + 4);
+        const riskAfter = evaluation?.projectedRisk ?? Math.max(0, Math.min(100, mission.riskLevel + 7));
         const status: Mission["status"] = progress === 100 ? "COMPLETED" : "ACTIVE";
-        outcomes.push({ missionId: mission.id, title: mission.title, strategy: plan?.strategy ?? "UNPLANNED", progressBefore: mission.progress, progressAfter: progress, riskBefore: mission.riskLevel, riskAfter: Math.max(0, Math.min(100, mission.riskLevel + riskChange)), completed: progress === 100 });
-        return { ...mission, progress, riskLevel: Math.max(0, Math.min(100, mission.riskLevel + riskChange)), status, eta: progress === 100 ? "COMPLETE" : mission.eta };
+        outcomes.push({ missionId: mission.id, title: mission.title, strategy: plan?.strategy ?? "UNPLANNED", progressBefore: mission.progress, progressAfter: progress, riskBefore: mission.riskLevel, riskAfter, completed: progress === 100 });
+        return { ...mission, progress, riskLevel: riskAfter, status, eta: progress === 100 ? "COMPLETE" : mission.eta };
       });
       const stabilityDelta = openMissions.length === 0 ? 8 : Math.round(openMissions.filter((mission) => plannedIds.has(mission.id)).length * 3 - openMissions.length * 2);
-      const intelBonus = state.missionPlans.reduce((total, plan) => {
-        const mission = state.missions.find((item) => item.id === plan.missionId);
-        const base = { STEALTH: 7, DIRECT: 2, SURVEILLANCE: 11 }[plan.strategy];
-        const synergy = mission ? plan.gadgetIds.filter((id) => mission.recommendedGadgetIds.includes(id)).length : 0;
-        return total + base + synergy * 2;
-      }, 0);
+      const intelBonus = [...evaluationsByMission.values()].reduce((total, evaluation) => total + evaluation.intelGain, 0);
       const campaign = {
         night: state.campaign.night + (state.campaign.turn >= 3 ? 1 : 0),
         turn: state.campaign.turn >= 3 ? 1 : state.campaign.turn + 1,
@@ -358,11 +353,17 @@ export function nocturneReducer(state: NocturneState, action: NocturneAction): N
       const achievement = campaign.night >= 2 ? unlockAchievement(state, {
         id: "night-two", title: "Second Watch", description: "Advance into the second operational night.", unlockedAt: action.timestamp,
       }, action.timestamp) : { achievements: state.achievements, logs: state.logs };
-      const usedGadgetIds = new Set(state.missionPlans.flatMap((plan) => plan.gadgetIds));
-      const gadgetsDrained = state.gadgets.filter((gadget) => usedGadgetIds.has(gadget.id) && gadget.status !== "MAINTENANCE").map((gadget) => ({ gadgetId: gadget.id, name: gadget.name, powerSpent: Math.min(12, gadget.powerLevel) }));
+      const gadgetPowerCosts = new Map([...evaluationsByMission.values()].flatMap((evaluation) =>
+        evaluation.gadgetPowerCosts.map((gadget) => [gadget.gadgetId, gadget.powerSpent] as const)
+      ));
+      const gadgetsDrained = state.gadgets.flatMap((gadget) => {
+        const powerSpent = gadgetPowerCosts.get(gadget.id);
+        return powerSpent === undefined ? [] : [{ gadgetId: gadget.id, name: gadget.name, powerSpent }];
+      });
       const gadgets = state.gadgets.map((gadget) => {
-        if (!usedGadgetIds.has(gadget.id) || gadget.status === "MAINTENANCE") return gadget;
-        const powerLevel = Math.max(0, gadget.powerLevel - 12);
+        const powerSpent = gadgetPowerCosts.get(gadget.id);
+        if (powerSpent === undefined) return gadget;
+        const powerLevel = gadget.powerLevel - powerSpent;
         return { ...gadget, powerLevel, status: powerLevel === 0 ? "MAINTENANCE" as const : "DEPLOYED" as const, deploymentHistory: `Assigned during watch ${state.campaign.night}.${state.campaign.turn}.` };
       });
       const report = { id: `${state.campaign.night}-${state.campaign.turn}-${action.timestamp}`, timestamp: action.timestamp, night: state.campaign.night, turn: state.campaign.turn, stabilityBefore: state.campaign.cityStability, stabilityAfter: campaign.cityStability, intelBefore: state.campaign.intel, intelAfter: campaign.intel, outcomes, gadgetsDrained };

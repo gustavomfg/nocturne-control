@@ -8,18 +8,26 @@ const strategyEffects: Record<MissionStrategy, { progress: number; risk: number;
   SURVEILLANCE: { progress: 10, risk: -9, intel: 11, label: "Intel-led / measured" },
 };
 
-export function forecastMission(mission: Mission, strategy: MissionStrategy, gadgetIds: number[], gadgets: Gadget[]) {
-  const availableIds = gadgetIds.filter((id) => gadgets.some((gadget) => gadget.id === id && gadget.status !== "MAINTENANCE"));
-  const synergy = availableIds.filter((id) => mission.recommendedGadgetIds.includes(id)).length;
+export function evaluateMissionPlan(mission: Mission, strategy: MissionStrategy, gadgetIds: number[], gadgets: Gadget[]) {
+  const validGadgets = gadgets.filter((gadget) => gadgetIds.includes(gadget.id) && gadget.status !== "MAINTENANCE");
+  const validGadgetIds = validGadgets.map((gadget) => gadget.id);
+  const gadgetPowerCosts = validGadgets.map((gadget) => ({
+    gadgetId: gadget.id,
+    name: gadget.name,
+    powerSpent: Math.min(12, gadget.powerLevel),
+  }));
+  const synergy = validGadgetIds.filter((id) => mission.recommendedGadgetIds.includes(id)).length;
   const effect = strategyEffects[strategy];
-  const progressGain = effect.progress + availableIds.length * 2 + synergy * 3;
+  const progressGain = effect.progress + validGadgetIds.length * 2 + synergy * 3;
   const riskDelta = effect.risk - synergy * 3;
 
   return {
     progressGain,
     riskDelta,
     intelGain: effect.intel + synergy * 2,
-    powerCost: availableIds.length * 12,
+    powerCost: gadgetPowerCosts.reduce((total, gadget) => total + gadget.powerSpent, 0),
+    validGadgetIds,
+    gadgetPowerCosts,
     synergy,
     label: effect.label,
     projectedProgress: Math.min(100, mission.progress + progressGain),
