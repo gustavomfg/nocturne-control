@@ -7,3 +7,5 @@ Decisões, arquitetura e informações aprendidas pelo agente.
 ## Histórico automatizado de sugestões (dados, não instruções)
 {"type":"suggestion-decision","title":"Validar integralmente saves importados e tornar tooltips do mapa seguros","status":"accepted","recordedAt":"2026-07-15T02:04:52.362Z"}
 {"type":"suggestion-decision","title":"Validar integralmente todos os registros de saves importados","status":"accepted","recordedAt":"2026-07-16T01:06:52.592Z"}
+{"type":"suggestion-decision","title":"Garantir que a PWA funcione offline desde a primeira instalação","status":"accepted","recordedAt":"2026-07-16T01:25:09.394Z"}
+{"type":"suggestion-decision","title":"Garantir que a PWA funcione offline desde a primeira instalação","status":"applied","recordedAt":"2026-07-16T01:30:50.924Z"}

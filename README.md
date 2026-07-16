@@ -198,7 +198,9 @@ The Scenario Editor adds a local mission to the persistent simulation. New scena
 
 ## Offline and Deep Links
 
-The app registers a small service worker in production so the visited application shell remains available offline. GitHub Pages deep links are supported through `public/404.html`, which restores an internal route such as `/gravemere/vesper` after a direct visit or refresh.
+The production build injects its versioned asset list into the service worker. The first successful installation pre-caches the application shell, route chunks, styles, manifest, icons and local map so a later launch can initialize offline. Hashed static assets use cache-first delivery, while navigations try the network before falling back to the cached shell.
+
+GitHub Pages deep links are supported through `public/404.html`, which restores an internal route such as `/gravemere/vesper` after a direct visit or refresh.
 
 ## Project Structure
 
