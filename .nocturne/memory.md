@@ -13,3 +13,5 @@ Decisões, arquitetura e informações aprendidas pelo agente.
 {"type":"suggestion-decision","title":"Excluir missões concluídas das métricas distritais do mapa","status":"applied","recordedAt":"2026-07-16T01:32:24.360Z"}
 {"type":"suggestion-decision","title":"Unificar previsão e execução das regras de missão","status":"accepted","recordedAt":"2026-07-16T01:34:03.227Z"}
 {"type":"suggestion-decision","title":"Unificar previsão e execução das regras de missão","status":"applied","recordedAt":"2026-07-16T01:36:42.175Z"}
+{"type":"suggestion-decision","title":"Implementar comportamento modal acessível no drawer móvel","status":"accepted","recordedAt":"2026-07-16T01:37:21.762Z"}
+{"type":"suggestion-decision","title":"Implementar comportamento modal acessível no drawer móvel","status":"applied","recordedAt":"2026-07-16T01:41:08.870Z"}

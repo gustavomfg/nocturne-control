@@ -123,6 +123,7 @@ function App() {
   );
   const [soundEnabled, setSoundEnabled] = useState(() => loadStoredBoolean("nocturne-sound-enabled", true));
   const [paletteOpen, setPaletteOpen] = useState(false);
+  const [mobileNavigationOpen, setMobileNavigationOpen] = useState(false);
   const [highContrast, setHighContrast] = useState(() => loadStoredBoolean("nocturne-high-contrast", false));
   const activePage = route.page;
   const finishBoot = useCallback(() => {
@@ -171,7 +172,11 @@ function App() {
     function handleShortcut(event: KeyboardEvent) {
       if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
         event.preventDefault();
-        setPaletteOpen((open) => !open);
+        setPaletteOpen((open) => {
+          const nextOpen = !open;
+          if (nextOpen) setMobileNavigationOpen(false);
+          return nextOpen;
+        });
       }
     }
     window.addEventListener("keydown", handleShortcut);
@@ -277,17 +282,24 @@ function App() {
           onToggleEffects={() => setEffectsEnabled((currentValue) => !currentValue)}
           soundEnabled={soundEnabled}
           onToggleSound={() => setSoundEnabled((currentValue) => !currentValue)}
-          onOpenPalette={() => setPaletteOpen(true)}
+          onOpenPalette={() => {
+            setMobileNavigationOpen(false);
+            setPaletteOpen(true);
+          }}
           highContrast={highContrast}
           onToggleContrast={() => setHighContrast((value) => !value)}
+          mobileOpen={mobileNavigationOpen}
+          onMobileOpenChange={setMobileNavigationOpen}
         />
 
-        <div key={`${activePage}-${route.villainSlug ?? "index"}`} className="page-transition">
+        <div key={`${activePage}-${route.villainSlug ?? "index"}`} className="page-transition" inert={mobileNavigationOpen}>
           <Suspense fallback={<RouteSkeleton />}>
             {renderPage()}
           </Suspense>
         </div>
-        <ToastViewport />
+        <div inert={mobileNavigationOpen}>
+          <ToastViewport />
+        </div>
         <CommandPalette
           open={paletteOpen}
           onClose={() => setPaletteOpen(false)}

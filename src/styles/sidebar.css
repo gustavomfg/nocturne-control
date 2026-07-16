@@ -303,6 +303,7 @@
   .sidebar.mobile-open {
     transform: translateX(0);
     visibility: visible;
+    overscroll-behavior: contain;
   }
 
   .sidebar-backdrop {
@@ -313,6 +314,7 @@
     border: 0;
     background: rgba(0,0,0,.72);
     backdrop-filter: blur(4px);
+    cursor: pointer;
   }
 
   .sidebar h2 {
