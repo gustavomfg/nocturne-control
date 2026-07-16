@@ -16,7 +16,7 @@
   <img alt="React" src="https://img.shields.io/badge/React-19-20232a?logo=react&logoColor=61dafb" />
   <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-6-1f2937?logo=typescript&logoColor=3178c6" />
   <img alt="Vite" src="https://img.shields.io/badge/Vite-8-1f1b2d?logo=vite&logoColor=ffd166" />
-  <img alt="Tests" src="https://img.shields.io/badge/tests-22%20passing-6d4aff" />
+  <img alt="Tests" src="https://img.shields.io/badge/tests-27%20passing-6d4aff" />
 </p>
 
 ![Nocturne Control Center tactical dashboard](images/dashboard.png)
@@ -96,6 +96,7 @@ Actions are not isolated to one screen. Capturing a target changes related missi
 - Leaflet
 - ESLint
 - Vitest
+- Playwright
 - Testing Library
 - CSS organized by page/component
 
@@ -125,6 +126,7 @@ npm run dev       # start local Vite server
 npm run lint      # run ESLint
 npm run test      # run Vitest tests once
 npm run build     # typecheck and build production assets
+npm run test:pwa  # build and run the PWA smoke test in Chromium
 npm run preview   # preview the production build
 ```
 
@@ -135,10 +137,10 @@ Before pushing changes, run:
 ```bash
 npm run lint
 npm run test
-npm run build
+npm run test:pwa
 ```
 
-The 22-test suite covers state migration and validation, operator identity preservation, connected navigation and mission actions, strategy consequences, campaign turns, achievement logs, watch reports, accessible map filters, dialogs, save import and first-install offline behavior.
+The suite includes 26 Vitest checks plus a Playwright browser smoke test. It covers state migration and validation, operator identity preservation, connected navigation and mission actions, strategy consequences, campaign turns, achievement logs, watch reports, accessible map filters, dialogs, save import, deep links and first-install offline behavior.
 
 ## App Routes
 
@@ -209,6 +211,7 @@ GitHub Pages deep links are supported through `public/404.html`, which restores 
 ```text
 public           Custom map, PWA manifest, service worker and Pages fallback
 images           Curated screenshots used by this README
+tests            Playwright browser and offline smoke tests
 src/components  Shared UI components
 src/data        Static fictional domain data
 src/domain      Pure mission forecasting rules
@@ -231,7 +234,7 @@ PRODUCT.md      Product purpose, audience and design principles
 
 Pushes to `main` run `.github/workflows/deploy.yml`.
 
-The workflow installs dependencies, runs lint, tests, production build, uploads `dist/` and deploys to GitHub Pages.
+The workflow installs dependencies, runs lint and Vitest, installs Chromium, builds the production app, runs the Playwright PWA smoke test, uploads `dist/` and deploys to GitHub Pages.
 
 ## Git Hygiene
 
