@@ -19,3 +19,5 @@ Decisões, arquitetura e informações aprendidas pelo agente.
 {"type":"suggestion-decision","title":"Sincronizar filtros visuais e resumo acessível do mapa","status":"applied","recordedAt":"2026-07-16T01:42:24.590Z"}
 {"type":"suggestion-decision","title":"Cobrir fluxos integrados de navegação, mapa e persistência","status":"accepted","recordedAt":"2026-07-16T01:44:22.276Z"}
 {"type":"suggestion-decision","title":"Cobrir fluxos integrados de navegação, mapa e persistência","status":"applied","recordedAt":"2026-07-16T01:50:32.206Z"}
+{"type":"suggestion-decision","title":"Atualizar metadados por rota e alinhar documentação visual","status":"accepted","recordedAt":"2026-07-16T01:50:59.189Z"}
+{"type":"suggestion-decision","title":"Atualizar metadados por rota e alinhar documentação visual","status":"applied","recordedAt":"2026-07-16T02:08:08.775Z"}

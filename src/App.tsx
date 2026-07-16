@@ -25,6 +25,21 @@ const pageRoutes: Record<Page, string> = {
   editor: "/editor",
 };
 
+const pageTitles: Record<Page, string> = {
+  dashboard: "Dashboard",
+  gravemere: "Gravemere Archive",
+  missions: "Missions",
+  aegis: "Aegis Lab",
+  terminal: "Sentinel Terminal",
+  logs: "Event Timeline",
+  map: "Nocturne Map",
+  profile: "Operator Profile",
+  campaign: "Night Watch",
+  editor: "Scenario Editor",
+};
+
+const appTitle = "Nocturne Control Center";
+
 const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
 const basePathFull = import.meta.env.BASE_URL;
 const Dashboard = lazy(() => import("./pages/Dashboard.tsx").then((module) => ({ default: module.Dashboard })));
@@ -109,7 +124,7 @@ function storeBoolean(key: string, value: boolean) {
 }
 
 function App() {
-  const { operatorName, setOperatorName } = useNocturne();
+  const { operatorName, setOperatorName, villains } = useNocturne();
   const [boot, setBoot] = useState(() => {
     try {
       return !sessionStorage.getItem("nocturne-boot-complete");
@@ -167,6 +182,17 @@ function App() {
   useEffect(() => {
     storeBoolean("nocturne-high-contrast", highContrast);
   }, [highContrast]);
+
+  useEffect(() => {
+    const villain = route.villainSlug
+      ? villains.find((item) => slugify(item.name) === route.villainSlug)
+      : undefined;
+    const routeTitle = route.villainSlug
+      ? `${villain?.name ?? "Target"} Dossier`
+      : activePage === "notFound" ? "Page Not Found" : pageTitles[activePage];
+
+    document.title = `${routeTitle} — ${appTitle}`;
+  }, [activePage, route.villainSlug, villains]);
 
   useEffect(() => {
     function handleShortcut(event: KeyboardEvent) {

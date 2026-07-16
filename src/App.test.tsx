@@ -54,20 +54,26 @@ describe("App navigation", () => {
     renderApp("/gravemere/vesper");
 
     expect(await screen.findByRole("heading", { name: "Vesper", level: 1 })).toBeTruthy();
+    expect(document.title).toBe("Vesper Dossier — Nocturne Control Center");
     await user.click(screen.getByRole("button", { name: /back to gravemere/i }));
     expect(await screen.findByRole("heading", { name: /gravemere archive/i })).toBeTruthy();
+    expect(document.title).toBe("Gravemere Archive — Nocturne Control Center");
     await user.click(screen.getByRole("button", { name: /^missions/i }));
     expect(await screen.findByRole("heading", { name: "Mission Control" })).toBeTruthy();
+    expect(document.title).toBe("Missions — Nocturne Control Center");
     await user.click(screen.getByRole("button", { name: /^logs/i }));
     expect(await screen.findByRole("heading", { name: "Event Timeline" })).toBeTruthy();
+    expect(document.title).toBe("Event Timeline — Nocturne Control Center");
 
     act(() => window.history.back());
     await waitFor(() => expect(window.location.pathname).toBe("/missions"));
     expect(await screen.findByRole("heading", { name: "Mission Control" })).toBeTruthy();
+    expect(document.title).toBe("Missions — Nocturne Control Center");
 
     act(() => window.history.forward());
     await waitFor(() => expect(window.location.pathname).toBe("/logs"));
     expect(await screen.findByRole("heading", { name: "Event Timeline" })).toBeTruthy();
+    expect(document.title).toBe("Event Timeline — Nocturne Control Center");
   });
 
   it("isolates the page while the mobile navigation drawer is open", async () => {
