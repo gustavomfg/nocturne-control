@@ -16,7 +16,7 @@
   <img alt="React" src="https://img.shields.io/badge/React-19-20232a?logo=react&logoColor=61dafb" />
   <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-6-1f2937?logo=typescript&logoColor=3178c6" />
   <img alt="Vite" src="https://img.shields.io/badge/Vite-8-1f1b2d?logo=vite&logoColor=ffd166" />
-  <img alt="Tests" src="https://img.shields.io/badge/tests-12%20passing-1f3326" />
+  <img alt="Tests" src="https://img.shields.io/badge/tests-22%20passing-6d4aff" />
 </p>
 
 ![Nocturne Control Center tactical dashboard](images/dashboard.png)
@@ -49,6 +49,8 @@ All names, districts, dossiers, missions, gadgets and map artwork are original f
 - Installable local-first PWA with an offline service worker.
 
 ## Interface Tour
+
+The screenshots below show the current violet operational interface and its connected simulation state.
 
 ### Mission Control
 
@@ -136,7 +138,7 @@ npm run test
 npm run build
 ```
 
-The test suite covers state migration and validation, operator identity preservation, connected mission actions, strategy consequences, campaign turns, achievement logs, watch reports and boot screen behavior.
+The 22-test suite covers state migration and validation, operator identity preservation, connected navigation and mission actions, strategy consequences, campaign turns, achievement logs, watch reports, accessible map filters, dialogs, save import and first-install offline behavior.
 
 ## App Routes
 
@@ -242,7 +244,7 @@ The repository ignores:
 - private key/certificate formats
 - local raster asset folders that are not cleared for repository use
 
-The curated screenshots in `images/` are intentionally tracked as project documentation. Keep other committed assets original, lightweight and cleared for public use.
+The curated screenshots in `images/` are intentionally tracked as project documentation. Raw capture folders such as a repository-local `Imagens/` remain ignored; capture folders outside the repository are never considered by Git. Keep other committed assets original, lightweight and cleared for public use.
 
 ## License / Usage
 
