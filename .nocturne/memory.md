@@ -23,3 +23,5 @@ Decisões, arquitetura e informações aprendidas pelo agente.
 {"type":"suggestion-decision","title":"Atualizar metadados por rota e alinhar documentação visual","status":"applied","recordedAt":"2026-07-16T02:08:08.775Z"}
 {"type":"suggestion-decision","title":"Mover tipos do Leaflet para dependências de desenvolvimento","status":"accepted","recordedAt":"2026-07-16T02:08:50.228Z"}
 {"type":"suggestion-decision","title":"Mover tipos do Leaflet para dependências de desenvolvimento","status":"applied","recordedAt":"2026-07-16T02:10:02.886Z"}
+{"type":"suggestion-decision","title":"Restaurar o pipeline de lint e deploy","status":"accepted","recordedAt":"2026-07-16T16:08:28.713Z"}
+{"type":"suggestion-decision","title":"Restaurar o pipeline de lint e deploy","status":"applied","recordedAt":"2026-07-16T16:13:52.884Z"}
