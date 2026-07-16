@@ -9,3 +9,5 @@ Decisões, arquitetura e informações aprendidas pelo agente.
 {"type":"suggestion-decision","title":"Validar integralmente todos os registros de saves importados","status":"accepted","recordedAt":"2026-07-16T01:06:52.592Z"}
 {"type":"suggestion-decision","title":"Garantir que a PWA funcione offline desde a primeira instalação","status":"accepted","recordedAt":"2026-07-16T01:25:09.394Z"}
 {"type":"suggestion-decision","title":"Garantir que a PWA funcione offline desde a primeira instalação","status":"applied","recordedAt":"2026-07-16T01:30:50.924Z"}
+{"type":"suggestion-decision","title":"Excluir missões concluídas das métricas distritais do mapa","status":"accepted","recordedAt":"2026-07-16T01:31:34.972Z"}
+{"type":"suggestion-decision","title":"Excluir missões concluídas das métricas distritais do mapa","status":"applied","recordedAt":"2026-07-16T01:32:24.360Z"}

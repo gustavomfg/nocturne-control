@@ -78,8 +78,10 @@ export function NocturneMap({ onOpenVillain, onOpenMissions }: NocturneMapProps)
     () => villains.filter((villain) => matchesDistrict(villain.lastLocation, activeDistrict.id)),
     [activeDistrict.id, villains]
   );
-  const districtMissions = useMemo(
-    () => missions.filter((mission) => matchesDistrict(mission.district, activeDistrict.id)),
+  const districtOpenMissions = useMemo(
+    () => missions.filter((mission) =>
+      mission.status !== "COMPLETED" && matchesDistrict(mission.district, activeDistrict.id)
+    ),
     [activeDistrict.id, missions]
   );
   const activeMissionPins = useMemo(
@@ -90,8 +92,8 @@ export function NocturneMap({ onOpenVillain, onOpenMissions }: NocturneMapProps)
     () => villains.filter((villain) => villain.status === "ESCAPED"),
     [villains]
   );
-  const districtRisk = districtMissions.length
-    ? Math.round(districtMissions.reduce((total, mission) => total + mission.riskLevel, 0) / districtMissions.length)
+  const districtRisk = districtOpenMissions.length
+    ? Math.round(districtOpenMissions.reduce((total, mission) => total + mission.riskLevel, 0) / districtOpenMissions.length)
     : 0;
 
   return (
@@ -170,9 +172,9 @@ export function NocturneMap({ onOpenVillain, onOpenMissions }: NocturneMapProps)
 
           <article>
             <span>Missions</span>
-            <strong>{districtMissions.length || "NONE"}</strong>
-            <p>{districtMissions.map((mission) => mission.title).join(" / ") || "No active mission assigned to this district."}</p>
-            {districtMissions[0] && <button onClick={onOpenMissions}>Open mission control</button>}
+            <strong>{districtOpenMissions.length || "NONE"}</strong>
+            <p>{districtOpenMissions.map((mission) => mission.title).join(" / ") || "No open mission assigned to this district."}</p>
+            {districtOpenMissions[0] && <button onClick={onOpenMissions}>Open mission control</button>}
           </article>
 
           <article>
