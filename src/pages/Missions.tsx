@@ -1,8 +1,8 @@
 import { useMemo, useState } from "react";
-import { MissionCard } from "../components/MissionCard";
-import { MissionPlanner } from "../components/MissionPlanner";
-import { useNocturne } from "../state/useNocturne";
-import type { Mission } from "../types/mission";
+import { MissionCard } from "../components/MissionCard.tsx";
+import { MissionPlanner } from "../components/MissionPlanner.tsx";
+import { useNocturne } from "../state/useNocturne.ts";
+import type { Mission } from "../types/mission.ts";
 
 import "../styles/missions.css";
 

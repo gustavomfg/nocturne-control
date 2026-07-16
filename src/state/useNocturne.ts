@@ -1,6 +1,6 @@
 import { useContext } from "react";
 
-import { NocturneContext } from "./nocturneContext";
+import { NocturneContext } from "./nocturneContext.ts";
 
 export function useNocturne() {
   const context = useContext(NocturneContext);

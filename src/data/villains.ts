@@ -1,4 +1,4 @@
-import type { Villain } from "../types/villain";
+import type { Villain } from "../types/villain.ts";
 
 export const villains: Villain[] = [
   {

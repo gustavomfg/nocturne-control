@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 
-import { useNocturne } from "../state/useNocturne";
-import type { TerminalLine } from "../types/terminal";
+import { useNocturne } from "../state/useNocturne.ts";
+import type { TerminalLine } from "../types/terminal.ts";
 import type { Page } from "../types";
-import { playTone } from "../utils/audio";
+import { playTone } from "../utils/audio.ts";
 
 import "../styles/terminal.css";
 

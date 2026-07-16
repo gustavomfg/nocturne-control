@@ -1,6 +1,6 @@
 import type { MissionStrategy } from "../types";
-import type { Gadget } from "../types/gadget";
-import type { Mission } from "../types/mission";
+import type { Gadget } from "../types/gadget.ts";
+import type { Mission } from "../types/mission.ts";
 
 const strategyEffects: Record<MissionStrategy, { progress: number; risk: number; intel: number; label: string }> = {
   STEALTH: { progress: 12, risk: -14, intel: 7, label: "Controlled / low exposure" },

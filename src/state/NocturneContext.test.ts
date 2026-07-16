@@ -5,7 +5,7 @@ import {
   migrateState,
   nocturneReducer,
   SCHEMA_VERSION,
-} from "./NocturneContext";
+} from "./NocturneContext.tsx";
 
 describe("Nocturne state", () => {
   it("migrates a legacy save while preserving operational data", () => {

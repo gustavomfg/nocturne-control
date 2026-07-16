@@ -1,5 +1,5 @@
-import { useNocturne } from "../state/useNocturne";
-import { slugify } from "../utils/slug";
+import { useNocturne } from "../state/useNocturne.ts";
+import { slugify } from "../utils/slug.ts";
 
 import "../styles/villain-detail.css";
 

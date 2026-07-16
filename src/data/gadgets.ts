@@ -1,4 +1,4 @@
-import type { Gadget } from "../types/gadget";
+import type { Gadget } from "../types/gadget.ts";
 
 export const gadgets: Gadget[] = [
   {

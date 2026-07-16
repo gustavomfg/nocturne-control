@@ -1,6 +1,6 @@
-import type { Mission } from "../types/mission";
-import { useTiltCard } from "../hooks/useTiltCard";
-import { InterfaceIcon } from "./InterfaceIcon";
+import type { Mission } from "../types/mission.ts";
+import { useTiltCard } from "../hooks/useTiltCard.ts";
+import { InterfaceIcon } from "./InterfaceIcon.tsx";
 
 import "../styles/mission-card.css";
 

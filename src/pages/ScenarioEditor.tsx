@@ -1,9 +1,9 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
 
-import { useNocturne } from "../state/useNocturne";
-import type { Mission, MissionPriority } from "../types/mission";
-import { InterfaceIcon } from "../components/InterfaceIcon";
+import { useNocturne } from "../state/useNocturne.ts";
+import type { Mission, MissionPriority } from "../types/mission.ts";
+import { InterfaceIcon } from "../components/InterfaceIcon.tsx";
 import "../styles/campaign.css";
 
 const priorities: MissionPriority[] = ["LOW", "NORMAL", "HIGH", "CRITICAL"];

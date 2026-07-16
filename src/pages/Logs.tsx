@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { useNocturne } from "../state/useNocturne";
+import { useNocturne } from "../state/useNocturne.ts";
 import type { EventLog } from "../types";
 
 import "../styles/logs.css";

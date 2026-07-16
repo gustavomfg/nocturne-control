@@ -1,9 +1,9 @@
 import { createContext } from "react";
 
 import type { Achievement, CampaignState, EventLog, MissionPlan, MissionStrategy, WatchReport } from "../types";
-import type { Gadget } from "../types/gadget";
-import type { Mission } from "../types/mission";
-import type { Villain } from "../types/villain";
+import type { Gadget } from "../types/gadget.ts";
+import type { Mission } from "../types/mission.ts";
+import type { Villain } from "../types/villain.ts";
 
 export type NocturneState = {
   schemaVersion: number;

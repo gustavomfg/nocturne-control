@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNocturne } from "../state/useNocturne";
+import { useNocturne } from "../state/useNocturne.ts";
 
 import "../styles/profile.css";
 

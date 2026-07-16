@@ -1,6 +1,6 @@
-import type { Villain } from "../types/villain";
-import { useTiltCard } from "../hooks/useTiltCard";
-import { InterfaceIcon } from "./InterfaceIcon";
+import type { Villain } from "../types/villain.ts";
+import { useTiltCard } from "../hooks/useTiltCard.ts";
+import { InterfaceIcon } from "./InterfaceIcon.tsx";
 
 import "../styles/villain-card.css";
 

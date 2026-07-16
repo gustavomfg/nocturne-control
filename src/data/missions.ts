@@ -1,4 +1,4 @@
-import type { Mission } from "../types/mission";
+import type { Mission } from "../types/mission.ts";
 
 export const missions: Mission[] = [
   {

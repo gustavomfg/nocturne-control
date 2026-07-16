@@ -1,9 +1,9 @@
 import { useMemo, useState } from "react";
 
-import { LeafletNocturneMap } from "../components/LeafletNocturneMap";
-import type { NocturneDistrictMap } from "../components/LeafletNocturneMap";
-import { useNocturne } from "../state/useNocturne";
-import { asset } from "../utils/assets";
+import { LeafletNocturneMap } from "../components/LeafletNocturneMap.tsx";
+import type { NocturneDistrictMap } from "../components/LeafletNocturneMap.tsx";
+import { useNocturne } from "../state/useNocturne.ts";
+import { asset } from "../utils/assets.ts";
 
 import "../styles/nocturne-map.css";
 

@@ -1,5 +1,5 @@
-import { VillainCard } from "../components/VillainCard";
-import { useNocturne } from "../state/useNocturne";
+import { VillainCard } from "../components/VillainCard.tsx";
+import { useNocturne } from "../state/useNocturne.ts";
 
 import "../styles/gravemere.css";
 

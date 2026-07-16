@@ -1,6 +1,6 @@
-import type { Gadget } from "../types/gadget";
-import { useTiltCard } from "../hooks/useTiltCard";
-import { InterfaceIcon } from "./InterfaceIcon";
+import type { Gadget } from "../types/gadget.ts";
+import { useTiltCard } from "../hooks/useTiltCard.ts";
+import { InterfaceIcon } from "./InterfaceIcon.tsx";
 
 import "../styles/gadget-card.css";
 

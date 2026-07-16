@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
-import { UI_NOTICE_EVENT } from "../utils/uiEvents";
-import type { UiNotice } from "../utils/uiEvents";
+import { UI_NOTICE_EVENT } from "../utils/uiEvents.ts";
+import type { UiNotice } from "../utils/uiEvents.ts";
 
 type ActiveNotice = UiNotice & { id: number };
 

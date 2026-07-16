@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 
-import { useNocturne } from "../state/useNocturne";
-import { InterfaceIcon } from "../components/InterfaceIcon";
+import { useNocturne } from "../state/useNocturne.ts";
+import { InterfaceIcon } from "../components/InterfaceIcon.tsx";
 import "../styles/campaign.css";
 
 export function Campaign() {

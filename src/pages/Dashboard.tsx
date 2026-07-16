@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
-import { InterfaceIcon } from "../components/InterfaceIcon";
-import { useNocturne } from "../state/useNocturne";
+import { InterfaceIcon } from "../components/InterfaceIcon.tsx";
+import { useNocturne } from "../state/useNocturne.ts";
 import type { Page } from "../types";
 
 import "../styles/dashboard.css";

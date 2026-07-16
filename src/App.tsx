@@ -1,14 +1,14 @@
 import { lazy, Suspense, useCallback, useEffect, useState } from "react";
 
-import { BootScreen } from "./components/BootScreen";
-import { Sidebar } from "./components/Sidebar";
+import { BootScreen } from "./components/BootScreen.tsx";
+import { Sidebar } from "./components/Sidebar.tsx";
 
-import { NocturneEffects } from "./components/NocturneEffects";
-import { RouteSkeleton } from "./components/RouteSkeleton";
-import { ToastViewport } from "./components/ToastViewport";
-import { CommandPalette } from "./components/CommandPalette";
-import { slugify } from "./utils/slug";
-import { useNocturne } from "./state/useNocturne";
+import { NocturneEffects } from "./components/NocturneEffects.tsx";
+import { RouteSkeleton } from "./components/RouteSkeleton.tsx";
+import { ToastViewport } from "./components/ToastViewport.tsx";
+import { CommandPalette } from "./components/CommandPalette.tsx";
+import { slugify } from "./utils/slug.ts";
+import { useNocturne } from "./state/useNocturne.ts";
 
 import type { Page } from "./types";
 
@@ -27,18 +27,18 @@ const pageRoutes: Record<Page, string> = {
 
 const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
 const basePathFull = import.meta.env.BASE_URL;
-const Dashboard = lazy(() => import("./pages/Dashboard").then((module) => ({ default: module.Dashboard })));
-const Gravemere = lazy(() => import("./pages/Gravemere").then((module) => ({ default: module.Gravemere })));
-const Missions = lazy(() => import("./pages/Missions").then((module) => ({ default: module.Missions })));
-const Terminal = lazy(() => import("./pages/Terminal").then((module) => ({ default: module.Terminal })));
-const AegisArsenal = lazy(() => import("./pages/AegisArsenal").then((module) => ({ default: module.AegisArsenal })));
-const Logs = lazy(() => import("./pages/Logs").then((module) => ({ default: module.Logs })));
-const VillainDetail = lazy(() => import("./pages/VillainDetail").then((module) => ({ default: module.VillainDetail })));
-const NocturneMap = lazy(() => import("./pages/NocturneMap").then((module) => ({ default: module.NocturneMap })));
-const Profile = lazy(() => import("./pages/Profile").then((module) => ({ default: module.Profile })));
-const Campaign = lazy(() => import("./pages/Campaign").then((module) => ({ default: module.Campaign })));
-const ScenarioEditor = lazy(() => import("./pages/ScenarioEditor").then((module) => ({ default: module.ScenarioEditor })));
-const NotFound = lazy(() => import("./pages/NotFound").then((module) => ({ default: module.NotFound })));
+const Dashboard = lazy(() => import("./pages/Dashboard.tsx").then((module) => ({ default: module.Dashboard })));
+const Gravemere = lazy(() => import("./pages/Gravemere.tsx").then((module) => ({ default: module.Gravemere })));
+const Missions = lazy(() => import("./pages/Missions.tsx").then((module) => ({ default: module.Missions })));
+const Terminal = lazy(() => import("./pages/Terminal.tsx").then((module) => ({ default: module.Terminal })));
+const AegisArsenal = lazy(() => import("./pages/AegisArsenal.tsx").then((module) => ({ default: module.AegisArsenal })));
+const Logs = lazy(() => import("./pages/Logs.tsx").then((module) => ({ default: module.Logs })));
+const VillainDetail = lazy(() => import("./pages/VillainDetail.tsx").then((module) => ({ default: module.VillainDetail })));
+const NocturneMap = lazy(() => import("./pages/NocturneMap.tsx").then((module) => ({ default: module.NocturneMap })));
+const Profile = lazy(() => import("./pages/Profile.tsx").then((module) => ({ default: module.Profile })));
+const Campaign = lazy(() => import("./pages/Campaign.tsx").then((module) => ({ default: module.Campaign })));
+const ScenarioEditor = lazy(() => import("./pages/ScenarioEditor.tsx").then((module) => ({ default: module.ScenarioEditor })));
+const NotFound = lazy(() => import("./pages/NotFound.tsx").then((module) => ({ default: module.NotFound })));
 
 function toAppPath(path: string) {
   return `${basePath}${path}` || path;

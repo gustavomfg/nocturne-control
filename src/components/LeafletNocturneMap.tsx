@@ -2,8 +2,8 @@ import { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
-import type { Mission } from "../types/mission";
-import type { Villain } from "../types/villain";
+import type { Mission } from "../types/mission.ts";
+import type { Villain } from "../types/villain.ts";
 
 export type NocturneDistrictMap = {
   id: string;

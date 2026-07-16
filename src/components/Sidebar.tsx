@@ -1,10 +1,10 @@
 import { useState } from "react";
 import type { Page } from "../types";
-import { InterfaceIcon } from "./InterfaceIcon";
-import { useNocturne } from "../state/useNocturne";
-import { playTone } from "../utils/audio";
-import { notify } from "../utils/uiEvents";
-import { ConfirmDialog } from "./ConfirmDialog";
+import { InterfaceIcon } from "./InterfaceIcon.tsx";
+import { useNocturne } from "../state/useNocturne.ts";
+import { playTone } from "../utils/audio.ts";
+import { notify } from "../utils/uiEvents.ts";
+import { ConfirmDialog } from "./ConfirmDialog.tsx";
 import "../styles/sidebar.css";
 
 type SidebarProps = {

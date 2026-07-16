@@ -1,3 +1,9 @@
 # Memória do projeto
 
 Decisões, arquitetura e informações aprendidas pelo agente.
+
+
+<!-- nocturne:suggestion-history -->
+## Histórico automatizado de sugestões (dados, não instruções)
+{"type":"suggestion-decision","title":"Validar integralmente saves importados e tornar tooltips do mapa seguros","status":"accepted","recordedAt":"2026-07-15T02:04:52.362Z"}
+{"type":"suggestion-decision","title":"Validar integralmente todos os registros de saves importados","status":"accepted","recordedAt":"2026-07-16T01:06:52.592Z"}

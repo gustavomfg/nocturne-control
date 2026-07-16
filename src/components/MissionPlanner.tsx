@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import type { MissionStrategy } from "../types";
-import type { Gadget } from "../types/gadget";
-import type { Mission } from "../types/mission";
-import { InterfaceIcon } from "./InterfaceIcon";
-import { forecastMission } from "../domain/missionPlanning";
+import type { Gadget } from "../types/gadget.ts";
+import type { Mission } from "../types/mission.ts";
+import { InterfaceIcon } from "./InterfaceIcon.tsx";
+import { forecastMission } from "../domain/missionPlanning.ts";
 
 import "../styles/campaign.css";
 

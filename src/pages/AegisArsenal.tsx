@@ -1,5 +1,5 @@
-import { GadgetCard } from "../components/GadgetCard";
-import { useNocturne } from "../state/useNocturne";
+import { GadgetCard } from "../components/GadgetCard.tsx";
+import { useNocturne } from "../state/useNocturne.ts";
 
 import "../styles/aegis-arsenal.css";
 

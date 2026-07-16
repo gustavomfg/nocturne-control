@@ -2,15 +2,15 @@
 import { useEffect, useReducer } from "react";
 import type { ReactNode } from "react";
 
-import { gadgets as initialGadgets } from "../data/gadgets";
-import { missions as initialMissions } from "../data/missions";
-import { villains as initialVillains } from "../data/villains";
+import { gadgets as initialGadgets } from "../data/gadgets.ts";
+import { missions as initialMissions } from "../data/missions.ts";
+import { villains as initialVillains } from "../data/villains.ts";
 import type { EventLog } from "../types";
 import type { Achievement, CampaignState } from "../types";
-import type { Mission } from "../types/mission";
-import { notify } from "../utils/uiEvents";
-import { NocturneContext } from "./nocturneContext";
-import type { NocturneAction, NocturneState } from "./nocturneContext";
+import type { Mission } from "../types/mission.ts";
+import { notify } from "../utils/uiEvents.ts";
+import { NocturneContext } from "./nocturneContext.ts";
+import type { NocturneAction, NocturneState } from "./nocturneContext.ts";
 
 const STORAGE_KEY = "nocturne-control-state";
 export const SCHEMA_VERSION = 4;
