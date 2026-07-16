@@ -94,6 +94,35 @@ describe("Nocturne state", () => {
     expect(advanced.watchReports[0].outcomes).toHaveLength(4);
   });
 
+  it("rejects assigning the same gadget to simultaneous mission plans", () => {
+    const firstPlan = nocturneReducer(initialState, {
+      type: "PLAN_MISSION",
+      missionId: 1,
+      strategy: "STEALTH",
+      gadgetIds: [3],
+      unit: "Unit A",
+      timestamp: "22:13:00",
+    });
+    const conflictingPlan = nocturneReducer(firstPlan, {
+      type: "PLAN_MISSION",
+      missionId: 2,
+      strategy: "DIRECT",
+      gadgetIds: [3],
+      unit: "Unit B",
+      timestamp: "22:14:00",
+    });
+
+    expect(conflictingPlan).toBe(firstPlan);
+    expect(conflictingPlan.missionPlans).toEqual([expect.objectContaining({ missionId: 1, gadgetIds: [3] })]);
+    expect(migrateState({
+      ...initialState,
+      missionPlans: [
+        { missionId: 1, strategy: "STEALTH", gadgetIds: [3], unit: "Unit A", preparedAt: "22:13:00" },
+        { missionId: 2, strategy: "DIRECT", gadgetIds: [3], unit: "Unit B", preparedAt: "22:14:00" },
+      ],
+    })).toBeNull();
+  });
+
   it("keeps both the action and achievement entries in the timeline", () => {
     const state = nocturneReducer(initialState, { type: "CAPTURE_VILLAIN", villainId: 1, timestamp: "22:15:00" });
 

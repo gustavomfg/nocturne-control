@@ -17,6 +17,9 @@ export function Missions() {
     .filter((mission) => `${mission.title} ${mission.district}`.toLowerCase().includes(query.toLowerCase()))
     .sort((a, b) => sort === "risk" ? b.riskLevel - a.riskLevel : a.title.localeCompare(b.title)),
   [missions, query, sort, status]);
+  const reservedGadgetIds = missionPlans
+    .filter((plan) => plan.missionId !== planningMission?.id)
+    .flatMap((plan) => plan.gadgetIds);
 
   return (
     <main className="missions">
@@ -50,7 +53,13 @@ export function Missions() {
         ))}
         {visibleMissions.length === 0 && <div className="collection-empty"><strong>No mission signal found</strong><p>Adjust the current search or status filter.</p><button type="button" onClick={() => { setQuery(""); setStatus("ALL"); }}>Clear filters</button></div>}
       </section>
-      <MissionPlanner mission={planningMission} gadgets={gadgets} onClose={() => setPlanningMission(null)} onSubmit={planMission} />
+      <MissionPlanner
+        mission={planningMission}
+        gadgets={gadgets}
+        reservedGadgetIds={reservedGadgetIds}
+        onClose={() => setPlanningMission(null)}
+        onSubmit={planMission}
+      />
     </main>
   );
 }

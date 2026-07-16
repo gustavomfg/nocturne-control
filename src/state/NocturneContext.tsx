@@ -191,7 +191,8 @@ export function isNocturneState(value: unknown): value is NocturneState {
     isReferenceArray(item.gadgetIds, availableGadgetIds, gadgets.length) &&
     isText(item.unit, 48) &&
     isText(item.preparedAt, MAX_SHORT_TEXT)) &&
-    isUnique(missionPlans.map((item) => isRecord(item) ? item.missionId : undefined));
+    isUnique(missionPlans.map((item) => isRecord(item) ? item.missionId : undefined)) &&
+    isUnique(missionPlans.flatMap((item) => isRecord(item) && Array.isArray(item.gadgetIds) ? item.gadgetIds : []));
   const validAchievements = achievements.every((item) => isRecord(item) &&
     isOneOf(item.id, ["first-plan", "first-capture", "first-resolution", "night-two"]) &&
     isText(item.title, MAX_SHORT_TEXT) &&
@@ -418,6 +419,10 @@ export function nocturneReducer(state: NocturneState, action: NocturneAction): N
     case "PLAN_MISSION": {
       const mission = state.missions.find((item) => item.id === action.missionId);
       if (!mission || mission.status === "COMPLETED" || !action.unit.trim()) return state;
+      const reservedGadgetIds = new Set(state.missionPlans
+        .filter((plan) => plan.missionId !== action.missionId)
+        .flatMap((plan) => plan.gadgetIds));
+      if (!isUnique(action.gadgetIds) || action.gadgetIds.some((id) => reservedGadgetIds.has(id))) return state;
 
       const missionPlans = [
         ...state.missionPlans.filter((plan) => plan.missionId !== action.missionId),

@@ -11,17 +11,22 @@ import "../styles/campaign.css";
 type MissionPlannerProps = {
   mission: Mission | null;
   gadgets: Gadget[];
+  reservedGadgetIds?: number[];
   onClose: () => void;
   onSubmit: (missionId: number, strategy: MissionStrategy, gadgetIds: number[], unit: string) => void;
 };
 
-export function MissionPlanner({ mission, gadgets, onClose, onSubmit }: MissionPlannerProps) {
+export function MissionPlanner({ mission, gadgets, reservedGadgetIds = [], onClose, onSubmit }: MissionPlannerProps) {
   const dialogRef = useRef<HTMLDialogElement | null>(null);
   const [strategy, setStrategy] = useState<MissionStrategy>("SURVEILLANCE");
   const [unit, setUnit] = useState("");
   const [gadgetIds, setGadgetIds] = useState<number[]>([]);
   const availableGadgets = useMemo(() => gadgets.filter((gadget) => gadget.status !== "MAINTENANCE"), [gadgets]);
-  const forecast = useMemo(() => mission ? evaluateMissionPlan(mission, strategy, gadgetIds, gadgets) : null, [gadgetIds, gadgets, mission, strategy]);
+  const effectiveGadgetIds = useMemo(
+    () => gadgetIds.filter((id) => !reservedGadgetIds.includes(id)),
+    [gadgetIds, reservedGadgetIds]
+  );
+  const forecast = useMemo(() => mission ? evaluateMissionPlan(mission, strategy, effectiveGadgetIds, gadgets) : null, [effectiveGadgetIds, gadgets, mission, strategy]);
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -29,11 +34,13 @@ export function MissionPlanner({ mission, gadgets, onClose, onSubmit }: MissionP
     if (mission && !dialog.open) {
       setStrategy("SURVEILLANCE");
       setUnit(mission.assignedUnit);
-      setGadgetIds(mission.recommendedGadgetIds.filter((id) => gadgets.some((gadget) => gadget.id === id && gadget.status !== "MAINTENANCE")));
+      setGadgetIds(mission.recommendedGadgetIds.filter((id) =>
+        !reservedGadgetIds.includes(id) && gadgets.some((gadget) => gadget.id === id && gadget.status !== "MAINTENANCE")
+      ));
       dialog.showModal();
     }
     if (!mission && dialog.open) dialog.close();
-  }, [gadgets, mission]);
+  }, [gadgets, mission, reservedGadgetIds]);
 
   return (
     <dialog ref={dialogRef} className="nocturne-dialog mission-planner" aria-labelledby="mission-planner-title" onCancel={onClose} onClose={onClose}>
@@ -58,18 +65,22 @@ export function MissionPlanner({ mission, gadgets, onClose, onSubmit }: MissionP
       </fieldset>
       <fieldset className="planner-assets">
         <legend>Deployable assets</legend>
-        {availableGadgets.map((gadget) => (
-          <label key={gadget.id} className={gadgetIds.includes(gadget.id) ? "selected" : ""}>
+        {availableGadgets.map((gadget) => {
+          const reserved = reservedGadgetIds.includes(gadget.id);
+          return (
+          <label key={gadget.id} className={effectiveGadgetIds.includes(gadget.id) ? "selected" : ""}>
             <input
               type="checkbox"
-              checked={gadgetIds.includes(gadget.id)}
+              checked={effectiveGadgetIds.includes(gadget.id)}
+              disabled={reserved}
               onChange={() => setGadgetIds((current) => current.includes(gadget.id)
                 ? current.filter((id) => id !== gadget.id)
                 : [...current, gadget.id])}
             />
-            <span><strong>{gadget.name}</strong><small>POWER {gadget.powerLevel}%</small></span>
+            <span><strong>{gadget.name}</strong><small>{reserved ? "ASSIGNED TO ANOTHER PLAN" : `POWER ${gadget.powerLevel}%`}</small></span>
           </label>
-        ))}
+          );
+        })}
       </fieldset>
       {forecast && <section className="planner-forecast" aria-live="polite" aria-label="Projected operation outcome">
         <header><span>Outcome forecast</span><strong>{forecast.label}</strong></header>
@@ -83,7 +94,7 @@ export function MissionPlanner({ mission, gadgets, onClose, onSubmit }: MissionP
       <div>
         <button type="button" onClick={onClose}>Cancel</button>
         <button type="button" className="danger" disabled={!mission || !unit.trim()} onClick={() => {
-          if (mission) onSubmit(mission.id, strategy, gadgetIds, unit);
+          if (mission) onSubmit(mission.id, strategy, effectiveGadgetIds, unit);
           onClose();
         }}>Commit plan</button>
       </div>
