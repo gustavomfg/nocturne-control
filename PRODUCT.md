@@ -2,7 +2,7 @@
 
 ## Register
 
-product
+brand
 
 ## Platform
 
@@ -10,28 +10,28 @@ web
 
 ## Users
 
-Nocturne Control Center is built for portfolio visitors, evaluators, and fiction-minded operators exploring a local tactical simulation. They arrive expecting a polished, usable React application rather than a passive showcase, and they should be able to move through missions, target records, equipment, map signals, logs, profile state, and terminal commands with minimal friction.
+Solaris is a portfolio experience for curious visitors, creative technologists, and people who enjoy interfaces that reward attention. It is designed to be understood in seconds and remembered after the interaction.
 
 ## Product Purpose
 
-The product demonstrates an original noir operations console: a connected city-control interface where missions, villains, gadgets, operator identity, logs, map markers, and terminal commands share state. Success means the app feels like a coherent fictional tool that can be inspected, navigated, reset, and extended without relying on real-world people, brands, agencies, places, dossiers, or third-party map services.
+Solaris is a small digital instrument for finding rhythm between a gesture and its echo. The visitor moves through a WebGL2 visual field, changes its palette, adjusts its intensity, can expand the field into an immersive viewport, and may opt into a subtle sound layer. The interface itself is the artifact.
 
 ## Brand Personality
 
-Noir tactical, disciplined, atmospheric, and slyly theatrical. The interface should feel like a confidential local system from the fictional Nocturne City: precise enough to trust, shadowed enough to invite curiosity, and original enough that no user mistakes it for a replica of an existing franchise, government console, or commercial dashboard.
+Kinetic, luminous, tactile, and quietly strange. Solaris should feel like a scientific object found in a future art studio: precise enough to trust, expressive enough to invite play, and calm enough to keep exploring.
 
 ## Anti-references
 
-Avoid anything already created in the real world: real agencies, real cities, real maps, real villains, real corporate brands, real dossiers, real logos, and recognizable franchise aesthetics. Do not imitate Gotham, Batman-adjacent interfaces, Marvel/DC command centers, CIA/FBI/police dashboards, Google Maps, military targeting software, Bloomberg terminals, cyberpunk neon templates, generic SaaS admin dashboards, glassmorphism-heavy AI mockups, or purple-gradient dark-mode products.
+Avoid tactical consoles, dashboards, mission systems, cyberpunk neon, generic AI workspaces, glassmorphism, portfolio templates, stock hero photography, and decorative complexity without a relationship to the visitor's gesture.
 
-## Design Principles
+## Experience Principles
 
-- Original fiction first: every name, place, artifact, icon, dossier, and map element should belong to Nocturne's own world.
-- Operational trust over spectacle: the UI can be atmospheric, but navigation, state changes, filters, controls, and recovery paths must stay clear.
-- Noir restraint with tactical signal: darkness is the stage; amber, green, blue, and red are used only when they carry meaning.
-- Connected simulation: screens should not feel isolated; actions in one module should echo through missions, logs, map signals, and terminal feedback.
-- Inspectable craft: visual effects, motion, and sound should reward attention while preserving responsiveness and reduced-motion preferences.
+- Make the interaction visible immediately; the canvas is the hero.
+- Treat motion as material, not decoration. Every change should respond to a gesture, palette, intensity, or sound state.
+- Keep the copy sparse and specific so the visitor has room to explore.
+- Make optional audio explicit and silent by default.
+- Give the experience a graceful 2D fallback when WebGL2, audio, or motion is unavailable.
 
 ## Accessibility & Inclusion
 
-Aim for WCAG AA as the working bar. Preserve keyboard navigation, visible focus states, semantic controls, readable contrast, high-contrast mode, reduced-motion behavior, and non-color-only status communication. Atmospheric effects, sound, scanlines, rain, glow, and motion must remain optional or safely reduced for users who need a calmer interface.
+Aim for WCAG AA. Preserve keyboard navigation, visible focus states, readable contrast, clear pressed states, touch-sized controls, reduced-motion behavior, and a fully usable experience without audio.
