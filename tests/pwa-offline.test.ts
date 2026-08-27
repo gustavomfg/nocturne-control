@@ -15,7 +15,7 @@ type ServiceWorkerEvent = {
 describe("PWA offline shell", () => {
   it("reopens the shell and route chunks offline after the first install", async () => {
     const scope = "https://example.test/nocturne-control/";
-    const urls = ["./", "./index.html", "./assets/app-deadbeef.js", "./maps/nocturne-custom-map.svg"];
+    const urls = ["./", "./index.html", "./assets/index-deadbeef.js", "./styles/solaris.css"];
     const source = injectPrecacheManifest(
       readFileSync(new URL("../public/sw.js", import.meta.url), "utf8"),
       "test-build",
@@ -90,11 +90,11 @@ describe("PWA offline shell", () => {
 
     let chunkResponse: Promise<Response> | undefined;
     listeners.get("fetch")?.({
-      request: { method: "GET", mode: "cors", url: `${scope}assets/app-deadbeef.js` },
+      request: { method: "GET", mode: "cors", url: `${scope}assets/index-deadbeef.js` },
       waitUntil: () => undefined,
       respondWith: (promise) => { chunkResponse = promise; },
     });
-    expect(await (await chunkResponse)?.text()).toContain("app-deadbeef.js");
+    expect(await (await chunkResponse)?.text()).toContain("index-deadbeef.js");
     expect(fetchMock).toHaveBeenCalledTimes(urls.length + 1);
   });
 });

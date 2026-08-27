@@ -15,8 +15,15 @@ const preview = spawn(process.execPath, [
 
 async function stopPreview() {
   if (preview.exitCode !== null) return;
-  preview.kill("SIGTERM");
-  await once(preview, "exit");
+  if (process.platform === "win32" && preview.pid) {
+    spawn("taskkill", ["/pid", String(preview.pid), "/T", "/F"], { stdio: "ignore" });
+  } else {
+    preview.kill("SIGTERM");
+  }
+  await Promise.race([
+    once(preview, "exit"),
+    new Promise((resolve) => globalThis.setTimeout(resolve, 2_000)),
+  ]);
 }
 
 test.beforeAll(async () => {
@@ -31,14 +38,14 @@ test.beforeAll(async () => {
 
 test.afterAll(stopPreview);
 
-test("reopens deep links and lazy routes offline after the first visit", async ({ context, page }) => {
-  await context.addInitScript(() => {
-    window.sessionStorage.setItem("nocturne-boot-complete", "true");
-  });
+test("renders the Solaris instrument and reopens the shell offline", async ({ context, page }) => {
+  await page.goto(appBase);
+  await expect(page.getByRole("heading", { name: "Move through light.", level: 1 })).toBeVisible();
+  await expect(page).toHaveTitle("Solaris — an instrument for attention");
+  await expect(page.locator("canvas[data-renderer]")).toBeVisible();
 
-  await page.goto(`${appBase}gravemere/vesper`);
-  await expect(page.getByRole("heading", { name: "Vesper", level: 1 })).toBeVisible();
-  await expect(page).toHaveTitle("Vesper Dossier — Nocturne Control Center");
+  await page.getByRole("button", { name: "SOL" }).click();
+  await expect(page.getByText("composition / SOL")).toBeVisible();
 
   const serviceWorkerScope = await page.evaluate(async () => {
     const registration = await navigator.serviceWorker.ready;
@@ -66,37 +73,19 @@ test("reopens deep links and lazy routes offline after the first visit", async (
     return urls;
   });
   expect(cachedUrls.some((url) => url.endsWith("/manifest.webmanifest"))).toBe(true);
-  expect(cachedUrls.some((url) => url.endsWith("/icons/nocturne-192.png"))).toBe(true);
-  expect(cachedUrls.some((url) => url.endsWith("/icons/nocturne-512.png"))).toBe(true);
-  expect(cachedUrls.some((url) => url.endsWith("/maps/nocturne-custom-map.svg"))).toBe(true);
-  expect(cachedUrls.some((url) => /\/assets\/NocturneMap-[^/]+\.js$/.test(url))).toBe(true);
-  expect(cachedUrls.some((url) => /\/assets\/NocturneMap-[^/]+\.css$/.test(url))).toBe(true);
-
-  await stopPreview();
-
-  await page.reload();
-  await expect(page.getByRole("heading", { name: "Vesper", level: 1 })).toBeVisible();
-  await expect(page).toHaveTitle("Vesper Dossier — Nocturne Control Center");
-
-  await page.goto(`${appBase}map`);
-  await expect(page.getByRole("heading", { name: "Nocturne Map", level: 1 })).toBeVisible();
-  await expect(page.locator(".nocturne-leaflet-map")).toBeVisible();
-  await expect(page.locator(".leaflet-image-layer")).toHaveAttribute("src", /nocturne-custom-map\.svg$/);
-
-  const offlineResources = await page.evaluate(() => ({
-    mapScriptLoaded: performance.getEntriesByType("resource").some((entry) =>
-      entry.name.includes("/assets/NocturneMap-") && entry.name.endsWith(".js")
-    ),
-    mapStylesLoaded: [...document.styleSheets].some((styleSheet) =>
-      styleSheet.href?.includes("/assets/NocturneMap-")
-    ),
-  }));
-  expect(offlineResources).toEqual({ mapScriptLoaded: true, mapStylesLoaded: true });
+  expect(cachedUrls.some((url) => /\/assets\/index-[^/]+\.js$/.test(url))).toBe(true);
+  expect(cachedUrls.some((url) => /\/assets\/index-[^/]+\.css$/.test(url))).toBe(true);
 
   const manifest = await page.evaluate(async () => {
     const manifestUrl = document.querySelector<HTMLLinkElement>('link[rel="manifest"]')?.href;
     if (!manifestUrl) throw new Error("Manifest link is missing.");
-    return await (await fetch(manifestUrl)).json() as { icons?: Array<{ sizes?: string }> };
+    return await (await fetch(manifestUrl)).json() as { name?: string; short_name?: string };
   });
-  expect(manifest.icons?.map((icon) => icon.sizes)).toEqual(["192x192", "512x512"]);
+  expect(manifest).toMatchObject({ name: "Solaris", short_name: "Solaris" });
+
+  await stopPreview();
+  await page.reload();
+  await expect(page.getByRole("heading", { name: "Move through light.", level: 1 })).toBeVisible();
+
+  await context.close();
 });
