@@ -1,22 +1,22 @@
 {
-  "name": "Nocturne Control Center",
-  "short_name": "Nocturne",
+  "name": "Solaris",
+  "short_name": "Solaris",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#09090b",
-  "theme_color": "#09090b",
-  "description": "A local-first fictional tactical operations console.",
+  "background_color": "#e9ecea",
+  "theme_color": "#e9ecea",
+  "description": "Um instrumento digital para encontrar ritmo no espaço entre um gesto e seu eco.",
   "icons": [
     {
-      "src": "icons/nocturne-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "src": "icons/solaris.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
     },
     {
-      "src": "icons/nocturne-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
+      "src": "icons/solaris.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
       "purpose": "any maskable"
     }
   ]

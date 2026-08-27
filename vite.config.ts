@@ -30,7 +30,7 @@ function pwaPrecachePlugin(): Plugin {
   let outputDirectory = ''
 
   return {
-    name: 'nocturne-pwa-precache',
+    name: 'solaris-pwa-precache',
     apply: 'build',
     configResolved(config) {
       outputDirectory = resolve(config.root, config.build.outDir)
