@@ -1,5 +1,7 @@
 # Solaris
 
+> **Status: experimental test project.** Solaris is a visual and technical playground for testing WebGL2, GSAP motion, interaction patterns, responsive composition, and PWA behavior. It is not a production product or a supported service.
+
 <p align="center">
   <strong>An interactive WebGL instrument for attention.</strong>
 </p>
@@ -19,14 +21,21 @@
   <img alt="Vite" src="https://img.shields.io/badge/Vite-8-1f1b2d?logo=vite&logoColor=ffd166" />
 </p>
 
-Solaris is a portfolio experience built around one idea: a visitor's gesture can become a living visual object. Move through the field and a raymarched 3D orb shifts its form, light, atmosphere, orbiting particles, and color.
+Solaris is an experimental portfolio study built around one idea: a visitor's gesture can become a living visual object. Move through the field and a raymarched 3D orb shifts its form, light, atmosphere, sparse particles, and color. The page is staged as a dark, cinematic installation rather than a conventional product shell.
 
 The interface is intentionally small. There are no accounts, feeds, dashboards, missions, or background systems competing with the artifact.
 
+## Project Status
+
+This repository is intentionally a test project. Its purpose is to explore visual direction, shader techniques, motion choreography, interaction feedback, responsive behavior, accessibility, and offline packaging in one contained experience.
+
+Expect experimental code, visual changes, dependency changes, and unfinished ideas. APIs, copy, layout, and implementation details may change without notice. Do not treat the demo, local storage, audio behavior, or deployment as production guarantees.
+
 ## Highlights
 
-- Custom WebGL2 renderer with a GLSL raymarched 3D orb.
-- Pointer and touch input for camera drift, surface deformation, particles, and energy.
+- Custom WebGL2 renderer with a GLSL raymarched 3D planet, atmospheric bands, polar light and a thin ring system.
+- Dark-first full-bleed hero with layered orbital framing, a responsive 3D tilt surface, and a scroll-led afterimage sequence.
+- Pointer and touch input for camera drift, surface deformation, sparse particles, and energy.
 - Full field mode that expands the composition into a viewport-filling installation.
 - Four visual palettes: Prism, Sol, Violet, and Moss.
 - Intensity control that changes the shader's material and atmosphere.
@@ -99,4 +108,4 @@ Pushes to `main` run `.github/workflows/deploy.yml`. The workflow installs depen
 
 ## License / Usage
 
-Solaris is an original fictional portfolio/study project. Keep future additions aligned with the instrument's focus: make the gesture visible, make the response meaningful, and leave room for curiosity.
+Solaris is an original fictional portfolio test project. Keep future additions aligned with the instrument's focus: make the gesture visible, make the response meaningful, and leave room for curiosity.

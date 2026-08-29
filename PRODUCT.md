@@ -1,5 +1,7 @@
 # Product
 
+> **Project status: experimental test project.** This document describes a creative technology study and interaction laboratory. Solaris is not a production product, commercial service, or supported platform.
+
 ## Register
 
 brand
@@ -14,7 +16,18 @@ Solaris is a portfolio experience for curious visitors, creative technologists, 
 
 ## Product Purpose
 
-Solaris is a small digital instrument for finding rhythm between a gesture and its echo. The visitor moves through a WebGL2 visual field, changes its palette, adjusts its intensity, can expand the field into an immersive viewport, and may opt into a subtle sound layer. The interface itself is the artifact.
+Solaris is a small experimental digital instrument for testing the rhythm between a gesture and its echo. The visitor moves through a WebGL2 visual field, changes its palette, adjusts its intensity, can expand the field into an immersive viewport, and may opt into a subtle sound layer. The interface itself is the artifact and the test surface.
+
+## Test Scope
+
+The repository is used to explore:
+
+- raymarched WebGL2 materials, lighting, atmosphere, and ring occlusion;
+- GSAP timelines, ScrollTrigger choreography, pointer tilt, and reduced-motion behavior;
+- interaction feedback across mouse, touch, keyboard, and optional audio;
+- responsive layout, accessible controls, and a local-first PWA shell.
+
+The scope is intentionally exploratory. Requirements, visual language, content, and implementation can change as the experiments evolve.
 
 ## Brand Personality
 
