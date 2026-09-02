@@ -17,7 +17,7 @@
 <p align="center">
   <img alt="React" src="https://img.shields.io/badge/React-19-20232a?logo=react&logoColor=61dafb" />
   <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-6-1f2937?logo=typescript&logoColor=3178c6" />
-  <img alt="WebGL2" src="https://img.shields.io/badge/WebGL2-GLSL-3656ff" />
+  <img alt="WebGL2" src="https://img.shields.io/badge/WebGL2-GLSL-6b6b68" />
   <img alt="Vite" src="https://img.shields.io/badge/Vite-8-1f1b2d?logo=vite&logoColor=ffd166" />
 </p>
 
@@ -76,7 +76,7 @@ npm run preview   # preview the production build
 - Vite
 - WebGL2 and GLSL ES 3.00
 - Web Audio API
-- CSS with Bricolage Grotesque and Source Sans 3
+- CSS with Source Sans 3 and a restrained monochrome visual system
 - Vitest, Testing Library, and Playwright
 
 The runtime stays intentionally small. The 3D scene is written directly against WebGL2 instead of relying on a large 3D framework, while the fallback keeps the experience usable on devices without a compatible GPU context.

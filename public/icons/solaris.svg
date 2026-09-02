@@ -2,23 +2,23 @@
   <defs>
     <radialGradient id="orb" cx="35%" cy="28%" r="78%">
       <stop offset="0" stop-color="#f4f5f1" stop-opacity=".96" />
-      <stop offset=".12" stop-color="#a8b9ff" stop-opacity=".94" />
-      <stop offset=".48" stop-color="#3656ff" stop-opacity=".9" />
-      <stop offset="1" stop-color="#111b5a" stop-opacity=".92" />
+      <stop offset=".12" stop-color="#eeeeea" stop-opacity=".94" />
+      <stop offset=".48" stop-color="#a9a9a2" stop-opacity=".9" />
+      <stop offset="1" stop-color="#2b2b29" stop-opacity=".92" />
     </radialGradient>
     <filter id="glow" x="-80%" y="-80%" width="260%" height="260%">
       <feGaussianBlur stdDeviation="16" />
     </filter>
   </defs>
-  <rect width="512" height="512" rx="112" fill="#10131e" />
-  <g fill="none" stroke="#3656ff" stroke-linecap="round">
+  <rect width="512" height="512" rx="112" fill="#0d0d0c" />
+  <g fill="none" stroke="#d5d5ce" stroke-linecap="round">
     <ellipse cx="256" cy="256" rx="205" ry="70" transform="rotate(-18 256 256)" stroke-opacity=".34" stroke-width="5" />
     <ellipse cx="256" cy="256" rx="166" ry="54" transform="rotate(28 256 256)" stroke-opacity=".52" stroke-width="4" />
   </g>
-  <circle cx="256" cy="256" r="122" fill="#3656ff" opacity=".2" filter="url(#glow)" />
+  <circle cx="256" cy="256" r="122" fill="#deded7" opacity=".2" filter="url(#glow)" />
   <circle cx="256" cy="256" r="94" fill="url(#orb)" />
   <circle cx="226" cy="222" r="18" fill="#fff" opacity=".8" />
-  <g fill="#a8b9ff">
+  <g fill="#d5d5ce">
     <circle cx="106" cy="210" r="5" />
     <circle cx="395" cy="183" r="4" />
     <circle cx="383" cy="332" r="6" />

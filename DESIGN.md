@@ -3,20 +3,20 @@ name: Solaris
 product: Solaris — an instrument for attention
 description: A light, kinetic WebGL experience with an art-studio sensibility.
 colors:
-  bg: "#060811"
-  surface: "#0B1120"
-  ink: "#F1F5FF"
-  body: "#AAB6C9"
-  muted: "#657289"
-  canvas: "#050914"
-  prism: "#20D6E8"
-  sol: "#FF725C"
-  violet: "#A67CFF"
-  moss: "#76BB38"
+  bg: "#080808"
+  surface: "#10100F"
+  ink: "#F4F4EF"
+  body: "#B8B8B1"
+  muted: "#7C7C75"
+  canvas: "#090909"
+  prism: "#F3F3EE"
+  sol: "#DEDDD6"
+  violet: "#C9C9CC"
+  moss: "#B6B9B2"
 typography:
   display:
-    fontFamily: '"Bricolage Grotesque", Arial, sans-serif'
-    fontWeight: 500
+    fontFamily: '"Source Sans 3", "Helvetica Neue", Arial, sans-serif'
+    fontWeight: 400
   body:
     fontFamily: '"Source Sans 3", "Helvetica Neue", Arial, sans-serif'
     fontWeight: 400
@@ -32,15 +32,14 @@ The project is a contained laboratory for testing shader-based 3D, GSAP choreogr
 
 ## 2. Palette
 
-- The page uses an indigo-black field (`#060811`) with cold white typography (`#F1F5FF`).
-- Surfaces stay close to the background (`#0B1120`) so borders and light carry the hierarchy.
-- Palette states are explicit: Prism polar-cyan, Sol coral, Violet lavender, and Moss green.
-- Accent color belongs to the current state and appears in the canvas frame, controls, marks, and status signals.
+- The page uses a soft black field (`#080808`) with warm white typography (`#F4F4EF`).
+- Surfaces stay close to the background (`#10100F`) so borders and light carry the hierarchy.
+- Palette states are tonal rather than saturated: mineral white, warm ash, quiet silver, and soft graphite.
+- The active tone appears in the canvas frame, controls, marks, and status signals without competing with the composition.
 
 ## 3. Typography
 
-- Bricolage Grotesque carries the display voice: compact, unusual, and tactile without becoming ornamental.
-- Source Sans 3 handles paragraphs and controls for a clear reading rhythm.
+- Source Sans 3 carries the whole voice: calm, open, and tactile without becoming ornamental.
 - Use sentence case for prose. Reserve uppercase for short system labels and state indicators.
 - The display heading uses balanced wrapping and stays within a six-rem ceiling.
 

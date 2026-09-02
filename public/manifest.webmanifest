@@ -3,8 +3,8 @@
   "short_name": "Solaris",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#e9ecea",
-  "theme_color": "#e9ecea",
+  "background_color": "#080808",
+  "theme_color": "#080808",
   "description": "Um instrumento digital para encontrar ritmo no espaço entre um gesto e seu eco.",
   "icons": [
     {
