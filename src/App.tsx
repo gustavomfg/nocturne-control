@@ -55,11 +55,12 @@ function hexToRgb(hex: string) {
   };
 }
 
-function SolarisFallbackCanvas({ mode, intensity }: { mode: Mode; intensity: number }) {
+function SolarisFallbackCanvas({ mode, intensity, pulseKey }: { mode: Mode; intensity: number; pulseKey: number }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const pointerRef = useRef({ x: 0.5, y: 0.5, targetX: 0.5, targetY: 0.5, energy: 0.32 });
   const modeRef = useRef(mode);
   const intensityRef = useRef(intensity);
+  const pulseRef = useRef(0);
 
   useEffect(() => {
     modeRef.current = mode;
@@ -68,6 +69,10 @@ function SolarisFallbackCanvas({ mode, intensity }: { mode: Mode; intensity: num
   useEffect(() => {
     intensityRef.current = intensity;
   }, [intensity]);
+
+  useEffect(() => {
+    if (pulseKey > 0) pulseRef.current = 1;
+  }, [pulseKey]);
 
   useEffect(() => {
     const canvasElement = canvasRef.current;
@@ -116,12 +121,13 @@ function SolarisFallbackCanvas({ mode, intensity }: { mode: Mode; intensity: num
       pointer.x += (pointer.targetX - pointer.x) * Math.min(1, delta * 4.5);
       pointer.y += (pointer.targetY - pointer.y) * Math.min(1, delta * 4.5);
       pointer.energy += (0.28 - pointer.energy) * Math.min(1, delta * 1.5);
+      pulseRef.current = Math.max(0, pulseRef.current - delta * 0.78);
 
       const currentMode = modeRef.current;
       const color = hexToRgb(currentMode.accent);
       const centerX = width * (0.5 + (pointer.x - 0.5) * 0.16);
       const centerY = height * (0.5 + (pointer.y - 0.5) * 0.16);
-      const radius = Math.min(width, height) * 0.22;
+      const radius = Math.min(width, height) * (0.22 + pulseRef.current * 0.018);
       const motionTime = reducedMotion ? 0 : time / 1000;
 
       context.clearRect(0, 0, width, height);
@@ -141,7 +147,7 @@ function SolarisFallbackCanvas({ mode, intensity }: { mode: Mode; intensity: num
       context.scale(1, 0.22);
       context.beginPath();
       context.ellipse(0, 0, radius * 1.78, radius * 1.78, 0, 0, Math.PI * 2);
-      context.strokeStyle = `rgba(230, 230, 224, ${0.38 + intensityRef.current * 0.2})`;
+      context.strokeStyle = `rgba(230, 230, 224, ${0.38 + intensityRef.current * 0.2 + pulseRef.current * 0.2})`;
       context.lineWidth = Math.max(1, radius * 0.017);
       context.stroke();
       context.restore();
@@ -310,6 +316,10 @@ float intersectSphere(vec3 origin, vec3 direction, float radius, out vec3 hitPoi
 void main() {
   vec2 centered = (gl_FragCoord.xy * 2.0 - u_resolution.xy) / min(u_resolution.x, u_resolution.y);
   vec2 pointer = u_pointer - 0.5;
+  vec2 lensCenter = pointer * 0.56;
+  float lensDistance = length(centered - lensCenter);
+  float lensStrength = exp(-lensDistance * lensDistance * 2.5) * u_pulse;
+  centered += normalize(centered - lensCenter + vec2(0.0001)) * lensStrength * 0.15;
   vec3 background = vec3(0.008, 0.008, 0.007);
   float vignette = 1.0 - smoothstep(0.2, 1.55, length(centered));
   float heartbeat = 0.5 + 0.5 * sin(u_time * 1.25 + sin(u_time * 0.31) * 0.7);
@@ -320,8 +330,11 @@ void main() {
   float edgeHalo = exp(-abs(radialDistance - silhouetteRadius) * 175.0) * (0.08 + heartbeat * 0.08 + u_audio * 0.35);
   color += u_color * edgeHalo;
   color += u_color * exp(-abs(length(centered) - 0.82) * 20.0) * u_pulse * 0.12;
+  float shockwaveRadius = 0.2 + (1.0 - u_pulse) * 1.08;
+  float shockwave = exp(-abs(radialDistance - shockwaveRadius) * 72.0) * u_pulse;
+  color += vec3(0.92, 0.92, 0.87) * shockwave * 0.46;
 
-  vec3 origin = vec3(pointer.x * 0.18, -pointer.y * 0.18, 3.18);
+  vec3 origin = vec3(pointer.x * 0.18, -pointer.y * 0.18, 3.18 - u_pulse * 0.68);
   vec3 direction = normalize(vec3(centered * 0.88, -2.0));
   vec3 hitPoint;
   float breathingRadius = 1.04 + heartbeat * 0.028 + u_audio * 0.018 + u_pulse * 0.035;
@@ -329,12 +342,13 @@ void main() {
 
   if (hitDistance > 0.0) {
     vec3 localPoint = hitPoint;
+    localPoint += normalize(localPoint) * sin(localPoint.x * 20.0 + localPoint.z * 13.0 + u_time * 1.6) * u_pulse * 0.032;
     localPoint.yz = rotate2d(u_pointer.y * 0.34 + u_time * 0.16) * localPoint.yz;
     localPoint.xz = rotate2d(-u_pointer.x * 0.34 - u_time * 0.2) * localPoint.xz;
     vec3 baseNormal = normalize(localPoint);
     float ripple = sin(localPoint.x * 4.0 + u_time * 0.42) * sin(localPoint.z * 5.0 - u_time * 0.3);
     float detail = sin(localPoint.y * 16.0 + localPoint.x * 2.0 + u_time * 0.38);
-    vec3 normal = normalize(baseNormal + vec3(ripple * 0.35, detail * 0.28, ripple * 0.2) * (0.014 + u_intensity * 0.018));
+    vec3 normal = normalize(baseNormal + vec3(ripple * 0.35, detail * 0.28, ripple * 0.2) * (0.014 + u_intensity * 0.018 + u_pulse * 0.08));
     vec3 lightDirection = normalize(vec3(-1.14, 0.48, 0.52));
     vec3 viewDirection = normalize(origin - hitPoint);
     vec3 halfDirection = normalize(lightDirection + viewDirection);
@@ -468,7 +482,7 @@ function createShader(gl: WebGL2RenderingContext, type: number, source: string) 
   return shader;
 }
 
-function SolarisWebGLCanvas({ mode, intensity, audioLevel, onUnavailable }: { mode: Mode; intensity: number; audioLevel: number; onUnavailable: () => void }) {
+function SolarisWebGLCanvas({ mode, intensity, audioLevel, pulseKey, onUnavailable }: { mode: Mode; intensity: number; audioLevel: number; pulseKey: number; onUnavailable: () => void }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const pointerRef = useRef({ x: 0.5, y: 0.5, targetX: 0.5, targetY: 0.5 });
   const pulseRef = useRef(0);
@@ -487,6 +501,10 @@ function SolarisWebGLCanvas({ mode, intensity, audioLevel, onUnavailable }: { mo
   useEffect(() => {
     audioLevelRef.current = audioLevel;
   }, [audioLevel]);
+
+  useEffect(() => {
+    if (pulseKey > 0) pulseRef.current = 1.15;
+  }, [pulseKey]);
 
   useEffect(() => {
     const canvasElement = canvasRef.current;
@@ -566,7 +584,7 @@ function SolarisWebGLCanvas({ mode, intensity, audioLevel, onUnavailable }: { mo
       const pointer = pointerRef.current;
       pointer.x += (pointer.targetX - pointer.x) * Math.min(1, delta * 4.2);
       pointer.y += (pointer.targetY - pointer.y) * Math.min(1, delta * 4.2);
-      pulseRef.current = Math.max(0, pulseRef.current - delta * 1.8);
+      pulseRef.current = Math.max(0, pulseRef.current - delta * 0.88);
       const color = hexToRgb(modeRef.current.accent);
       const seconds = reducedMotion ? 0 : time / 1000;
 
@@ -636,15 +654,15 @@ function SolarisWebGLCanvas({ mode, intensity, audioLevel, onUnavailable }: { mo
   );
 }
 
-function SolarisCanvas({ mode, intensity, audioLevel }: { mode: Mode; intensity: number; audioLevel: number }) {
+function SolarisCanvas({ mode, intensity, audioLevel, pulseKey }: { mode: Mode; intensity: number; audioLevel: number; pulseKey: number }) {
   const [renderer, setRenderer] = useState<"webgl" | "fallback">("webgl");
   const handleUnavailable = useCallback(() => setRenderer("fallback"), []);
 
   if (renderer === "fallback") {
-    return <SolarisFallbackCanvas mode={mode} intensity={intensity} />;
+    return <SolarisFallbackCanvas mode={mode} intensity={intensity} pulseKey={pulseKey} />;
   }
 
-  return <SolarisWebGLCanvas mode={mode} intensity={intensity} audioLevel={audioLevel} onUnavailable={handleUnavailable} />;
+  return <SolarisWebGLCanvas mode={mode} intensity={intensity} audioLevel={audioLevel} pulseKey={pulseKey} onUnavailable={handleUnavailable} />;
 }
 
 export default function App() {
@@ -653,7 +671,9 @@ export default function App() {
   const [audioOn, setAudioOn] = useState(false);
   const [audioLevel, setAudioLevel] = useState(0);
   const [immersive, setImmersive] = useState(false);
+  const [voidOpen, setVoidOpen] = useState(false);
   const [pulseCount, setPulseCount] = useState(0);
+  const [pulseKey, setPulseKey] = useState(0);
   const [signalNote, setSignalNote] = useState("field / listening");
   const [activeFoundation, setActiveFoundation] = useState("logo");
   const mode = modes[activeMode];
@@ -723,12 +743,24 @@ export default function App() {
     event.currentTarget.style.setProperty("--pointer-y", "50%");
   }, []);
 
-  const registerPulse = useCallback((event: ReactPointerEvent<HTMLDivElement>) => {
-    if (!(event.target instanceof HTMLCanvasElement)) return;
+  const handleVoidPointerMove = useCallback((event: ReactPointerEvent<HTMLDivElement>) => {
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const x = ((event.clientX - bounds.left) / bounds.width) * 100;
+    const y = ((event.clientY - bounds.top) / bounds.height) * 100;
+    event.currentTarget.style.setProperty("--void-x", `${Math.max(0, Math.min(100, x))}%`);
+    event.currentTarget.style.setProperty("--void-y", `${Math.max(0, Math.min(100, y))}%`);
+  }, []);
 
+  const triggerPulse = useCallback(() => {
+    setPulseKey((key) => key + 1);
     setPulseCount((count) => count + 1);
     setSignalNote("pulse / received");
   }, []);
+
+  const registerPulse = useCallback((event: ReactPointerEvent<HTMLDivElement>) => {
+    if (!(event.target instanceof HTMLCanvasElement)) return;
+    triggerPulse();
+  }, [triggerPulse]);
 
   const stopAudio = useCallback(() => {
     const audio = audioRef.current;
@@ -808,11 +840,11 @@ export default function App() {
 
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
-    if (immersive) document.body.style.overflow = "hidden";
+    if (immersive || voidOpen) document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = previousOverflow;
     };
-  }, [immersive]);
+  }, [immersive, voidOpen]);
 
   async function toggleImmersive() {
     try {
@@ -833,6 +865,12 @@ export default function App() {
     function handleKeyDown(event: KeyboardEvent) {
       if (event.target instanceof HTMLTextAreaElement || event.target instanceof HTMLInputElement) return;
 
+      if (event.key === "Escape" && voidOpen) {
+        event.preventDefault();
+        setVoidOpen(false);
+        return;
+      }
+
       if (event.key === " ") {
         event.preventDefault();
         if (audioOn) stopAudio();
@@ -844,10 +882,10 @@ export default function App() {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [activeMode, audioOn, changeMode, startAudio, stopAudio]);
+  }, [activeMode, audioOn, changeMode, startAudio, stopAudio, voidOpen]);
 
   return (
-    <div ref={appRef} className={`solaris-site ${immersive ? "is-immersive" : ""}`} style={rootStyle}>
+    <div ref={appRef} className={`solaris-site ${immersive ? "is-immersive" : ""} ${voidOpen ? "is-void-open" : ""}`} style={rootStyle}>
       <div className="site-glow site-glow--one" aria-hidden="true" />
       <div className="site-glow site-glow--two" aria-hidden="true" />
       <div className="scroll-progress" aria-hidden="true"><span /></div>
@@ -881,6 +919,9 @@ export default function App() {
         <p className="header-tagline">foundations / an instrument for attention</p>
         <div className="header-right">
           <span className="online-label"><i /> live / local</span>
+          <button className="void-trigger" type="button" aria-expanded={voidOpen} onClick={() => setVoidOpen(true)}>
+            <span>open void</span><i aria-hidden="true" />
+          </button>
           <button className="header-help" type="button" aria-label="Abrir controles do instrumento" onClick={scrollToInstrument}>?</button>
         </div>
       </header>
@@ -905,19 +946,24 @@ export default function App() {
                 <span className="stage-trace stage-trace--two" />
                 <span className="stage-trace stage-trace--three" />
               </div>
+              {pulseKey > 0 ? <span key={pulseKey} className="stage-pulse-wave" aria-hidden="true" /> : null}
               <div className="stage-readout" aria-live="polite">
                 <span className="stage-readout-dot" aria-hidden="true" />
                 <span>{signalNote}</span>
                 <strong>pulse {String(pulseCount).padStart(3, "0")}</strong>
               </div>
               <div className="hero-canvas-surface">
-                <SolarisCanvas mode={mode} intensity={intensity / 100} audioLevel={audioLevel} />
+                <SolarisCanvas mode={mode} intensity={intensity / 100} audioLevel={audioLevel} pulseKey={pulseKey} />
               </div>
+              <button className="singularity-trigger" type="button" onClick={triggerPulse}>
+                <span className="singularity-trigger__mark" aria-hidden="true"><i /><i /><i /></span>
+                <span>disturb the field</span><b aria-hidden="true">↗</b>
+              </button>
               <button className="immersive-control" type="button" aria-pressed={immersive} onClick={toggleImmersive}>
                 <span className="immersive-glyph" aria-hidden="true"><i /><i /></span>
                 <span>{immersive ? "exit full field" : "enter full field"}</span>
               </button>
-              <div className="hero-stage-foot"><span>your gesture is the input · click to pulse</span><span>{intensity}% field</span></div>
+              <div className="hero-stage-foot"><span>your gesture is the input · click the field to fracture it</span><span>{intensity}% field</span></div>
             </div>
           </div>
 
@@ -1096,6 +1142,25 @@ export default function App() {
       </main>
 
       <footer className="site-footer"><span>solaris / 001</span><span>no accounts · no feed · no noise</span><span>© 2026</span></footer>
+
+      {voidOpen ? (
+        <div className="void-gate" role="dialog" aria-modal="true" aria-labelledby="void-title" onPointerMove={handleVoidPointerMove}>
+          <div className="void-gate__frame" aria-hidden="true" />
+          <div className="void-gate__ring void-gate__ring--outer" aria-hidden="true"><i /><i /><i /></div>
+          <div className="void-gate__ring void-gate__ring--inner" aria-hidden="true"><i /></div>
+          <div className="void-gate__focal-point" aria-hidden="true"><span /></div>
+          <div className="void-gate__header"><span>void / 000</span><span>signal exposed</span></div>
+          <div className="void-gate__copy">
+            <p>you found the unmarked room</p>
+            <h2 id="void-title">Stay with<br /><em>the strange.</em></h2>
+            <span>There is no final frame.<br />Only the next signal.</span>
+          </div>
+          <button className="void-gate__close" type="button" autoFocus onClick={() => setVoidOpen(false)}>
+            <span>return to field</span><b aria-hidden="true">↗</b>
+          </button>
+          <div className="void-gate__footer"><span>pointer / focal shift</span><span>escape / return</span></div>
+        </div>
+      ) : null}
     </div>
   );
 }
