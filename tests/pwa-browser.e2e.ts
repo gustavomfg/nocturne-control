@@ -40,12 +40,12 @@ test.afterAll(stopPreview);
 
 test("renders the Solaris instrument and reopens the shell offline", async ({ context, page }) => {
   await page.goto(appBase);
-  await expect(page.getByRole("heading", { name: "Move through light.", level: 1 })).toBeVisible();
-  await expect(page).toHaveTitle("Solaris — an instrument for attention");
-  await expect(page.locator("canvas[data-renderer]")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "O invisível, em movimento.", level: 1 })).toBeVisible();
+  await expect(page).toHaveTitle("Solaris — o invisível, em movimento");
+  await expect(page.getByLabel("Instrumento visual interativo")).toBeVisible();
 
   await page.getByRole("button", { name: "SOL" }).click();
-  await expect(page.getByText("composition / SOL")).toBeVisible();
+  await expect(page.getByText("Composição / SOL")).toBeVisible();
 
   const serviceWorkerScope = await page.evaluate(async () => {
     const registration = await navigator.serviceWorker.ready;
@@ -85,7 +85,7 @@ test("renders the Solaris instrument and reopens the shell offline", async ({ co
 
   await stopPreview();
   await page.reload();
-  await expect(page.getByRole("heading", { name: "Move through light.", level: 1 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "O invisível, em movimento.", level: 1 })).toBeVisible();
 
   await context.close();
 });
