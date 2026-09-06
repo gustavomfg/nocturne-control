@@ -1,0 +1,25 @@
+.particle-universe { position: relative; width: 100%; height: 100%; isolation: isolate; }
+.particle-universe canvas { display: block; width: 100%; height: 100%; position: relative; z-index: 1; touch-action: pan-y; }
+.particle-universe__fallback { position: absolute; inset: 18%; border: 1px dotted #b8b8b1; border-radius: 50%; box-shadow: inset 24px -18px 60px #b8b8b11a; }
+.particle-universe:has(canvas[data-ready="true"]) .particle-universe__fallback { display: none; }
+.particle-controls { position: absolute; z-index: 3; left: 50%; bottom: 110px; transform: translateX(-50%); display: flex; align-items: center; gap: 16px; width: max-content; max-width: calc(100% - 40px); }
+.particle-scenes { display: flex; padding: 5px; border: 1px solid var(--site-line-bright); border-radius: 30px; background: #111110; }
+.particle-scenes button { border: 0; border-radius: 24px; background: transparent; color: #b8b8b1; padding: 9px 19px; min-height: 44px; cursor: pointer; transition: background 180ms, color 180ms; }
+.particle-scenes button[aria-pressed="true"] { color: #090909; background: #f4f4ef; }
+.particle-scenes button:hover { background: var(--site-surface-bright); color: var(--site-ink); }
+.particle-scenes button[aria-pressed="true"]:hover { background: #deddd6; color: #090909; }
+.particle-pause { color: #b8b8b1; background: #090909; border: 0; font-size: 12px; cursor: pointer; min-height: 44px; padding: 4px 12px; }
+.image-study__frame .particle-universe { position: absolute; inset: 0; }
+.image-study__frame:has(.particle-universe)::before, .image-study__frame:has(.particle-universe)::after { display: none; }
+.particle-study-stage { aspect-ratio: 1; }
+.particle-study-stage .particle-universe { position: absolute; inset: 0; }
+@media (max-width: 600px) {
+  .particle-controls { bottom: 114px; gap: 2px; flex-direction: column; }
+  .particle-scenes button { padding: 7px 14px; }
+}
+@media (prefers-reduced-motion: reduce) { .particle-scenes button { transition: none; } }
+
+.hero-stage .stage-traces, .hero-stage .stage-crosshair, .hero-stage .stage-spotlight { display: none; }
+
+/* Reserve a quiet lower shelf for actions instead of covering the sculpture. */
+.hero-canvas-surface .particle-universe canvas { top: 52px; height: calc(100% - 240px); }
