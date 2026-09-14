@@ -46,7 +46,7 @@ The active page uses `experience.css`, not the earlier Solaris brand-manual styl
 
 ## Art and light
 
-The opening asset is `public/images/solaris-sculpture.webp`, a generated artwork optimized to about 208 KiB. `AnimatedWave.tsx` animates this texture at runtime while retaining the original image as a fallback. Motion freezes when paused, offscreen, or hidden; reduced motion renders an undistorted still. The asset's provenance and generation prompt are recorded in `docs/solaris-art-direction.md`.
+The opening asset is `public/images/solaris-blender.webp`, a Blender render optimized to about 86 KiB. `AnimatedWave.tsx` animates this texture at runtime while retaining the original image as a fallback. Motion freezes when paused, offscreen, or hidden; reduced motion renders an undistorted still. The editable scene and render recipe live in `tools/solaris-sculpture.blend` and `tools/solaris_blender_scene.py`.
 
 Live artwork uses a WebGL ribbon mesh with two-sided material lighting, fine moving filaments, dust and spatial backdrop. Ivory light and bronze shadow create readable mass and depth. Scene selection morphs the same geometry between three forms; pointer motion changes the view and a pulse disperses the structure. The Canvas 2D particle instrument remains the fallback for unavailable or lost WebGL.
 

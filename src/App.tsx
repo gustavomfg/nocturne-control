@@ -138,7 +138,7 @@ export default function App() {
 
     <main>
       <section className="opening-scene" id="inicio" aria-labelledby="opening-title">
-        <div className="opening-art" aria-hidden="true"><AnimatedWave src={`${import.meta.env.BASE_URL}images/solaris-sculpture.webp`} paused={wavePaused} /></div>
+        <div className="opening-art" aria-hidden="true"><AnimatedWave src={`${import.meta.env.BASE_URL}images/solaris-blender.webp`} paused={wavePaused} /></div>
         <div className="opening-title"><h1 id="opening-title" aria-label="O invisível, em movimento.">O invisível,<br /><em>em movimento.</em></h1><p>Entre o seu gesto e a luz,<br />um mundo encontra forma.</p></div>
         <a className="opening-invitation" href="#passage"><span>Comece a travessia</span><span className="invitation-arrow"><Arrow /></span></a>
         <div className="opening-foot"><span>Passe pela onda. Deixe um rastro.</span><button type="button" aria-pressed={wavePaused} onClick={() => setWavePaused(value => !value)}>{wavePaused ? "Retomar onda" : "Pausar onda"}</button><span>Role devagar. Não há pressa.</span></div>
@@ -165,7 +165,7 @@ export default function App() {
         <p className="audio-status" role="status">{audioMessage}</p>
       </section>
 
-      <section className="closing-scene" aria-labelledby="closing-title"><div className="closing-art" aria-hidden="true" style={{ backgroundImage: `url(${import.meta.env.BASE_URL}images/solaris-sculpture.webp)` }} /><p>O movimento termina.<br />A sensação fica.</p><h2 id="closing-title">Até o próximo <em>gesto.</em></h2><a href="#inicio">Voltar ao começo<Arrow diagonal /></a></section>
+      <section className="closing-scene" aria-labelledby="closing-title"><div className="closing-art" aria-hidden="true" style={{ backgroundImage: `url(${import.meta.env.BASE_URL}images/solaris-blender.webp)` }} /><p>O movimento termina.<br />A sensação fica.</p><h2 id="closing-title">Até o próximo <em>gesto.</em></h2><a href="#inicio">Voltar ao começo<Arrow diagonal /></a></section>
     </main>
     <footer className="experience-footer"><a className="experience-logo" href="#inicio">solaris</a><span>Um estudo de luz, matéria e presença.</span><button type="button" onClick={() => about.current?.showModal()}>Sobre o experimento</button><span>2026</span></footer>
     <dialog className="about-dialog" ref={about} aria-labelledby="about-title"><form method="dialog"><button type="submit" aria-label="Fechar apresentação">Fechar</button></form><h2 id="about-title">Um espaço<br />para <em>perceber.</em></h2><p>Solaris é um experimento visual. A onda da abertura ganha movimento com a sua presença. Na travessia e no instrumento, a matéria muda de forma em tempo real.</p><p>Explore com o mouse, o toque ou o teclado. O som é opcional. Você pode pausar o movimento e guardar uma imagem da travessia.</p><span>Sem conta. Sem coleta de gestos. Só este instante.</span></dialog>

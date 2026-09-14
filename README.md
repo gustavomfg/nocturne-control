@@ -21,7 +21,7 @@
   <img alt="Vite" src="https://img.shields.io/badge/Vite-8-1f1b2d?logo=vite&logoColor=ffd166" />
 </p>
 
-Solaris is an experimental portfolio study built around one idea: a visitor's gesture can become a living visual object. Move through the field and a raymarched 3D orb shifts its form, light, atmosphere, sparse particles, and color. The page is staged as a dark, cinematic installation rather than a conventional product shell.
+Solaris is an experimental portfolio study built around one idea: a visitor's gesture can become a living visual object. Move through the field and a sculptural ribbon shifts its form, light, atmosphere, sparse particles, and color. The page is staged as a dark, cinematic installation rather than a conventional product shell.
 
 The interface is intentionally small. There are no accounts, feeds, dashboards, missions, or background systems competing with the artifact.
 
@@ -33,7 +33,7 @@ Expect experimental code, visual changes, dependency changes, and unfinished ide
 
 ## Highlights
 
-- Custom WebGL2 renderer with a GLSL raymarched 3D planet, atmospheric bands, polar light and a thin ring system.
+- Custom WebGL renderer with a procedural ribbon surface, atmospheric depth, luminous filaments, and a thin orbital system.
 - Dark-first full-bleed hero with layered orbital framing, a responsive 3D tilt surface, and a scroll-led afterimage sequence.
 - Pointer and touch input for camera drift, surface deformation, sparse particles, and energy.
 - Full field mode that expands the composition into a viewport-filling installation.
@@ -42,6 +42,7 @@ Expect experimental code, visual changes, dependency changes, and unfinished ide
 - Optional Web Audio tone, silent by default and keyboard accessible.
 - Progressive enhancement: a composed 2D canvas fallback when WebGL2 is unavailable.
 - Reduced-motion support, capped device-pixel ratio, responsive layout, and visible focus states.
+- Blender-authored amber ribbon sculpture, rendered into the opening wave and closing scene.
 - Installable local-first PWA shell.
 
 ## Getting Started
@@ -97,6 +98,7 @@ The unit suite covers the Solaris shell, palette state, intensity control, audio
 src/App.tsx          Active Solaris experience and WebGL2 renderer
 src/styles/          Solaris visual system and global reset
 public/              Manifest, service worker, and Pages fallback
+tools/               Reproducible Blender scene and render script
 PRODUCT.md           Product purpose and experience principles
 DESIGN.md            Visual system, interaction, and accessibility rules
 tests/               Browser and offline PWA checks
