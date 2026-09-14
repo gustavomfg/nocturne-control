@@ -2,7 +2,7 @@
 
 Tool: Blender 5.2 Eevee, scripted with Python.
 
-Project asset: `public/images/solaris-blender.webp` (1672 × 941, 88316 bytes). Rendered in Blender Eevee from the editable `tools/solaris-sculpture.blend` scene using `tools/solaris_blender_scene.py`.
+Project asset: `public/images/solaris-blender.webp` (1920 × 1080). Rendered in Blender Eevee from the editable `tools/solaris-sculpture.blend` scene using `tools/solaris_blender_scene.py`. A 52 mm lens, f/3.2 depth of field and horizontal camera shift frame the sculpture beside the opening typography. Ivory key light, silver edge light and amber backlight separate the folds.
 
 AnimatedWave.tsx applies real-time WebGL texture flow to make the Blender sculpture roll and breathe, with a cursor wake that parts the surface. A separate particle pass uses colors sampled from luminous source regions; pointer speed drives the scatter, and a damped spring returns the motes. The render preserves object-fit framing, freezes on pause, suspends offscreen rendering, and shows the source artwork when WebGL is unavailable. Reduced motion renders the undistorted source. The passage and studio remain separate three-dimensional compositions.
 

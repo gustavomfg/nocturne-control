@@ -93,7 +93,9 @@ def create_orbit(name, radius, tilt, mat):
     bpy.ops.curve.primitive_bezier_circle_add(radius=radius, location=(0.0, 0.0, 0.35), rotation=(tilt, 0.1, -0.18))
     orbit = bpy.context.object
     orbit.name = name
-    orbit.data.bevel_depth = 0.018
+    orbit.data.resolution_u = 64
+    orbit.data.render_resolution_u = 64
+    orbit.data.bevel_depth = 0.006
     orbit.data.bevel_resolution = 4
     orbit.data.materials.append(mat)
     return orbit
@@ -109,7 +111,7 @@ def create_particle_cloud(mat):
             radius * sin(angle) * 0.54,
             0.15 + (u - 0.5) * 1.5 + 0.22 * sin(angle * 2.0),
         )
-        bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=1, radius=0.014 + (index % 4) * 0.008, location=location)
+        bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=2, radius=0.003 + (index % 4) * 0.002, location=location)
         mote = bpy.context.object
         mote.name = f"mote_{index:03d}"
         mote.data.materials.append(mat)
@@ -138,8 +140,8 @@ def build_scene():
 
     scene = bpy.context.scene
     scene.render.engine = "BLENDER_EEVEE"
-    scene.render.resolution_x = 1672
-    scene.render.resolution_y = 941
+    scene.render.resolution_x = 1920
+    scene.render.resolution_y = 1080
     scene.render.resolution_percentage = 100
     scene.render.image_settings.file_format = "WEBP"
     if hasattr(scene.render.image_settings, "quality"):
@@ -177,24 +179,30 @@ def build_scene():
     bevel.width = 0.08
     bevel.segments = 2
 
-    add_area_light("warm key", (3.8, -4.5, 5.6), 920.0, (1.0, 0.35, 0.10), 4.2)
-    add_area_light("cool rim", (-4.0, 2.8, 3.4), 680.0, (0.18, 0.35, 1.0), 3.6)
-    add_area_light("top glint", (0.0, 1.0, 6.5), 500.0, (1.0, 0.64, 0.28), 2.5)
+    add_area_light("ivory softbox", (1.8, -3.0, 5.6), 1100.0, (1.0, 0.82, 0.61), 3.0)
+    add_area_light("silver edge", (-4.0, 2.8, 3.4), 420.0, (0.58, 0.69, 0.82), 2.0)
+    add_area_light("amber backlight", (2.0, 3.0, 2.5), 1250.0, (1.0, 0.43, 0.12), 2.2)
 
     camera_data = bpy.data.cameras.new("Solaris camera")
     camera = bpy.data.objects.new("Solaris camera", camera_data)
     bpy.context.collection.objects.link(camera)
-    camera.location = (4.9, -7.6, 3.7)
-    camera_data.lens = 56
+    camera.location = (6.2, -10.0, 4.1)
+    camera_data.lens = 52
+    camera_data.shift_x = -0.13
+    camera_data.dof.use_dof = True
+    camera_data.dof.focus_distance = (camera.location - Vector((0.0, 0.0, 0.3))).length
+    camera_data.dof.aperture_fstop = 3.2
+    camera_data.dof.aperture_blades = 9
     camera_data.sensor_width = 36
     look_at(camera, (0.15, 0.0, 0.22))
     scene.camera = camera
 
     scene.view_settings.look = "AgX - Medium High Contrast"
-    scene.view_settings.exposure = 0.25
+    scene.view_settings.exposure = -0.15
     scene.view_settings.gamma = 1.0
 
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
+    bpy.context.preferences.filepaths.save_version = 0
     bpy.ops.wm.save_as_mainfile(filepath=str(ROOT / "tools" / "solaris-sculpture.blend"))
     bpy.ops.render.render(write_still=True)
 
