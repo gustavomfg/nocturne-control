@@ -3,9 +3,9 @@
 Run from the repository root:
     blender --background --python tools/solaris_blender_scene.py
 
-The generated still is used as the texture for the interactive WebGL wave.
-The companion .blend file stays editable while this script keeps the render
-reproducible for future art direction changes.
+The generated still is the fallback for the opening artwork. The same scene is
+also exported as a glTF binary so the browser can draw the real geometry in
+3D, and the companion .blend file stays editable for art direction changes.
 """
 
 from math import cos, pi, sin
@@ -17,6 +17,8 @@ from mathutils import Vector
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "public" / "images" / "solaris-blender.webp"
+MODEL_OUTPUT = ROOT / "public" / "3d" / "solaris-sculpture.glb"
+SCULPTURE_OBJECTS = ("amber tide", "ivory echo", "tilted orbit", "inner orbit")
 TAU = pi * 2.0
 
 
@@ -130,6 +132,27 @@ def add_area_light(name, location, energy, color, size):
     return light
 
 
+def export_sculpture():
+    """Export only the sculpture (no floor, motes or lights) as a binary glTF."""
+    bpy.ops.object.select_all(action="DESELECT")
+    for name in SCULPTURE_OBJECTS:
+        bpy.data.objects[name].select_set(True)
+    bpy.context.view_layer.objects.active = bpy.data.objects[SCULPTURE_OBJECTS[0]]
+    MODEL_OUTPUT.parent.mkdir(parents=True, exist_ok=True)
+    bpy.ops.export_scene.gltf(
+        filepath=str(MODEL_OUTPUT),
+        export_format="GLB",
+        use_selection=True,
+        export_apply=True,
+        export_yup=True,
+        export_normals=True,
+        export_materials="EXPORT",
+        export_cameras=False,
+        export_lights=False,
+        export_animations=False,
+    )
+
+
 def build_scene():
     bpy.ops.object.select_all(action="SELECT")
     bpy.ops.object.delete(use_global=False)
@@ -204,6 +227,7 @@ def build_scene():
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     bpy.context.preferences.filepaths.save_version = 0
     bpy.ops.wm.save_as_mainfile(filepath=str(ROOT / "tools" / "solaris-sculpture.blend"))
+    export_sculpture()
     bpy.ops.render.render(write_still=True)
 
 

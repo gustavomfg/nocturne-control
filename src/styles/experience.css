@@ -51,9 +51,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, [tabindex]:focus-vis
 @keyframes sound-wave { to { transform: scaleY(0.3); } }
 .opening-scene { position: relative; height: max(800px, 100svh); isolation: isolate; background: #090909; }
 .opening-art { position: absolute; inset: 0; z-index: -2; overflow: hidden; }
-.opening-art img { width: 100%; height: 100%; object-fit: cover; object-position: 60% center; display: block; }
-.opening-art .animated-wave { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; pointer-events: none; }
-.opening-art .animated-wave[data-ready="true"] { opacity: 1; }
+.opening-art::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 34% 20% at 66% 80%, #3a2a1a40 0%, transparent 70%); pointer-events: none; }
 .opening-art::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, #0909098c 0%, transparent 50%), linear-gradient(0deg, #090909 0%, transparent 30%); pointer-events: none; }
 .opening-title { position: absolute; left: 7%; top: 32%; max-width: 620px; }
 .opening-title h1 { font-size: clamp(4rem, 6.7vw, 6rem); line-height: 0.99; letter-spacing: -0.035em; font-weight: 400; margin: 0; }

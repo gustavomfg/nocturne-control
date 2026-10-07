@@ -37,7 +37,7 @@
 
 .passage-art {
   position: absolute;
-  inset: -5% -10%;
+  inset: -14% -12%;
   z-index: -2;
   transform: translate(var(--passage-art-x), var(--passage-art-y)) scale(var(--passage-art-scale));
   transition: transform 1400ms cubic-bezier(0.16, 1, 0.3, 1);
@@ -174,7 +174,7 @@
   .passage-beat { align-self: start; }
   .passage-beat h2 { font-size: clamp(2rem, 8.8vw, 2.6rem); }
   .passage-beat p { margin-top: 16px; font-size: 13px; max-width: 27ch; }
-  .passage-art { inset: 2% -28% 3%; }
+  .passage-art { inset: -16% -28% 3%; }
   .passage-stage::after { background: linear-gradient(0deg, #090909 0%, #090909e0 15%, transparent 40%, transparent 68%, #090909b3 86%); }
   .passage-bottom { left: 24px; right: 24px; bottom: max(44px, env(safe-area-inset-bottom)); gap: 8px; }
   .passage-chapters { gap: 22px; }

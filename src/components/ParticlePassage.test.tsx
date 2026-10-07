@@ -3,9 +3,9 @@ import { act, cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ParticlePassage } from "./ParticlePassage";
 
-vi.mock("./CinematicField", () => ({
-  CinematicField: ({ progression, frozen }: { progression: number; frozen: boolean }) => (
-    <canvas data-testid="field" data-ready="true" data-progression={progression} data-frozen={String(frozen)} />
+vi.mock("./SculptureStage", () => ({
+  SculptureStage: ({ dissolve, turn, paused }: { dissolve: number; turn: number; paused: boolean }) => (
+    <canvas data-testid="field" data-ready="true" data-dissolve={dissolve} data-turn={turn} data-frozen={String(paused)} />
   ),
 }));
 
@@ -39,6 +39,10 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
+function turnFor(progress: number) {
+  return progress * Math.PI * 1.1;
+}
+
 function scrollToProgress(value: number) {
   act(() => {
     pageProgress = value;
@@ -51,15 +55,15 @@ function scrollToProgress(value: number) {
 
 describe("ParticlePassage", () => {
   it("holds the chapter, canvas and exported filename together until motion resumes", () => {
-    render(<ParticlePassage accent="#ffffff" intensity={0.6} audioLevel={0} />);
+    render(<ParticlePassage audioLevel={0} />);
     scrollToProgress(0.12);
-    expect(screen.getByTestId("field").getAttribute("data-progression")).toBe("0.24");
+    expect(Number(screen.getByTestId("field").getAttribute("data-turn"))).toBeCloseTo(turnFor(0.12));
 
     fireEvent.click(screen.getByRole("button", { name: "Congelar cena" }));
     scrollToProgress(0.82);
 
     expect(screen.getByTestId("field").getAttribute("data-frozen")).toBe("true");
-    expect(screen.getByTestId("field").getAttribute("data-progression")).toBe("0.24");
+    expect(Number(screen.getByTestId("field").getAttribute("data-turn"))).toBeCloseTo(turnFor(0.12));
     expect(screen.getByRole("button", { name: "Origem" }).getAttribute("aria-current")).toBe("step");
     expect(screen.getByRole("heading", { name: "O primeiro instante." })).toBeTruthy();
     expect((screen.getByRole("button", { name: "Dispersar" }) as HTMLButtonElement).disabled).toBe(true);
@@ -68,16 +72,24 @@ describe("ParticlePassage", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Retomar cena" }));
     expect(screen.getByTestId("field").getAttribute("data-frozen")).toBe("false");
-    expect(screen.getByTestId("field").getAttribute("data-progression")).toBe("1.64");
+    expect(Number(screen.getByTestId("field").getAttribute("data-turn"))).toBeCloseTo(turnFor(0.82));
     expect(screen.getByRole("button", { name: "Reencontro" }).getAttribute("aria-current")).toBe("step");
     expect(screen.getByRole("heading", { name: "Outra forma de existir." })).toBeTruthy();
     fireEvent.click(screen.getByRole("button", { name: "Salvar imagem" }));
     expect(downloads).toEqual(["solaris-origem.png", "solaris-reencontro.png"]);
   });
 
+  it("dissolves the sculpture in Ruptura and gathers it again in Reencontro", () => {
+    render(<ParticlePassage audioLevel={0} />);
+    scrollToProgress(0.5);
+    expect(Number(screen.getByTestId("field").getAttribute("data-dissolve"))).toBeCloseTo(1);
+    scrollToProgress(0.97);
+    expect(Number(screen.getByTestId("field").getAttribute("data-dissolve"))).toBeCloseTo(0, 1);
+  });
+
   it("leaves a held frame when a chapter is explicitly chosen and respects reduced motion", () => {
     vi.stubGlobal("matchMedia", vi.fn(() => ({ matches: true })));
-    render(<ParticlePassage accent="#ffffff" intensity={0.6} audioLevel={0} />);
+    render(<ParticlePassage audioLevel={0} />);
     fireEvent.click(screen.getByRole("button", { name: "Congelar cena" }));
     fireEvent.click(screen.getByRole("button", { name: "Ruptura" }));
 

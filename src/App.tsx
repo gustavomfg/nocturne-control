@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState, type CSSProperties, type KeyboardEvent } from "react";
-import { AnimatedWave } from "./components/AnimatedWave";
+import { SculptureStage } from "./components/SculptureStage";
 import { CinematicField } from "./components/CinematicField";
 import { ParticlePassage } from "./components/ParticlePassage";
 import { useSolarisMotion } from "./hooks/useSolarisMotion";
@@ -31,7 +31,7 @@ export default function App() {
   const [audioMessage, setAudioMessage] = useState("");
   const [immersive, setImmersive] = useState(false);
   const [pulse, setPulse] = useState(0);
-  const [wavePaused, setWavePaused] = useState(false);
+  const [heroPaused, setHeroPaused] = useState(false);
   const mode = modes[modeIndex];
   useSolarisMotion(root);
 
@@ -138,14 +138,27 @@ export default function App() {
 
     <main>
       <section className="opening-scene" id="inicio" aria-labelledby="opening-title">
-        <div className="opening-art" aria-hidden="true"><AnimatedWave src={`${import.meta.env.BASE_URL}images/solaris-blender.webp`} paused={wavePaused} /></div>
+        <div className="opening-art">
+          <SculptureStage
+            model={`${import.meta.env.BASE_URL}3d/solaris-sculpture.glb`}
+            poster={`${import.meta.env.BASE_URL}images/solaris-blender.webp`}
+            dissolve={0}
+            turn={0}
+            burstKey={0}
+            paused={heroPaused}
+            intro
+            interactive
+            energy={audioLevel}
+            composition="hero"
+          />
+        </div>
         <div className="opening-title"><h1 id="opening-title" aria-label="O invisível, em movimento.">O invisível,<br /><em>em movimento.</em></h1><p>Entre o seu gesto e a luz,<br />um mundo encontra forma.</p></div>
         <a className="opening-invitation" href="#passage"><span>Comece a travessia</span><span className="invitation-arrow"><Arrow /></span></a>
-        <div className="opening-foot"><span>Passe pela onda. Deixe um rastro.</span><button type="button" aria-pressed={wavePaused} onClick={() => setWavePaused(value => !value)}>{wavePaused ? "Retomar onda" : "Pausar onda"}</button><span>Role devagar. Não há pressa.</span></div>
+        <div className="opening-foot"><span>Passe pela matéria. Deixe um rastro.</span><button type="button" aria-pressed={heroPaused} onClick={() => setHeroPaused(value => !value)}>{heroPaused ? "Retomar movimento" : "Pausar movimento"}</button><span>Toque para dispersar.</span></div>
       </section>
 
       <section className="threshold" aria-label="Convite à experiência"><p>Você se move.<br /><span>A matéria responde.</span></p><div><span className="threshold-line" aria-hidden="true" /><p>Três formas. A mesma matéria.<br />A próxima mudança começa com você.</p></div></section>
-      <ParticlePassage accent={mode.accent} intensity={intensity / 100} audioLevel={audioLevel} />
+      <ParticlePassage audioLevel={audioLevel} />
 
       <section ref={studio} className={`studio ${immersive ? "is-immersive" : ""}`} id="instrumento" aria-labelledby="instrument-title">
         <div className="studio-heading"><h2 id="instrument-title">Agora, <em>é seu.</em></h2><p>Escolha uma forma. Mude a atmosfera.<br />Veja até onde um gesto pode levar.</p></div>

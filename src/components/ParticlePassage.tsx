@@ -1,6 +1,15 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
-import { CinematicField } from "./CinematicField";
+import { SculptureStage } from "./SculptureStage";
 import "../styles/particle-passage.css";
+
+const base = import.meta.env.BASE_URL;
+
+// The same matter is dispersed and gathered again. Dust peaks in Ruptura and
+// the form returns, turned, in Reencontro.
+function smoothstep(edge0: number, edge1: number, value: number) {
+  const t = Math.min(1, Math.max(0, (value - edge0) / (edge1 - edge0)));
+  return t * t * (3 - 2 * t);
+}
 
 const chapters = [
   { name: "Origem", slug: "origem", title: "O primeiro", line: "instante.", text: "Role devagar. Veja a luz ganhar forma." },
@@ -8,9 +17,9 @@ const chapters = [
   { name: "Reencontro", slug: "reencontro", title: "Outra forma", line: "de existir.", text: "A mesma matéria. Um novo movimento." },
 ];
 
-type Props = { accent: string; intensity: number; audioLevel: number };
+type Props = { audioLevel: number };
 
-export function ParticlePassage({ accent, intensity, audioLevel }: Props) {
+export function ParticlePassage({ audioLevel }: Props) {
   const root = useRef<HTMLElement>(null);
   const [progress, setProgress] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -20,6 +29,9 @@ export function ParticlePassage({ accent, intensity, audioLevel }: Props) {
   const effectiveProgress = paused ? heldProgress : progress;
   const chapter = Math.min(chapters.length - 1, Math.floor(effectiveProgress * chapters.length));
   const currentChapter = chapters[chapter];
+  const dissolve = smoothstep(0.16, 0.5, effectiveProgress) * (1 - smoothstep(0.72, 0.98, effectiveProgress));
+  const turn = effectiveProgress * Math.PI * 1.1;
+  const tilt = Math.sin(effectiveProgress * Math.PI) * 0.22;
 
   useEffect(() => {
     let frame = 0;
@@ -90,14 +102,17 @@ export function ParticlePassage({ accent, intensity, audioLevel }: Props) {
           <span>{paused ? "Cena congelada" : "Role para transformar"}</span>
         </div>
         <div className="passage-art" aria-hidden="true">
-          <CinematicField
-            mode={{ accent }}
-            intensity={intensity}
-            audioLevel={audioLevel}
-            pulseKey={pulse}
-            controls={false}
-            progression={effectiveProgress * 2}
-            frozen={paused}
+          <SculptureStage
+            model={`${base}3d/solaris-sculpture.glb`}
+            poster={`${base}images/solaris-blender.webp`}
+            dissolve={dissolve}
+            turn={turn}
+            tilt={tilt}
+            burstKey={pulse}
+            paused={paused}
+            interactive
+            energy={audioLevel}
+            composition="centered"
           />
         </div>
         <div className="passage-copy">
