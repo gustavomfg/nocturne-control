@@ -35,11 +35,13 @@ coverage
 # Local agent/session metadata
 .agents/
 .codex/
+.playwright-cli/
 
 # Test reports and generated screenshots
 playwright-report
 test-results
 screenshots
+/output/playwright/
 storybook-static
 *.png.tmp
 *.webm
