@@ -25,6 +25,10 @@ Solaris is an experimental portfolio study built around one idea: a visitor's ge
 
 The interface is intentionally small. There are no accounts, feeds, dashboards, missions, or background systems competing with the artifact.
 
+<p align="center">
+  <img src="images/solaris-current.png" alt="Solaris desktop experience with a bronze 3D sculpture beside the opening title" width="1440" />
+</p>
+
 ## Project Status
 
 This repository is intentionally a test project. Its purpose is to explore visual direction, shader techniques, motion choreography, interaction feedback, responsive behavior, accessibility, and offline packaging in one contained experience.
@@ -42,7 +46,7 @@ Expect experimental code, visual changes, dependency changes, and unfinished ide
 - Optional Web Audio tone, silent by default and keyboard accessible.
 - Progressive enhancement: a composed 2D canvas fallback when WebGL2 is unavailable.
 - Reduced-motion support, capped device-pixel ratio, responsive layout, and visible focus states.
-- Blender-authored amber ribbon sculpture, rendered into the opening wave and closing scene.
+- A Blender-authored bronze sculpture rendered as real 3D geometry in WebGL2: it materializes from dust, turns with the pointer, breaks where the cursor passes, disperses on tap and spins under drag.
 - Installable local-first PWA shell.
 
 ## Getting Started
@@ -95,10 +99,14 @@ The unit suite covers the Solaris shell, palette state, intensity control, audio
 ## Project Structure
 
 ```text
-src/App.tsx          Active Solaris experience and WebGL2 renderer
+src/App.tsx          Active Solaris experience
+src/components/SculptureStage.tsx   Blender sculpture stage (opening and passage)
+src/graphics/        WebGL2 sculpture renderer and motion model
+src/utils/glb.ts     Dependency-free glTF binary reader
 src/styles/          Solaris visual system and global reset
-public/              Manifest, service worker, and Pages fallback
-tools/               Reproducible Blender scene and render script
+public/3d/           Blender sculpture exported as glTF binary
+public/              Manifest, service worker, still image and Pages fallback
+tools/               Reproducible Blender scene, glTF export and still render
 PRODUCT.md           Product purpose and experience principles
 DESIGN.md            Visual system, interaction, and accessibility rules
 tests/               Browser and offline PWA checks

@@ -38,17 +38,19 @@ The active page uses `experience.css`, not the earlier Solaris brand-manual styl
 
 ## Narrative
 
-1. **Opening:** a bespoke artwork of illuminated bronze filaments, full-bleed, with one invitation to enter. The authored artwork is animated with a WebGL texture-flow shader: the crest rolls, the fibers undulate, and pointer movement gently shifts the local flow. A pause control sits in the opening footer. Cursor and touch movement open a local wake in the fibers. Small luminous particles are sampled from the source artwork, pushed aside, then spring back. The wake closes behind the gesture; speed controls its strength.
+1. **Opening:** a bronze sculpture rendered in real 3D from the Blender scene. It materializes out of dust on first view, full-bleed, with one invitation to enter. The pointer turns it gently; cursor movement leaves a wake that dissolves the surface where it passes and heals behind the gesture; a tap disperses it into embers and dust; dragging spins it with inertia. A pause control sits in the opening footer.
 2. **Threshold:** warm paper breaks the darkness and establishes the simple relationship between gesture and response.
-3. **Passage:** three scroll-linked acts, Origem, Ruptura, Reencontro. The sculpture is dominant; text stays near the edge. Chapter navigation, scatter, freeze and PNG export remain accessible.
+3. **Passage:** three scroll-linked acts, Origem, Ruptura, Reencontro. The whole sculpture is shown in Origem, dissolves into particles anchored to its surface in Ruptura, and gathers again in a new orientation in Reencontro. Text stays near the edge. Chapter navigation, scatter, freeze and PNG export remain accessible.
 4. **Studio:** the visitor chooses a form and atmosphere, adjusts intensity, scatters the sculpture, pauses it, and enters full-screen. The paper surrounds a single dark stage.
 5. **Closing:** a quiet return to the opening material, with a path back to the beginning.
 
 ## Art and light
 
-The opening asset is `public/images/solaris-blender.webp`, a Blender render optimized to about 86 KiB. `AnimatedWave.tsx` animates this texture at runtime while retaining the original image as a fallback. Motion freezes when paused, offscreen, or hidden; reduced motion renders an undistorted still. The editable scene and render recipe live in `tools/solaris-sculpture.blend` and `tools/solaris_blender_scene.py`.
+The sculpture is authored in `tools/solaris_blender_scene.py` and exported to `public/3d/solaris-sculpture.glb` (glTF 2.0, PBR materials, node transforms applied at load). `SculptureStage.tsx` draws it with the raw WebGL2 renderer in `src/graphics/`: a metallic-roughness shader lit by a procedural studio environment with ivory, amber and silver light, a noise-driven dissolve whose embers trace the edges, a particle layer sampled from the mesh surface that follows the same current, and a half-resolution bloom. `sculptureMotion.ts` holds the springs, intro, dispersal and wake as plain arithmetic.
 
-Live artwork uses a WebGL ribbon mesh with two-sided material lighting, fine moving filaments, dust and spatial backdrop. Ivory light and bronze shadow create readable mass and depth. Scene selection morphs the same geometry between three forms; pointer motion changes the view and a pulse disperses the structure. The Canvas 2D particle instrument remains the fallback for unavailable or lost WebGL.
+The still `public/images/solaris-blender.webp` is the poster while the model loads and the fallback when WebGL2 is unavailable; the closing scene keeps using it. Motion freezes when paused, offscreen, or hidden. Reduced motion shows the settled sculpture without the intro or idle turn. Sound raises the ember glow without changing the composition.
+
+The Canvas 2D particle instrument in the studio and its palette, intensity and scatter controls are unchanged.
 
 ## Composition
 
