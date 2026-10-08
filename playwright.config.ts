@@ -11,7 +11,7 @@ export default defineConfig({
   },
   reporter: process.env.CI ? "github" : "list",
   use: {
-    baseURL: "http://127.0.0.1:4173/nocturne-control/",
+    baseURL: "http://127.0.0.1:4173/ovra/",
     browserName: "chromium",
     serviceWorkers: "allow",
     trace: "retain-on-failure",

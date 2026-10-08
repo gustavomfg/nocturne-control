@@ -13,9 +13,9 @@ type ServiceWorkerEvent = {
 };
 
 describe("PWA offline shell", () => {
-  it("reopens the shell and route chunks offline after the first install", async () => {
-    const scope = "https://example.test/nocturne-control/";
-    const urls = ["./", "./index.html", "./assets/index-deadbeef.js", "./styles/solaris.css"];
+  it("reopens the shell and experiment chunks offline after the first install", async () => {
+    const scope = "https://example.test/ovra/";
+    const urls = ["./", "./index.html", "./assets/index-deadbeef.js", "./assets/Entity001-cafe.js"];
     const source = injectPrecacheManifest(
       readFileSync(new URL("../public/sw.js", import.meta.url), "utf8"),
       "test-build",
@@ -82,7 +82,7 @@ describe("PWA offline shell", () => {
 
     let navigationResponse: Promise<Response> | undefined;
     listeners.get("fetch")?.({
-      request: { method: "GET", mode: "navigate", url: `${scope}dashboard` },
+      request: { method: "GET", mode: "navigate", url: `${scope}experimento` },
       waitUntil: () => undefined,
       respondWith: (promise) => { navigationResponse = promise; },
     });
@@ -90,11 +90,11 @@ describe("PWA offline shell", () => {
 
     let chunkResponse: Promise<Response> | undefined;
     listeners.get("fetch")?.({
-      request: { method: "GET", mode: "cors", url: `${scope}assets/index-deadbeef.js` },
+      request: { method: "GET", mode: "cors", url: `${scope}assets/Entity001-cafe.js` },
       waitUntil: () => undefined,
       respondWith: (promise) => { chunkResponse = promise; },
     });
-    expect(await (await chunkResponse)?.text()).toContain("index-deadbeef.js");
+    expect(await (await chunkResponse)?.text()).toContain("Entity001-cafe.js");
     expect(fetchMock).toHaveBeenCalledTimes(urls.length + 1);
   });
 });
