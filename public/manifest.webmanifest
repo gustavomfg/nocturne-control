@@ -1,20 +1,20 @@
 {
-  "name": "Solaris",
-  "short_name": "Solaris",
+  "name": "OVRA",
+  "short_name": "OVRA",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#080808",
-  "theme_color": "#080808",
-  "description": "Um instrumento digital para encontrar ritmo no espaço entre um gesto e seu eco.",
+  "background_color": "#030304",
+  "theme_color": "#030304",
+  "description": "Um laboratório pessoal de experiências digitais, arte generativa e WebGL.",
   "icons": [
     {
-      "src": "icons/solaris.svg",
+      "src": "icons/ovra.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"
     },
     {
-      "src": "icons/solaris.svg",
+      "src": "icons/ovra.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"

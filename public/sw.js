@@ -1,4 +1,4 @@
-const CACHE_PREFIX = "solaris-instrument-";
+const CACHE_PREFIX = "ovra-";
 const PRECACHE_VERSION = "__PRECACHE_VERSION__";
 const PRECACHE_URLS = ["__PRECACHE_URLS__"];
 const CACHE = `${CACHE_PREFIX}${PRECACHE_VERSION}`;

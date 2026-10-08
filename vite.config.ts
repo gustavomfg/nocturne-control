@@ -30,7 +30,7 @@ function pwaPrecachePlugin(): Plugin {
   let outputDirectory = ''
 
   return {
-    name: 'solaris-pwa-precache',
+    name: 'ovra-pwa-precache',
     apply: 'build',
     configResolved(config) {
       outputDirectory = resolve(config.root, config.build.outDir)
@@ -65,6 +65,11 @@ function pwaPrecachePlugin(): Plugin {
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: process.env.VITE_BASE_PATH || '/nocturne-control/',
+  base: process.env.VITE_BASE_PATH || '/ovra/',
   plugins: [react(), pwaPrecachePlugin()],
+  build: {
+    // The Three.js renderer lives in the experiment chunk, which is only fetched when
+    // that experiment opens. The shell itself stays small.
+    chunkSizeWarningLimit: 700,
+  },
 })

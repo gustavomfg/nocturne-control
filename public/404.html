@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Redirecting to Solaris</title>
+    <title>Redirecionando para OVRA</title>
     <script>
       const firstSegment = window.location.pathname.split("/").filter(Boolean)[0];
       const base = firstSegment ? `/${firstSegment}/` : "/";
@@ -11,5 +11,5 @@
       window.location.replace(base + "?p=" + encodeURIComponent(path) + window.location.hash);
     </script>
   </head>
-  <body>Redirecting to Solaris…</body>
+  <body>Redirecionando para OVRA…</body>
 </html>
