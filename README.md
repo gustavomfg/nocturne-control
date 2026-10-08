@@ -1,121 +1,109 @@
-# Solaris
+# OVRA
 
-> **Status: experimental test project.** Solaris is a visual and technical playground for testing WebGL2, GSAP motion, interaction patterns, responsive composition, and PWA behavior. It is not a production product or a supported service.
+> **Status: laboratório pessoal em evolução.** OVRA é um espaço para experimentos independentes de creative development: arte generativa, animações cinematográficas, WebGL, Three.js e interações experimentais. Não é um site institucional, um portfólio nem um produto.
 
 <p align="center">
-  <strong>An interactive WebGL instrument for attention.</strong>
+  <a href="https://gustavomfg.github.io/ovra/">Experiência publicada</a>
+  ·
+  <a href="#executar-localmente">Executar localmente</a>
+  ·
+  <a href="DESIGN.md">Sistema visual</a>
+  ·
+  <a href="docs/entity-001.md">ENTITY 001</a>
 </p>
 
 <p align="center">
-  <a href="https://gustavomfg.github.io/nocturne-control/">Live demo</a>
-  ·
-  <a href="#getting-started">Run locally</a>
-  ·
-  <a href="DESIGN.md">Design system</a>
-</p>
-
-<p align="center">
+  <img alt="Three.js" src="https://img.shields.io/badge/Three.js-0.186-1f2937?logo=threedotjs&logoColor=white" />
   <img alt="React" src="https://img.shields.io/badge/React-19-20232a?logo=react&logoColor=61dafb" />
   <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-6-1f2937?logo=typescript&logoColor=3178c6" />
-  <img alt="WebGL2" src="https://img.shields.io/badge/WebGL2-GLSL-6b6b68" />
+  <img alt="GSAP" src="https://img.shields.io/badge/GSAP-3-6b6b68" />
   <img alt="Vite" src="https://img.shields.io/badge/Vite-8-1f1b2d?logo=vite&logoColor=ffd166" />
 </p>
 
-Solaris is an experimental portfolio study built around one idea: a visitor's gesture can become a living visual object. Move through the field and a sculptural ribbon shifts its form, light, atmosphere, sparse particles, and color. The page is staged as a dark, cinematic installation rather than a conventional product shell.
-
-The interface is intentionally small. There are no accounts, feeds, dashboards, missions, or background systems competing with the artifact.
-
 <p align="center">
-  <img src="images/solaris-current.png" alt="Solaris desktop experience with a bronze 3D sculpture beside the opening title" width="1440" />
+  <img src="images/ovra-entity-001.png" alt="ENTITY 001: uma casca de estilhaços metálicos em torno de um núcleo âmbar, com um anel orbital de luz" width="1440" />
 </p>
 
-## Project Status
+## Experimentos
 
-This repository is intentionally a test project. Its purpose is to explore visual direction, shader techniques, motion choreography, interaction feedback, responsive behavior, accessibility, and offline packaging in one contained experience.
+| Código | Nome | Ideia |
+| --- | --- | --- |
+| 001 | ENTITY 001 | Uma entidade digital feita de estilhaços. Ela surge da escuridão, observa o cursor com atraso e inércia, recua, se vira de costas e se transforma com um duplo toque. |
 
-Expect experimental code, visual changes, dependency changes, and unfinished ideas. APIs, copy, layout, and implementation details may change without notice. Do not treat the demo, local storage, audio behavior, or deployment as production guarantees.
+Cada experimento é uma pasta independente em `src/experiments/`. A lista fica em `src/experiments/registry.ts` e é carregada sob demanda: um experimento só é baixado quando aberto.
 
-## Highlights
-
-- Custom WebGL renderer with a procedural ribbon surface, atmospheric depth, luminous filaments, and a thin orbital system.
-- Dark-first full-bleed hero with layered orbital framing, a responsive 3D tilt surface, and a scroll-led afterimage sequence.
-- Pointer and touch input for camera drift, surface deformation, sparse particles, and energy.
-- Full field mode that expands the composition into a viewport-filling installation.
-- Four visual palettes: Prism, Sol, Violet, and Moss.
-- Intensity control that changes the shader's material and atmosphere.
-- Optional Web Audio tone, silent by default and keyboard accessible.
-- Progressive enhancement: a composed 2D canvas fallback when WebGL2 is unavailable.
-- Reduced-motion support, capped device-pixel ratio, responsive layout, and visible focus states.
-- A Blender-authored bronze sculpture rendered as real 3D geometry in WebGL2: it materializes from dust, turns with the pointer, breaks where the cursor passes, disperses on tap and spins under drag.
-- Installable local-first PWA shell.
-
-## Getting Started
+## Executar localmente
 
 ```bash
 npm ci
 npm run dev
 ```
 
-The development server uses the repository's GitHub Pages base path:
+O servidor de desenvolvimento usa o caminho de publicação do GitHub Pages:
 
 ```text
-/nocturne-control/
+/ovra/
 ```
 
-For another deployment path, set `VITE_BASE_PATH` before building.
+Para outro caminho de publicação, defina `VITE_BASE_PATH` antes de compilar.
 
 ## Scripts
 
 ```bash
-npm run dev       # start the Vite development server
-npm run lint      # run ESLint
-npm run test      # run Vitest checks once
-npm run build     # typecheck and build production assets
-npm run test:pwa  # build and run the PWA smoke test in Chromium
-npm run preview   # preview the production build
+npm run dev       # servidor de desenvolvimento
+npm run lint      # ESLint
+npm run test      # testes unitários e de componentes (Vitest)
+npm run build     # verificação de tipos e build de produção
+npm run test:pwa  # build e teste do PWA no Chromium (Playwright)
+npm run preview   # serve o build de produção
 ```
 
-## Tech Stack
-
-- React 19 and TypeScript
-- Vite
-- WebGL2 and GLSL ES 3.00
-- Web Audio API
-- CSS with Source Sans 3 and a restrained monochrome visual system
-- Vitest, Testing Library, and Playwright
-
-The runtime stays intentionally small. The 3D scene is written directly against WebGL2 instead of relying on a large 3D framework, while the fallback keeps the experience usable on devices without a compatible GPU context.
-
-## Quality Checks
-
-```bash
-npm run lint
-npm run test
-npm run build
-```
-
-The unit suite covers the Solaris shell, palette state, intensity control, audio opt-in, and the no-WebGL fallback path. The browser smoke test covers the production PWA shell.
-
-## Project Structure
+## Arquitetura
 
 ```text
-src/App.tsx          Active Solaris experience
-src/components/SculptureStage.tsx   Blender sculpture stage (opening and passage)
-src/graphics/        WebGL2 sculpture renderer and motion model
-src/utils/glb.ts     Dependency-free glTF binary reader
-src/styles/          Solaris visual system and global reset
-public/3d/           Blender sculpture exported as glTF binary
-public/              Manifest, service worker, still image and Pages fallback
-tools/               Reproducible Blender scene, glTF export and still render
-PRODUCT.md           Product purpose and experience principles
-DESIGN.md            Visual system, interaction, and accessibility rules
-tests/               Browser and offline PWA checks
+src/
+  main.tsx                    inicialização e registro do service worker
+  app/                        shell: cabeçalho discreto, roteamento por hash e cortina entre experimentos
+  core/                       base reutilizável para qualquer experimento
+    camera.ts                 câmera orbital com movimento amortecido e objetivos tweenáveis
+    lighting.ts               ambiente HDR procedural (softboxes) para reflexos de metal
+    postprocessing.ts         bloom, acabamento (vinheta, grão, lente, ondulação) em um passe
+    frameLoop.ts              loop de quadros que pausa com a aba oculta ou fora da tela
+    assets.ts                 carregamento de GLTF/GLB com cache e descarte de recursos
+    audio.ts                  ambiência opcional em Web Audio, desligada por padrão
+    spring.ts, math.ts, noise.ts, transitions.ts, capabilities.ts
+  experiments/
+    registry.ts               lista de experimentos (carregamento preguiçoso)
+    entity-001/               ENTITY 001: cena, comportamento, coreografia, fallback 2D
+public/                       manifesto, service worker, ícone e página 404 do GitHub Pages
+tests/                        teste de offline do PWA e teste de navegador
+docs/entity-001.md            direção artística e especificação de comportamento
 ```
 
-## Deployment
+### Como criar um experimento
 
-Pushes to `main` run `.github/workflows/deploy.yml`. The workflow installs dependencies, checks the app, builds the production bundle, and deploys `dist/` to GitHub Pages.
+1. Crie `src/experiments/<nome>/` com um componente padrão exportado (o componente é o ponto de entrada).
+2. Use `core/` para câmera, luz, pós-processamento, loop e recursos. Mantenha a lógica do experimento dentro da pasta.
+3. Registre em `src/experiments/registry.ts` com um `slug` (usado em `#/slug`), um `code` curto e o `lazy(() => import(...))`.
+4. Escreva testes para a lógica pura (sem WebGL) e um teste de montagem com `getContext` simulado, como em `Entity001.test.tsx`.
 
-## License / Usage
+### Modelos 3D
 
-Solaris is an original fictional portfolio test project. Keep future additions aligned with the instrument's focus: make the gesture visible, make the response meaningful, and leave room for curiosity.
+ENTITY 001 é procedural: não depende de arquivos binários. Para um experimento com modelo pronto, exporte um GLB/GLTF pelo Blender e carregue com `loadGltf` (`src/core/assets.ts`), que já faz cache e tenta de novo após uma falha. Descarte o objeto com `disposeObject` ao desmontar.
+
+## Qualidade e acessibilidade
+
+- **Movimento reduzido**: sem intro, sem deriva, sem o olhar seguindo o cursor, sem movimento de câmera e sem empurrões nos estilhaços. A reação ao toque continua apenas como brilho; a metamorfose vira um pulso de luz.
+- **Sem WebGL2**: o mesmo experimento é desenhado em um canvas 2D com a mesma silhueta e os mesmos controles.
+- **Recursos**: o loop para com a aba oculta ou fora da tela; geometrias, materiais, texturas e o contexto WebGL são liberados ao desmontar.
+- **Áudio**: silencioso por padrão e só começa após ação explícita.
+- **Teclado**: os controles são botões nativos; a metamorfose também está disponível pelo botão, além do duplo toque.
+- **Publicação**: GitHub Pages em [`/ovra/`](https://gustavomfg.github.io/ovra/). `VITE_BASE_PATH` e `base` em `vite.config.ts` usam o caminho atual do repositório.
+
+## Publicação
+
+Pushes para `main` executam `.github/workflows/deploy.yml`: lint, testes, build, teste do PWA no Chromium e publicação de `dist/` no GitHub Pages.
+
+## Licença e uso
+
+Projeto pessoal de experimentação. Todo o código e as formas são originais. Mantenha os experimentos fiéis à ideia central: o visitante descobre o comportamento pela curiosidade, sem precisar ler explicações.

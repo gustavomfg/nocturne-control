@@ -1,71 +1,63 @@
 ---
-name: Solaris
-product: Solaris — o invisível, em movimento
-description: Uma experiência de luz, matéria e presença.
+name: OVRA
+product: OVRA — laboratório de experimentos
+description: Uma interface quase invisível. A obra é a única protagonista.
 colors:
-  bg: "#090909"
-  surface: "#141310"
-  surfaceBright: "#27251f"
-  scrollbar: "#6f6555"
-  backdrop: "#000b"
-  ink: "#f2efe7"
-  body: "#bdb6a9"
-  muted: "#b0a89a"
-  paper: "#e9e5da"
-  paperInk: "#292a25"
-  light: "#ebd7b5"
-  prism: "#f4eee4"
-  sol: "#edc291"
-  violet: "#cbc5e6"
-  moss: "#c3d0af"
+  void: "#030304"
+  ink: "#ece8e1"
+  muted: "#8d8a85"
+  line: "#ece8e125"
+  ember: "#ffa155"
+  frost: "#a8c8ff"
+  ivory: "#fff1dc"
+  graphite: "#525764"
 typography:
-  display:
-    fontFamily: '"Source Sans 3", sans-serif'
+  wordmark:
+    fontFamily: '"Inter Tight", sans-serif'
+    fontWeight: 500
+    letterSpacing: 0.42em
+  label:
+    fontFamily: '"IBM Plex Mono", monospace'
     fontWeight: 400
-  expressive:
-    fontFamily: '"Cormorant Garamond", Georgia, serif'
-    fontWeight: 400
-  body:
-    fontFamily: '"Source Sans 3", sans-serif'
-    fontWeight: 400
+    letterSpacing: 0.12em
 ---
 
-# Direction
+# Direção
 
-Solaris is an experimental visual experience, not a commercial platform. The visitor moves from a deliberately composed artwork to a live sculpture, then shapes their own composition. The language of the experience is Brazilian Portuguese.
+OVRA é um laboratório, não uma vitrine. A tela é quase toda obra: escuridão, luz e matéria. A interface se resume a três elementos discretos: a marca no canto superior esquerdo, o índice dos experimentos no canto superior direito e uma leitura de estado no inferior. Os textos são em português.
 
-The active page uses `experience.css`, not the earlier Solaris brand-manual styles. Preserve the existing source files as historical implementation context; do not reintroduce those styles into the active page.
+## Cor
 
-## Narrative
+- **Vazio** (`void`): o fundo de todas as cenas. Quase preto, com um toque frio.
+- **Tinta** (`ink`) e **silenciosa** (`muted`): textos de interface. Sempre sobre o vazio.
+- **Âmbar** (`ember`): a única cor quente. Reservada ao núcleo, à íris e ao destaque de estado. Não tinge superfícies.
+- **Gelo** (`frost`): o contraponto frio, usado quando a entidade se afasta ou fica indiferente.
+- **Grafite** (`graphite`): a matéria em repouso. Metal frio, sem brilho próprio.
 
-1. **Opening:** a bronze sculpture rendered in real 3D from the Blender scene. It materializes out of dust on first view, full-bleed, with one invitation to enter. The pointer turns it gently; cursor movement leaves a wake that dissolves the surface where it passes and heals behind the gesture; a tap disperses it into embers and dust; dragging spins it with inertia. A pause control sits in the opening footer.
-2. **Threshold:** warm paper breaks the darkness and establishes the simple relationship between gesture and response.
-3. **Passage:** three scroll-linked acts, Origem, Ruptura, Reencontro. The whole sculpture is shown in Origem, dissolves into particles anchored to its surface in Ruptura, and gathers again in a new orientation in Reencontro. Text stays near the edge. Chapter navigation, scatter, freeze and PNG export remain accessible.
-4. **Studio:** the visitor chooses a form and atmosphere, adjusts intensity, scatters the sculpture, pauses it, and enters full-screen. The paper surrounds a single dark stage.
-5. **Closing:** a quiet return to the opening material, with a path back to the beginning.
+Regra: calor só onde há contato. Qualquer tinta quente espalhada pela superfície vira neblina marrom sobre o metal escuro, o que foi o principal erro estético da fase de ajuste.
 
-## Art and light
+## Tipografia
 
-The sculpture is authored in `tools/solaris_blender_scene.py` and exported to `public/3d/solaris-sculpture.glb` (glTF 2.0, PBR materials, node transforms applied at load). `SculptureStage.tsx` draws it with the raw WebGL2 renderer in `src/graphics/`: a metallic-roughness shader lit by a procedural studio environment with ivory, amber and silver light, a noise-driven dissolve whose embers trace the edges, a particle layer sampled from the mesh surface that follows the same current, and a half-resolution bloom. `sculptureMotion.ts` holds the springs, intro, dispersal and wake as plain arithmetic.
+- **Inter Tight** (300 a 500) para a marca.
+- **IBM Plex Mono** para o índice, o estado e os controles. Caixa baixa, espaçamento amplo, tamanho pequeno.
 
-The still `public/images/solaris-blender.webp` is the poster while the model loads and the fallback when WebGL2 is unavailable; the closing scene keeps using it. Motion freezes when paused, offscreen, or hidden. Reduced motion shows the settled sculpture without the intro or idle turn. Sound raises the ember glow without changing the composition.
+Texto nunca compete com a obra. Quando aparece, é uma leitura do que a obra está fazendo.
 
-The Canvas 2D particle instrument in the studio and its palette, intensity and scatter controls are unchanged.
+## Composição
 
-## Composition
+- O experimento ocupa a tela inteira. A interface é só a marca no topo, o índice à direita e a leitura de estado embaixo.
+- Os controles ficam nos cantos inferiores e somam no máximo duas palavras cada.
+- Em celulares, a obra é enquadrada pela largura: a câmera recua para que a silhueta não seja cortada.
 
-- No sidebar, dashboard frame or brand-manual sections in the active experience.
-- Desktop opening: title and invitation on the left, crest of the artwork toward the right. On mobile, the artwork occupies the upper field and the title sits below its brightest region.
-- Sans-serif carries the main statements; the italic serif expresses their softer second phrase. Display size stops at 6rem.
-- Paper sections provide contrast between dark scenes. Their controls use dark ink and distinct focus treatment.
-- The studio groups choices beside the canvas on desktop and below it on mobile. Its frame reserves space for controls so they do not cover the sculpture.
+## Movimento
 
-## Interaction and inclusion
+- Toda transição é coreografada, com ritmo: a intro leva cerca de 7 s; a metamorfose, cerca de 8 s.
+- Nada muda de forma abrupta sem intenção artística. A luz é o primeiro sinal, a forma vem depois.
+- Com movimento reduzido: sem intro, sem deriva, sem movimento em resposta ao cursor e sem movimento de câmera. Ao toque, a matéria só acende. A metamorfose vira um pulso de luz.
 
-- Audio is silent by default and only begins after explicit activation. Pending audio initialization is deduplicated and cancelled on unmount. Muting fades before closing the context.
-- Space and arrow keys act as instrument shortcuts only when the stage itself is focused. Focused buttons retain native keyboard behavior.
-- Full-screen has a CSS fallback; Escape exits either form.
-- About uses a native modal dialog for focus isolation and restoration.
-- A frozen passage keeps image, chapter, title, progress and export filename in sync, even if the visitor scrolls.
-- Reduced motion removes decorative movement and keeps still compositions usable. Offscreen and hidden-tab rendering is suspended.
-- Mouse, touch and keyboard can reach the core interactions. Visible focus rings remain distinct on both light and dark sections.
+## Acessibilidade
+
+- Foco visível em todos os controles (contorno de 1 px, deslocado).
+- Botões com área mínima de 44 px e estado de pressionado (`aria-pressed`).
+- O estado da obra é anunciado em região `aria-live="polite"`.
+- A alternativa sem WebGL2 mantém a mesma silhueta, a mesma cor e os mesmos controles.
