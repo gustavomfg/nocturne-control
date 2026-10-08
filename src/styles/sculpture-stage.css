@@ -1,8 +1,0 @@
-.sculpture-stage { position: absolute; inset: 0; overflow: hidden; background: #090909; }
-.sculpture-stage > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 60% center; display: block; }
-.sculpture-stage--centered > img { object-position: center; }
-.sculpture-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; opacity: 0; pointer-events: none; transition: opacity 1400ms cubic-bezier(0.16, 1, 0.3, 1); }
-.sculpture-canvas[data-ready="true"] { opacity: 1; }
-@media (prefers-reduced-motion: reduce) {
-  .sculpture-canvas { transition: none; }
-}
