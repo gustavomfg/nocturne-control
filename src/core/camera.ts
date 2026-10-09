@@ -23,6 +23,11 @@ export class CameraRig {
   private readonly pointer = new Vector2();
   private readonly pointerGoal = new Vector2();
   private readonly target = new Vector3();
+  private readonly focusGoal = new Vector3();
+  private readonly expression = new Vector3();
+  private readonly expressionGoal = new Vector3();
+  private roll = 0;
+  private rollGoal = 0;
   private readonly rate: number;
 
   constructor(initial: CameraGoal, rate = 2.2) {
@@ -42,12 +47,37 @@ export class CameraRig {
     this.pointerGoal.set(clamp(x, -1, 1), clamp(y, -1, 1));
   }
 
+  setFocus(x: number, y: number, z: number) {
+    this.focusGoal.set(x, y, z);
+  }
+
+  snap() {
+    Object.assign(this.current, this.goal);
+    this.expression.set(0, 0, 0);
+    this.expressionGoal.set(0, 0, 0);
+    this.pointer.set(0, 0);
+    this.pointerGoal.set(0, 0);
+    this.target.copy(this.focusGoal);
+    this.roll = 0;
+    this.rollGoal = 0;
+  }
+
+  // Mood framing is independent of authored camera goals, so it cannot overwrite
+  // a cinematic timeline. Distance, orbit and roll ease together.
+  setExpression(distance: number, orbit: number, roll = 0) {
+    this.expressionGoal.set(distance, orbit, 0);
+    this.rollGoal = roll;
+  }
+
   update(dt: number, elapsed: number, motion: number) {
     this.current.distance = damp(this.current.distance, this.goal.distance, this.rate, dt);
     this.current.orbit = damp(this.current.orbit, this.goal.orbit, this.rate, dt);
     this.current.height = damp(this.current.height, this.goal.height, this.rate, dt);
     this.current.fov = damp(this.current.fov, this.goal.fov, this.rate, dt);
     this.pointer.lerp(this.pointerGoal, 1 - Math.exp(-dt * 2));
+    this.target.lerp(this.focusGoal, 1 - Math.exp(-dt * 2.4));
+    this.expression.lerp(this.expressionGoal, 1 - Math.exp(-dt * 1.25));
+    this.roll = damp(this.roll, this.rollGoal, 1.5, dt);
 
     if (Math.abs(this.camera.fov - this.current.fov) > 1e-4) {
       this.camera.fov = this.current.fov;
@@ -55,14 +85,15 @@ export class CameraRig {
     }
 
     // The idle drift and pointer parallax are scaled by `motion`, which is zero under reduced motion.
-    const orbit = this.current.orbit + (Math.sin(elapsed * 0.07) * 0.05 + this.pointer.x * 0.1) * motion;
+    const orbit = this.current.orbit + (this.expression.y + Math.sin(elapsed * 0.07) * 0.025 + this.pointer.x * 0.045) * motion;
     const height = this.current.height + (this.pointer.y * 0.08 + Math.sin(elapsed * 0.11) * 0.03) * motion;
-    const d = this.current.distance * Math.max(1, FRAME_ASPECT / this.camera.aspect);
+    const d = Math.max(0.5, this.current.distance + this.expression.x * motion) * Math.max(1, FRAME_ASPECT / this.camera.aspect);
     this.camera.position.set(
       Math.sin(orbit) * Math.cos(height) * d,
       Math.sin(height) * d,
       Math.cos(orbit) * Math.cos(height) * d,
     );
     this.camera.lookAt(this.target);
+    this.camera.rotateZ(this.roll * motion);
   }
 }

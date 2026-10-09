@@ -4,6 +4,7 @@ import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
 import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
 import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
+import { FXAAShader } from "three/addons/shaders/FXAAShader.js";
 
 // Display-space finishing: vignette, film grain, a faint lens split and a ripple
 // that travels outward from a point (used to acknowledge the visitor's gestures).
@@ -12,8 +13,8 @@ const FinishShader = {
     tDiffuse: { value: null as unknown },
     uTime: { value: 0 },
     uVignette: { value: 0.55 },
-    uGrain: { value: 0.03 },
-    uAberration: { value: 0.0018 },
+    uGrain: { value: 0.012 },
+    uAberration: { value: 0.00065 },
     // xy: ripple origin in UV space, z: amplitude, w: unused.
     uRipple: { value: new Vector4(0.5, 0.5, 0, 0) },
   },
@@ -50,7 +51,7 @@ const FinishShader = {
         texture2D(tDiffuse, uv - split).b
       );
 
-      float vignette = smoothstep(0.92, 0.18, radius * (1.0 + uVignette * 0.5));
+      float vignette = (1.0 - smoothstep(0.18, 0.92, radius * (1.0 + uVignette * 0.5)));
       color *= mix(1.0 - uVignette, 1.0, vignette);
       color += (hash(vUv * 1024.0 + fract(uTime)) - 0.5) * uGrain;
       gl_FragColor = vec4(max(color, 0.0), 1.0);
@@ -68,15 +69,18 @@ export type PostProcessing = {
 };
 
 export function createPostProcessing(renderer: WebGLRenderer, scene: Scene, camera: Camera, width: number, height: number): PostProcessing {
-  const target = new WebGLRenderTarget(width, height, { type: HalfFloatType, samples: 4 });
+  const target = new WebGLRenderTarget(width, height, { type: HalfFloatType, samples: 0 });
   const composer = new EffectComposer(renderer, target);
   composer.setPixelRatio(renderer.getPixelRatio());
   composer.setSize(width, height);
 
   composer.addPass(new RenderPass(scene, camera));
-  const bloom = new UnrealBloomPass(new Vector2(width, height), 0.55, 0.5, 0.82);
+  const bloom = new UnrealBloomPass(new Vector2(width, height), 0.35, 0.45, 1.05);
   composer.addPass(bloom);
   composer.addPass(new OutputPass());
+  const antialias = new ShaderPass(FXAAShader);
+  antialias.uniforms.resolution.value.set(1 / width, 1 / height);
+  composer.addPass(antialias);
   const finish = new ShaderPass(FinishShader);
   composer.addPass(finish);
 
@@ -91,6 +95,7 @@ export function createPostProcessing(renderer: WebGLRenderer, scene: Scene, came
     setSize(nextWidth, nextHeight, pixelRatio) {
       composer.setPixelRatio(pixelRatio);
       composer.setSize(nextWidth, nextHeight);
+      antialias.uniforms.resolution.value.set(1 / (nextWidth * pixelRatio), 1 / (nextHeight * pixelRatio));
     },
     ripple(x, y, amplitude) {
       finish.uniforms.uRipple.value.set(x, y, amplitude, 0);

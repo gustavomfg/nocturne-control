@@ -1,4 +1,4 @@
-export type FrameTick = (dt: number, elapsed: number) => void;
+export type FrameTick = (dt: number, elapsed: number, frameDt: number) => void;
 
 // Runs `tick` once per animation frame. The loop stops while the tab is hidden
 // or the owner reports it is off screen, and restarts without a time jump.
@@ -13,10 +13,11 @@ export function createFrameLoop(tick: FrameTick, maxStep = 1 / 20) {
 
   function run(now: number) {
     frame = 0;
-    const dt = last ? Math.min((now - last) / 1000, maxStep) : 0;
+    const frameDt = last ? Math.min((now - last) / 1000, 0.25) : 0;
+    const dt = Math.min(frameDt, maxStep);
     last = now;
-    elapsed += dt;
-    tick(dt, elapsed);
+    elapsed += frameDt;
+    tick(dt, elapsed, frameDt);
     if (isActive()) frame = requestAnimationFrame(run);
   }
 

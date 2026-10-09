@@ -11,7 +11,10 @@ import {
   Texture,
   Vector3,
   type WebGLRenderer,
+  type WebGLRenderTarget,
 } from "three";
+
+const environmentTargets = new WeakMap<Texture, WebGLRenderTarget>();
 
 export type Softbox = {
   color: string;
@@ -44,12 +47,19 @@ export function createStudioEnvironment(renderer: WebGLRenderer, softboxes: Soft
     scene.add(panel);
   }
 
-  const texture = pmrem.fromScene(scene, 0.03).texture;
+  const targetMap = pmrem.fromScene(scene, 0.03);
+  const texture = targetMap.texture;
+  environmentTargets.set(texture, targetMap);
   for (const item of disposables) item.dispose();
   pmrem.dispose();
   return texture;
 }
 
 export function disposeEnvironment(texture: Texture | null) {
-  texture?.dispose();
+  if (!texture) return;
+  const target = environmentTargets.get(texture);
+  if (target) {
+    target.dispose();
+    environmentTargets.delete(texture);
+  } else texture.dispose();
 }

@@ -44,6 +44,16 @@ describe("createFrameLoop", () => {
     loop.dispose();
   });
 
+  it("keeps cinematic time independent of the physics cap and excludes hidden time", () => {
+    const ticks: number[][] = [];
+    const loop = createFrameLoop((dt, elapsed, frameDt) => ticks.push([dt, elapsed, frameDt]));
+    loop.start(); runFrame(1000); runFrame(1200);
+    expect(ticks[1]).toEqual([0.05, 0.2, 0.2]);
+    loop.setVisible(false); loop.setVisible(true); runFrame(9000);
+    expect(ticks[2]).toEqual([0, 0.2, 0]);
+    loop.dispose();
+  });
+
   it("does not run while the document is hidden", () => {
     const ticks: number[] = [];
     const loop = createFrameLoop((dt) => ticks.push(dt));
