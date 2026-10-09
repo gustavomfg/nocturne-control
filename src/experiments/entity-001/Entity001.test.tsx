@@ -21,20 +21,20 @@ describe("Entity001 without WebGL2", () => {
     render(<Entity001 />);
     expect(screen.getByRole("img", { name: /Entidade digital abstrata/ })).toBeTruthy();
     expect(screen.getByText("modo essencial", { exact: false })).toBeTruthy();
-    expect(screen.getByRole("button", { name: "som" }).getAttribute("aria-pressed")).toBe("false");
+    expect(screen.getByRole("button", { name: "Ativar som" }).getAttribute("aria-pressed")).toBe("false");
   });
 
-  it("disables the metamorphosis control in the fallback, where no sequence exists", () => {
+  it("keeps the metamorphosis action available in the essential renderer", () => {
     render(<Entity001 />);
-    expect((screen.getByRole("button", { name: "metamorfose" }) as HTMLButtonElement).disabled).toBe(true);
+    expect((screen.getByRole("button", { name: "metamorfose" }) as HTMLButtonElement).disabled).toBe(false);
   });
 
   it("keeps the audio toggle silent when Web Audio is missing", async () => {
     vi.stubGlobal("AudioContext", undefined);
     render(<Entity001 />);
-    fireEvent.click(screen.getByRole("button", { name: "som" }));
+    fireEvent.click(screen.getByRole("button", { name: "Ativar som" }));
     await vi.waitFor(() => {
-      expect(screen.getByRole("button", { name: "som" }).getAttribute("aria-pressed")).toBe("false");
+      expect(screen.getByRole("button", { name: "Ativar som" }).getAttribute("aria-pressed")).toBe("false");
     });
   });
 });

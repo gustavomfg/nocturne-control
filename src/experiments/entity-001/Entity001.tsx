@@ -1,185 +1,163 @@
 import { useEffect, useRef, useState } from "react";
 import { createAmbience } from "../../core/audio";
 import { supportsWebGL2, watchReducedMotion } from "../../core/capabilities";
-import { EntityFallback } from "./EntityFallback";
-import { createEntityScene, type EntityScene } from "./scene";
+import { createFallbackScene } from "./EntityFallback";
+import { createEntityScene, type EntityScene, type SceneOptions } from "./scene";
 import "./entity-001.css";
 
-// Two taps closer than this in time and space count as a double tap.
 const DOUBLE_TAP_MS = 380;
 const DOUBLE_TAP_REACH = 0.12;
-// After this long without the visitor moving, the entity asks for attention.
-const HINT_DELAY_MS = 9000;
-
+const HINT_DELAY_MS = 18000;
 type Mode = "webgl" | "fallback";
 
-// Without the renderer there is no behavior to report, so the readout says so.
-const ESSENTIAL_LABEL = "modo essencial";
-
-// ENTITY 001: a digital entity assembled from shards. This component only wires
-// the DOM to the scene: pointer, size, visibility, motion preference and overlay.
 export default function Entity001() {
   const stageRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<EntityScene | null>(null);
-  const [mode, setMode] = useState<Mode>(() => (supportsWebGL2() ? "webgl" : "fallback"));
-  const [label, setLabel] = useState(() => (mode === "webgl" ? "emergindo" : ESSENTIAL_LABEL));
+  const [mode, setMode] = useState<Mode>(() => supportsWebGL2() ? "webgl" : "fallback");
+  const [label, setLabel] = useState(() => mode === "webgl" ? "despertando" : "modo essencial");
   const [sequence, setSequence] = useState(false);
   const [sound, setSound] = useState(false);
+  const [soundPending, setSoundPending] = useState(false);
   const [hint, setHint] = useState(false);
   const [ambience] = useState(createAmbience);
-
-  useEffect(() => () => ambience.dispose(), [ambience]);
+  const mounted = useRef(true);
+  useEffect(() => {
+    mounted.current = true;
+    return () => { mounted.current = false; ambience.dispose(); };
+  }, [ambience]);
 
   useEffect(() => {
-    if (mode !== "webgl") return;
     const stage = stageRef.current;
     if (!stage) return;
-
     const canvas = document.createElement("canvas");
-    canvas.className = "entity-canvas";
+    canvas.className = mode === "webgl" ? "entity-canvas" : "entity-fallback";
     canvas.setAttribute("role", "img");
-    canvas.setAttribute("aria-label", "Entidade digital abstrata, formada por estilhaços metálicos.");
+    canvas.setAttribute("aria-label", "Entidade digital abstrata: máscara de metal vivo com um olhar âmbar.");
     stage.prepend(canvas);
-
     let reduced = false;
-    const stopReduced = watchReducedMotion((value) => {
-      reduced = value;
-      sceneRef.current?.setReduced(value);
+    const stopReduced = watchReducedMotion(value => {
+      reduced = value; sceneRef.current?.setReduced(value);
     });
-    const compact = window.matchMedia("(max-width: 700px)").matches;
-
+    const options: SceneOptions = {
+      canvas, compact: typeof window.matchMedia === "function" && window.matchMedia("(max-width: 700px)").matches, reduced,
+      onState: setLabel,
+      onEnergy: ambience.setEnergy,
+      onCue: ambience.pulse,
+      onSequence(active) {
+        setSequence(active);
+        if (active) { setHint(false); ambience.pulse(); }
+      },
+      onContextLost() {
+        setLabel("modo essencial"); setSequence(false); setMode("fallback");
+      },
+    };
     let scene: EntityScene;
     try {
-      scene = createEntityScene({
-        canvas,
-        compact,
-        reduced,
-        onState: setLabel,
-        onSequence: (active) => {
-          setSequence(active);
-          if (active) ambience.pulse();
-        },
-        onContextLost: () => {
-          setLabel(ESSENTIAL_LABEL);
-          setMode("fallback");
-        },
-      });
+      scene = mode === "webgl" ? createEntityScene(options) : createFallbackScene(options);
     } catch {
-      stopReduced();
-      canvas.remove();
-      // Reported after the effect body, so React is not asked to render synchronously from it.
+      stopReduced(); canvas.remove();
       queueMicrotask(() => {
-        setLabel(ESSENTIAL_LABEL);
-        setMode("fallback");
+        if (mounted.current) { setLabel("modo essencial"); setMode("fallback"); }
       });
       return;
     }
     sceneRef.current = scene;
-
-    const resize = () => scene.setSize(stage.clientWidth, stage.clientHeight);
+    let inView = true;
+    const resize = () => {
+      const width = stage.clientWidth, height = stage.clientHeight;
+      const hasArea = width > 0 && height > 0;
+      scene.setVisible(inView && hasArea);
+      canvas.dataset.visible = String(inView && hasArea);
+      if (hasArea) scene.setSize(width, height);
+    };
     const resizer = new ResizeObserver(resize);
-    resizer.observe(stage);
-    const visibility = new IntersectionObserver(([entry]) => scene.setVisible(entry.isIntersecting));
+    resizer.observe(stage); resize();
+    const visibility = new IntersectionObserver(([entry]) => {
+      inView = entry.isIntersecting && entry.intersectionRatio > 0;
+      resize();
+    });
     visibility.observe(stage);
-
+    let lastTap = { time: -1000, x: 0, y: 0 };
+    let activity = performance.now();
+    let hintTimer = 0;
+    const checkHint = () => {
+      const remaining = HINT_DELAY_MS - (performance.now() - activity);
+      if (remaining <= 0 && !document.hidden) setHint(true);
+      else hintTimer = window.setTimeout(checkHint, Math.max(1000, remaining));
+    };
+    hintTimer = window.setTimeout(checkHint, HINT_DELAY_MS);
+    const awaken = () => {
+      activity = performance.now(); setHint(false);
+      window.clearTimeout(hintTimer);
+      hintTimer = window.setTimeout(checkHint, HINT_DELAY_MS);
+    };
     const toNdc = (event: PointerEvent) => {
       const bounds = stage.getBoundingClientRect();
-      return {
-        x: ((event.clientX - bounds.left) / bounds.width) * 2 - 1,
-        y: 1 - ((event.clientY - bounds.top) / bounds.height) * 2,
-      };
+      return { x: ((event.clientX - bounds.left) / Math.max(1, bounds.width)) * 2 - 1,
+        y: 1 - ((event.clientY - bounds.top) / Math.max(1, bounds.height)) * 2 };
     };
-    const isControl = (event: PointerEvent) => event.target instanceof Element && Boolean(event.target.closest("button, a"));
-    let lastTap = { time: 0, x: 0, y: 0 };
-    let energy = 0;
-    let hintTimer = window.setTimeout(() => setHint(true), HINT_DELAY_MS);
-    const awaken = () => {
-      setHint(false);
-      window.clearTimeout(hintTimer);
-      hintTimer = window.setTimeout(() => setHint(true), HINT_DELAY_MS);
-    };
-
     const onMove = (event: PointerEvent) => {
-      const point = toNdc(event);
-      scene.pointer(point.x, point.y);
-      energy = Math.min(1, energy + Math.hypot(event.movementX, event.movementY) / 320);
-      awaken();
+      const p = toNdc(event); scene.pointer(p.x, p.y); awaken();
     };
     const onDown = (event: PointerEvent) => {
-      if (isControl(event)) return;
-      const point = toNdc(event);
+      if (event.button !== 0) return;
+      const p = toNdc(event);
+      scene.pointer(p.x, p.y);
       const now = performance.now();
-      const close = Math.hypot(point.x - lastTap.x, point.y - lastTap.y) < DOUBLE_TAP_REACH;
+      const close = Math.hypot(p.x - lastTap.x, p.y - lastTap.y) < DOUBLE_TAP_REACH;
       if (now - lastTap.time < DOUBLE_TAP_MS && close) {
-        scene.metamorphose();
-        lastTap = { time: 0, x: 0, y: 0 };
+        scene.hold(false); scene.metamorphose();
+        lastTap.time = -1000;
       } else {
-        lastTap = { time: now, x: point.x, y: point.y };
-        scene.tap(point.x, point.y);
+        lastTap = { time: now, ...p }; scene.tap(p.x, p.y); scene.hold(true);
       }
       awaken();
     };
-    const onOut = (event: PointerEvent) => {
-      if (!event.relatedTarget) scene.leave();
+    const release = () => scene.hold(false);
+    const leave = () => { scene.leave(); release(); };
+    const onVisibility = () => {
+      if (document.hidden) { release(); ambience.setEnergy(0); }
     };
-    const drone = window.setInterval(() => {
-      energy *= 0.9;
-      ambience.setEnergy(energy);
-    }, 200);
-
-    window.addEventListener("pointermove", onMove, { passive: true });
-    window.addEventListener("pointerdown", onDown, { passive: true });
-    window.addEventListener("pointerout", onOut, { passive: true });
-
+    stage.addEventListener("pointermove", onMove, { passive: true });
+    stage.addEventListener("pointerdown", onDown, { passive: true });
+    stage.addEventListener("pointerleave", leave, { passive: true });
+    window.addEventListener("pointerup", release, { passive: true });
+    window.addEventListener("pointercancel", release, { passive: true });
+    document.addEventListener("visibilitychange", onVisibility);
     return () => {
       sceneRef.current = null;
-      window.removeEventListener("pointermove", onMove);
-      window.removeEventListener("pointerdown", onDown);
-      window.removeEventListener("pointerout", onOut);
+      stage.removeEventListener("pointermove", onMove);
+      stage.removeEventListener("pointerdown", onDown);
+      stage.removeEventListener("pointerleave", leave);
+      window.removeEventListener("pointerup", release);
+      window.removeEventListener("pointercancel", release);
+      document.removeEventListener("visibilitychange", onVisibility);
       window.clearTimeout(hintTimer);
-      window.clearInterval(drone);
-      resizer.disconnect();
-      visibility.disconnect();
-      stopReduced();
-      scene.dispose();
-      canvas.remove();
+      resizer.disconnect(); visibility.disconnect(); stopReduced();
+      scene.dispose(); canvas.remove();
     };
   }, [mode, ambience]);
 
   const toggleSound = async () => {
-    if (sound) {
-      ambience.stop();
-      setSound(false);
-      return;
-    }
+    if (soundPending) return;
+    if (sound) { ambience.stop(); setSound(false); return; }
+    setSoundPending(true);
     const started = await ambience.start();
-    setSound(started);
+    if (mounted.current) { setSound(started); setSoundPending(false); }
   };
-
-  const requestSequence = () => {
-    sceneRef.current?.metamorphose();
-  };
-
   return (
-    <section className="entity-experiment" aria-label="ENTITY 001">
-      <div className="entity-stage" ref={stageRef}>
-        {mode === "fallback" && <EntityFallback />}
+    <section className="entity-experiment" aria-label="ENTITY 001 — AWAKENING">
+      <div className="entity-stage" ref={stageRef} />
+      <div className="entity-caption">
+        <h1 className="entity-name">ENTITY 001 <span>— AWAKENING</span></h1>
+        <p className="entity-readout" aria-live="polite"><span className="entity-state-dot" aria-hidden="true" />{label}</p>
       </div>
-
-      <p className="entity-readout" aria-live="polite">
-        <span>estado</span> {label}
-      </p>
-      <p className={`entity-hint${hint ? " is-visible" : ""}`} aria-hidden={!hint}>
-        Toque duas vezes
-      </p>
-
+      <p className={`entity-hint${hint && !sequence ? " is-visible" : ""}`} aria-hidden={!hint || sequence}>Segure para despertar</p>
       <div className="entity-controls">
-        <button type="button" aria-pressed={sound} onClick={() => void toggleSound()}>
-          som
-        </button>
-        <button type="button" onClick={requestSequence} disabled={sequence || mode === "fallback"}>
-          metamorfose
-        </button>
+        <button type="button" aria-pressed={sound} aria-label={sound ? "Desativar som" : "Ativar som"}
+          disabled={soundPending} onClick={() => void toggleSound()}>som <span aria-hidden="true">{sound ? "on" : "off"}</span></button>
+        <button type="button" onClick={() => sceneRef.current?.metamorphose()}
+          disabled={sequence || label === "despertando"}>metamorfose</button>
       </div>
     </section>
   );

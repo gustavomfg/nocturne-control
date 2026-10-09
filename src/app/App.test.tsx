@@ -26,6 +26,6 @@ describe("OVRA shell", () => {
 
   it("loads the requested experiment lazily", async () => {
     render(<App />);
-    expect(await screen.findByRole("region", { name: "ENTITY 001" })).toBeTruthy();
+    expect(await screen.findByRole("region", { name: "ENTITY 001 — AWAKENING" })).toBeTruthy();
   });
 });

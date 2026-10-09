@@ -38,11 +38,11 @@ test.beforeAll(async () => {
 
 test.afterAll(stopPreview);
 
-test("renders ENTITY 001 and reopens the shell offline", async ({ context, page }) => {
+test("renders AWAKENING and reopens the shell offline", async ({ context, page }) => {
   await page.goto(`${appBase}#/entity-001`);
   await expect(page).toHaveTitle("OVRA — Experimental Creative Lab");
   await expect(page.getByText("OVRA", { exact: true })).toBeVisible();
-  const experiment = page.getByRole("region", { name: "ENTITY 001" });
+  const experiment = page.getByRole("region", { name: "ENTITY 001 — AWAKENING" });
   await expect(experiment).toBeVisible();
 
   // The first frame is drawn once WebGL2 is available; the fallback is drawn otherwise.
@@ -86,7 +86,7 @@ test("renders ENTITY 001 and reopens the shell offline", async ({ context, page 
 
   await stopPreview();
   await page.reload();
-  await expect(page.getByRole("region", { name: "ENTITY 001" })).toBeVisible();
+  await expect(page.getByRole("region", { name: "ENTITY 001 — AWAKENING" })).toBeVisible();
 
   await context.close();
 });

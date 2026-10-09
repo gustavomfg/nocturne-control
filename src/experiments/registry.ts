@@ -15,7 +15,7 @@ export const experiments: ExperimentDefinition[] = [
   {
     slug: "entity-001",
     code: "001",
-    title: "Entity 001",
+    title: "ENTITY 001 — AWAKENING",
     component: lazy(() => import("./entity-001/Entity001")),
   },
 ];
