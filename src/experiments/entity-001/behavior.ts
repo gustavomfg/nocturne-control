@@ -1,141 +1,93 @@
-import { damp } from "../../core/math";
+import { clamp, damp } from "../../core/math";
 
-// The entity's temperament is a small state machine driven by how the visitor
-// behaves: lingering close is noticed, a fast approach makes it recoil, and after
-// a recoil it turns away for a while. With no visitor for a while, it dreams.
-export type Mood = "dreaming" | "observing" | "curious" | "wary" | "ignoring";
+export type Mood = "dreaming" | "observing" | "curious" | "wary" | "ignoring" | "alert" | "disturbed";
 
 export const TIMING = {
-  // Reach (scene units) at which the visitor's cursor counts as close.
-  near: 1.1,
-  // Cursor speed (scene units per second) that reads as a sudden approach.
-  fast: 1.5,
-  // Seconds of calm proximity before curiosity shows.
-  linger: 1.6,
-  // Seconds spent recoiling before turning away.
-  wary: 1.1,
-  // Seconds the entity ignores the visitor after recoiling.
-  ignore: 5,
-  // Seconds without a visitor before it starts dreaming.
-  idle: 7,
+  near: 0.95, fast: 6, calm: 0.65, linger: 2.3,
+  wary: 1.35, ignore: 4.8, idle: 9,
+  alert: 2.2, disturbed: 2.8,
 };
 
 export type Temperament = {
-  mood: Mood;
-  // Seconds spent in the current mood.
-  timer: number;
-  // Seconds the cursor has stayed close and calm.
-  lingering: number;
-  // Seconds of indifference left.
-  ignoreLeft: number;
-  // Seconds since the visitor was last present.
-  idle: number;
-  // 0 to 1. Rises while the visitor is close, falls slowly after.
-  attention: number;
+  mood: Mood; timer: number; lingering: number; ignoreLeft: number;
+  idle: number; attention: number; stress: number; still: number;
 };
-
-export type Sense = {
-  dt: number;
-  present: boolean;
-  near: boolean;
-  speed: number;
-};
+export type Sense = { dt: number; present: boolean; near: boolean; speed: number; contact?: boolean };
 
 export function createTemperament(): Temperament {
-  return { mood: "observing", timer: 0, lingering: 0, ignoreLeft: 0, idle: 0, attention: 0 };
+  return { mood: "observing", timer: 0, lingering: 0, ignoreLeft: 0, idle: 0, attention: 0, stress: 0, still: 0 };
 }
 
+// Stress is memory, not a switch: repeated intrusions escalate, and calm restores trust.
+// Minimum dwell times keep a gesture from flickering through several moods in one second.
 export function stepTemperament(state: Temperament, sense: Sense): Temperament {
-  const { dt } = sense;
-  let { mood, timer, lingering, ignoreLeft } = state;
+  const dt = clamp(sense.dt, 0, 0.25);
+  const rushing = sense.present && sense.near && sense.speed > TIMING.fast;
+  const calm = sense.present && sense.near && sense.speed < TIMING.calm;
   const idle = sense.present ? 0 : state.idle + dt;
-  const attention = sense.present && sense.near
-    ? Math.min(1, state.attention + dt * 1.8)
-    : Math.max(0, state.attention - dt * 0.9);
-
+  const still = calm ? state.still + dt : Math.max(0, state.still - dt * 2);
+  const stress = clamp(state.stress + (rushing ? 1.7 : sense.contact ? 2.8 : -0.24) * dt, 0, 4);
+  const attention = damp(state.attention, calm ? 1 : sense.present ? 0.4 : 0, calm ? 0.65 : 0.25, dt);
+  let { mood, timer, lingering, ignoreLeft } = state;
+  timer += dt;
   const become = (next: Mood) => {
-    if (next === mood) return;
-    mood = next;
-    timer = 0;
+    if (next !== mood) { mood = next; timer = 0; }
   };
 
-  timer += dt;
-
   if (mood === "ignoring") {
-    ignoreLeft -= dt;
-    if (ignoreLeft <= 0) become("observing");
+    ignoreLeft = Math.max(0, ignoreLeft - dt);
+    lingering = 0;
+    if (ignoreLeft === 0) become(idle >= TIMING.idle ? "dreaming" : "observing");
+  } else if (mood === "disturbed") {
+    if (timer >= TIMING.disturbed) { ignoreLeft = TIMING.ignore + 1.8; become("ignoring"); }
+  } else if (mood === "alert") {
+    if (stress > 2.6) become("disturbed");
+    else if (timer >= TIMING.alert && !rushing) { ignoreLeft = TIMING.ignore * 0.7; become("ignoring"); }
   } else if (mood === "wary") {
-    if (timer >= TIMING.wary) {
-      ignoreLeft = TIMING.ignore;
-      become("ignoring");
-    }
+    if (stress > 1.45) become("alert");
+    else if (timer >= TIMING.wary) { ignoreLeft = TIMING.ignore; become("ignoring"); }
   } else {
-    if (mood === "dreaming" && sense.present) become("observing");
-
-    if (sense.present && sense.near && sense.speed > TIMING.fast) {
+    if (rushing || sense.contact) {
       lingering = 0;
-      become("wary");
-    } else if (sense.present && sense.near) {
+      become(stress > 2.6 ? "disturbed" : stress > 1.45 ? "alert" : "wary");
+    } else if (calm) {
       lingering += dt;
       if (lingering >= TIMING.linger) become("curious");
+      else if (mood === "dreaming") become("observing");
     } else {
-      lingering = 0;
-      if (mood === "curious") become("observing");
+      lingering = Math.max(0, lingering - dt * 2);
+      if (mood === "curious" && lingering === 0) become("observing");
+      if (mood === "dreaming" && sense.present) become("observing");
     }
-
     if (!sense.present && idle >= TIMING.idle) become("dreaming");
   }
-
-  return { mood, timer, lingering, ignoreLeft, idle, attention };
+  return { mood, timer, lingering, ignoreLeft, idle, attention, stress, still };
 }
 
-// How the entity behaves in each mood. The scene reads these numbers every frame
-// and eases toward them, so mood changes never snap.
 export type Intent = {
-  // 0 to 1. How much the entity turns toward the visitor.
-  gaze: number;
-  // -1 recoils, 0 holds, 1 leans toward the visitor.
-  lean: number;
-  // Strength of the core light.
-  light: number;
-  // 0 frost, 1 ember.
-  warmth: number;
-  // Multiplier for how strongly shards react to the cursor.
-  reactivity: number;
-  // True while the entity has turned away.
-  away: boolean;
+  gaze: number; lean: number; light: number; warmth: number; reactivity: number;
+  away: boolean; openness: number; rhythm: number; tremor: number;
+  tilt: number; roll: number; spread: number; camera: number; orbit: number;
 };
 
 const INTENTS: Record<Mood, Intent> = {
-  // Warmth is kept near the ends: ember and frost mixed at the middle read as pink.
-  dreaming: { gaze: 0, lean: 0, light: 0.3, warmth: 0.2, reactivity: 0.25, away: false },
-  observing: { gaze: 0.55, lean: 0, light: 0.55, warmth: 1, reactivity: 1, away: false },
-  curious: { gaze: 1, lean: 1, light: 1, warmth: 1, reactivity: 0.8, away: false },
-  wary: { gaze: 0.7, lean: -1, light: 1.7, warmth: 0, reactivity: 1.8, away: false },
-  ignoring: { gaze: 0, lean: -0.5, light: 0.15, warmth: 0, reactivity: 0.2, away: true },
+  dreaming:  { gaze: 0, lean: -0.1, light: 0.22, warmth: 0.9, reactivity: 0.1, away: false, openness: 0.18, rhythm: 0.5, tremor: 0, tilt: 0.14, roll: -0.05, spread: -0.035, camera: 0.65, orbit: 0.13 },
+  observing: { gaze: 0.58, lean: 0, light: 0.7, warmth: 1, reactivity: 0.6, away: false, openness: 0.72, rhythm: 0.8, tremor: 0, tilt: 0, roll: 0, spread: 0, camera: 0, orbit: 0 },
+  curious:   { gaze: 0.95, lean: 0.35, light: 0.98, warmth: 1, reactivity: 0.35, away: false, openness: 1, rhythm: 0.58, tremor: 0, tilt: -0.08, roll: 0.07, spread: 0.055, camera: -1.35, orbit: -0.12 },
+  wary:      { gaze: 0.8, lean: -0.65, light: 1, warmth: 0.15, reactivity: 1.4, away: false, openness: 0.43, rhythm: 1.5, tremor: 0.3, tilt: 0.08, roll: -0.09, spread: 0.15, camera: 1, orbit: 0.16 },
+  ignoring:  { gaze: 0, lean: -0.4, light: 0.16, warmth: 0.05, reactivity: 0.12, away: true, openness: 0.12, rhythm: 0.45, tremor: 0, tilt: -0.12, roll: 0.1, spread: -0.025, camera: 0.8, orbit: 0.12 },
+  alert:     { gaze: 0.9, lean: -0.4, light: 1.15, warmth: 0.05, reactivity: 1.8, away: false, openness: 0.56, rhythm: 2, tremor: 0.65, tilt: -0.05, roll: -0.12, spread: 0.22, camera: 1.2, orbit: -0.18 },
+  disturbed: { gaze: 0.35, lean: -0.85, light: 1.25, warmth: 0, reactivity: 2.2, away: false, openness: 0.3, rhythm: 2.8, tremor: 1, tilt: 0.22, roll: 0.16, spread: 0.3, camera: 1.9, orbit: 0.22 },
 };
-
-export function intentFor(mood: Mood): Intent {
-  return INTENTS[mood];
-}
-
-// Eases an intent value toward its target. Used by the scene for smooth changes.
+export function intentFor(mood: Mood): Intent { return { ...INTENTS[mood] }; }
 export function easeIntent(current: Intent, target: Intent, dt: number): Intent {
-  const rate = 3;
-  return {
-    gaze: damp(current.gaze, target.gaze, rate, dt),
-    lean: damp(current.lean, target.lean, rate, dt),
-    light: damp(current.light, target.light, rate, dt),
-    warmth: damp(current.warmth, target.warmth, rate, dt),
-    reactivity: damp(current.reactivity, target.reactivity, rate, dt),
-    away: target.away,
-  };
+  const next = { ...target };
+  for (const key of Object.keys(target) as (keyof Intent)[]) {
+    if (key !== "away") next[key] = damp(current[key], target[key], 1.8, dt);
+  }
+  return next;
 }
-
 export const MOOD_LABELS: Record<Mood, string> = {
-  dreaming: "sonhando",
-  observing: "observando",
-  curious: "curiosidade",
-  wary: "recuo",
-  ignoring: "indiferença",
+  dreaming: "sonhando", observing: "observando", curious: "curiosa",
+  wary: "recuando", ignoring: "indiferente", alert: "alerta", disturbed: "perturbada",
 };

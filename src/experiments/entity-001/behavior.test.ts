@@ -42,6 +42,33 @@ describe("stepTemperament", () => {
     expect(state.mood).toBe("observing");
   });
 
+  it("accumulates repeated intrusions into alert and disturbance instead of flickering", () => {
+    let state = run(createTemperament(), rush, 1);
+    expect(state.mood).toBe("alert");
+    state = run(state, rush, 0.8);
+    expect(state.mood).toBe("disturbed");
+    const peak = state.stress;
+    state = run(state, calm, TIMING.disturbed + 0.2);
+    expect(state.mood).toBe("ignoring");
+    state = run(state, calm, TIMING.ignore + 2);
+    expect(state.mood).toBe("observing");
+    expect(state.stress).toBeLessThan(peak * 0.5);
+  });
+
+  it("notices calm proximity in the same time at different frame rates", () => {
+    const smooth = run(createTemperament(), { ...close, dt: 1 / 60 }, 2.6);
+    const slow = run(createTemperament(), { ...close, dt: 0.2 }, 2.6);
+    expect(smooth.mood).toBe("curious");
+    expect(slow.mood).toBe(smooth.mood);
+    expect(Math.abs(slow.attention - smooth.attention)).toBeLessThan(0.06);
+  });
+
+  it("does not interpret persistent restless motion as calm curiosity", () => {
+    const state = run(createTemperament(), { ...close, speed: TIMING.fast * 0.7 }, 5);
+    expect(state.mood).toBe("observing");
+    expect(state.lingering).toBe(0);
+  });
+
   it("builds attention while the visitor is close and lets it fade when they leave", () => {
     const near = run(createTemperament(), close, 1);
     expect(near.attention).toBeGreaterThan(0.5);
