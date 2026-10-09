@@ -70,6 +70,31 @@ describe("ShardSwarm", () => {
     expect(maxDeviation(matrices(burst, slots.length), matrices(calm, slots.length))).toBeGreaterThan(0.05);
   });
 
+  it("gathers dispersed matter into orbital bands instead of leaving a particle cloud", () => {
+    const swarm = new ShardSwarm(slots, rings, ENTITY.radius, 3);
+    swarm.update(input({ morph: 1, disperse: 1.45 }));
+    const matrix = new Matrix4();
+    const position = new Vector3();
+    for (let i = 0; i < slots.length; i++) {
+      swarm.mesh.getMatrixAt(i, matrix);
+      position.setFromMatrixPosition(matrix);
+      expect(position.distanceTo(rings[i].position)).toBeLessThan(0.001);
+    }
+    swarm.dispose();
+  });
+
+  it("settles outstanding impulses when reduced motion is enabled", () => {
+    const swarm = new ShardSwarm(slots, rings, ENTITY.radius, 3);
+    swarm.burst(slots[0].position, 2);
+    swarm.update(input({}));
+    swarm.settle();
+    swarm.update(input({}));
+    const matrix = new Matrix4();
+    swarm.mesh.getMatrixAt(0, matrix);
+    expect(new Vector3().setFromMatrixPosition(matrix).distanceTo(slots[0].position)).toBeLessThan(0.001);
+    swarm.dispose();
+  });
+
   it("releases its GPU resources on dispose", () => {
     const swarm = new ShardSwarm(slots, rings, ENTITY.radius, 3);
     expect(() => swarm.dispose()).not.toThrow();

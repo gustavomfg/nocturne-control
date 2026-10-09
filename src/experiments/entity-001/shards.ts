@@ -3,7 +3,7 @@ import {
   InstancedBufferAttribute,
   InstancedMesh,
   Matrix4,
-  MeshPhysicalMaterial,
+  MeshStandardMaterial,
   OctahedronGeometry,
   Quaternion,
   Vector3,
@@ -54,6 +54,13 @@ export type SwarmInput = {
   reactivity: number;
   // Baseline heat from the core, 0 to 1.
   glow: number;
+  breath?: number;
+  agitation?: number;
+  spread?: number;
+  evolution?: number;
+  contraction?: number;
+  scan?: number;
+  trace?: number;
 };
 
 // Radius around the cursor where shards respond.
@@ -71,7 +78,7 @@ export class ShardSwarm {
   private readonly shards: Shard[];
   private readonly heatAttribute: InstancedBufferAttribute;
   private readonly geometry: OctahedronGeometry;
-  private readonly material: MeshPhysicalMaterial;
+  private readonly material: MeshStandardMaterial;
   private readonly uniforms = {
     uEmber: { value: new Color(ENTITY.palette.ember) },
     uIvory: { value: new Color(ENTITY.palette.ivory) },
@@ -94,16 +101,14 @@ export class ShardSwarm {
 
     // Octahedron stretched into a thin, faceted chip. Its local Y is the thin axis.
     this.geometry = new OctahedronGeometry(1, 0);
-    this.geometry.scale(1, 0.3, 0.58);
+    this.geometry.scale(1, 0.14, 0.78);
     this.heatAttribute = new InstancedBufferAttribute(new Float32Array(count), 1);
     this.geometry.setAttribute("aHeat", this.heatAttribute);
 
-    this.material = new MeshPhysicalMaterial({
+    this.material = new MeshStandardMaterial({
       color: 0xffffff,
       metalness: 0.92,
-      roughness: 0.38,
-      clearcoat: 0.25,
-      clearcoatRoughness: 0.4,
+      roughness: 0.32,
       envMapIntensity: 1.1,
       flatShading: true,
     });
@@ -134,7 +139,7 @@ export class ShardSwarm {
 
       // Stiffer shards come back sooner; softer ones linger longer.
       const stiffness = 5 + random() * 7;
-      const reveal = 0.08 + 0.62 * clamp((slot.position.y + radius) / (2 * radius)) + 0.3 * slot.seed;
+      const reveal = 0.05 + 0.65 * clamp((slot.position.y + radius * 1.27) / (2.54 * radius)) + 0.25 * slot.seed;
       return {
         home: slot.position.clone(),
         ring: ringSlot.position.clone(),
@@ -165,6 +170,9 @@ export class ShardSwarm {
     this.shards.forEach((shard, index) => {
       const morph = smoothstep(0, 1, clamp((input.morph - shard.delay * 0.3) / 0.7));
       this.current.lerpVectors(shard.home, shard.ring, morph);
+      const evolution = (input.evolution ?? 0) * (1 - morph);
+      this.current.x *= 1 - evolution * 0.1;
+      this.current.y *= 1 + evolution * 0.08;
 
       // Proximity to the cursor drives both the push and the heat. The push also
       // twists the shard, so it turns as it is displaced.
@@ -188,8 +196,10 @@ export class ShardSwarm {
       shard.offset.addScaledVector(shard.velocity, dt);
 
       // Disperse and idle wobble move the shard along its outward direction.
-      const idle = wobble(shard.home.x, shard.home.y, shard.home.z, elapsed * 0.5 + shard.seed * 3) * 0.05 * motion;
-      const outward = input.disperse * (0.6 + shard.seed * 1.4) + idle;
+      const agitation = input.agitation ?? 0;
+      const idle = wobble(shard.home.x, shard.home.y, shard.home.z, elapsed * (0.3 + agitation) + shard.seed * 3) * (0.016 + agitation * 0.045) * motion;
+      const respiration = (input.breath ?? 0) * 0.045 * motion;
+      const outward = input.disperse * (1 - morph) * (1.8 + shard.seed * 2.6) + idle + respiration + (input.spread ?? 0) - (input.contraction ?? 0);
       this.position.copy(this.current).addScaledVector(shard.outward, outward).add(shard.offset);
 
       // Spin decays back to the resting orientation.
@@ -203,15 +213,21 @@ export class ShardSwarm {
 
       this.quaternion.slerpQuaternions(shard.homeQuat, shard.ringQuat, morph).multiply(shard.spin);
 
-      const materialize = smoothstep(shard.reveal - 0.12, shard.reveal, input.reveal);
+      const materialize = Math.max(
+        smoothstep(shard.reveal - 0.12, shard.reveal, input.reveal),
+        (input.trace ?? 0) * 0.48 * (1 - input.reveal * 0.6),
+      );
       const size = shard.size * materialize;
-      this.scale.set(size, size, size);
+      this.scale.set(size * (1 + evolution * 0.12), size, size * (1 + evolution * 0.3));
       this.matrix.compose(this.position, this.quaternion, this.scale);
       this.mesh.setMatrixAt(index, this.matrix);
 
       // At rest the shell carries no heat: any baseline ember tints the whole graphite
       // surface, so warmth only appears where the visitor touches the matter.
-      const heatTarget = input.glow * 0.01 + proximity * 0.75;
+      const scan = input.scan ?? 2;
+      const scanBand = Math.exp(-Math.pow((shard.home.y / 2.7 - scan) * 9, 2));
+      const seam = shard.seed > 0.96 ? evolution * 0.12 : 0;
+      const heatTarget = input.glow * 0.004 + proximity * 0.48 + scanBand * 0.2 + seam;
       shard.heat += (heatTarget - shard.heat) * (1 - Math.exp(-dt * 6));
       this.heatAttribute.setX(index, shard.heat);
     });
@@ -221,6 +237,15 @@ export class ShardSwarm {
   }
 
   // Pushes shards away from a point, as when the visitor taps the entity.
+  settle() {
+    this.shards.forEach(shard => {
+      shard.offset.set(0, 0, 0);
+      shard.velocity.set(0, 0, 0);
+      shard.spin.identity();
+      shard.spinRate.set(0, 0, 0);
+    });
+  }
+
   burst(point: Vector3, strength: number) {
     this.shards.forEach((shard) => {
       const distance = shard.home.distanceTo(point);

@@ -1,33 +1,25 @@
 import type { CameraGoal } from "../../core/camera";
 
-// Everything that shapes ENTITY 001 lives here, so the look can be tuned without
-// touching the behavior code. Lengths are in scene units; the shell radius is 2.1.
 export const ENTITY = {
-  // Radius of the shell of shards.
   radius: 2.1,
-  // Angular radius (radians) of the open face that turns toward the visitor.
   aperture: 0.46,
+  eye: { width: 0.69, height: 0.23, y: 0.12, z: 1.55 },
   palette: {
-    graphite: "#525764",
-    ember: "#ffa155",
-    frost: "#a8c8ff",
-    ivory: "#fff1dc",
+    graphite: "#424a55",
+    ember: "#ed9b56",
+    frost: "#93b8cb",
+    ivory: "#eee2c8",
     void: "#030304",
   },
 } as const;
 
-export const CAMERA_BASE: CameraGoal = { distance: 10.5, orbit: 0, height: 0.16, fov: 30 };
-export const CAMERA_INTRO: CameraGoal = { distance: 30, orbit: -0.7, height: 0.34, fov: 46 };
+export const CAMERA_BASE: CameraGoal = { distance: 11.8, orbit: 0.04, height: 0.06, fov: 34 };
+export const CAMERA_INTRO: CameraGoal = { distance: 19, orbit: -0.58, height: 0.22, fov: 38 };
+export const HOLD_SECONDS = 1.25;
 
-export type Quality = {
-  shards: number;
-  dust: number;
-  pixelRatio: number;
-};
-
-// Counts are reduced on narrow screens, where fill rate is the first limit to reach.
+export type Quality = { shards: number; dust: number; pixelRatio: number };
 export function qualityFor(compact: boolean): Quality {
   return compact
-    ? { shards: 1100, dust: 1100, pixelRatio: 1.25 }
-    : { shards: 2400, dust: 2600, pixelRatio: 1.6 };
+    ? { shards: 820, dust: 430, pixelRatio: 1.25 }
+    : { shards: 1800, dust: 980, pixelRatio: 1.6 };
 }

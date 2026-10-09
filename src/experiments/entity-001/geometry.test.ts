@@ -15,19 +15,22 @@ describe("createShell", () => {
     }
   });
 
-  it("keeps the open face free: no shard sits inside the aperture", () => {
-    const apertureCos = Math.cos(ENTITY.aperture);
+  it("leaves the central almond aperture free of shell plates", () => {
     for (const slot of slots) {
-      const direction = slot.position.clone().normalize();
-      expect(direction.z).toBeLessThanOrEqual(apertureCos + 1e-9);
+      const p = slot.position;
+      expect(p.z > 1.25 && Math.abs(p.x) < 0.65 && Math.abs(p.y - ENTITY.eye.y) < 0.18).toBe(false);
     }
   });
 
-  it("lies near the shell radius", () => {
-    for (const slot of slots) {
-      expect(slot.position.length()).toBeGreaterThan(ENTITY.radius * 0.85);
-      expect(slot.position.length()).toBeLessThan(ENTITY.radius * 1.15);
-    }
+  it("has a taller crown and a narrower jaw than a spherical particle cloud", () => {
+    const ys = slots.map(s => s.position.y);
+    const xs = slots.map(s => s.position.x);
+    expect(Math.max(...ys) - Math.min(...ys)).toBeGreaterThan((Math.max(...xs) - Math.min(...xs)) * 1.25);
+    const jaw = slots.filter(s => s.position.y < -1.4);
+    const temples = slots.filter(s => s.position.y > 0 && s.position.y < 1);
+    expect(Math.max(...jaw.map(s => Math.abs(s.position.x)))).toBeLessThan(Math.max(...temples.map(s => Math.abs(s.position.x))) * 0.8);
+    expect(Math.min(...ys)).toBeLessThan(-2.5);
+    expect(Math.max(...ys)).toBeGreaterThan(2.5);
   });
 
   it("is deterministic for the same seed", () => {

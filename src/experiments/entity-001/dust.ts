@@ -22,7 +22,7 @@ void main() {
     wobble(p * 0.5 + 7.3, uTime * 0.35 + aSeed * 13.0)
   ) * 0.08;
   vec4 mv = modelViewMatrix * vec4(p, 1.0);
-  gl_PointSize = uPixelRatio * (1.0 + aSeed * 1.8 + uEnergy * 1.2) * (9.0 / -mv.z);
+  gl_PointSize = clamp(uPixelRatio * (0.7 + aSeed * 1.4 + uEnergy * 0.5) * (9.0 / max(0.3, -mv.z)), 0.7, 7.0);
   gl_Position = projectionMatrix * mv;
   vAlpha = (0.25 + 0.75 * aSeed) * (0.8 + uEnergy * 0.6);
 }
@@ -87,7 +87,7 @@ export class Dust {
   update(elapsed: number, energy: number, light: number) {
     this.material.uniforms.uTime.value = elapsed;
     this.material.uniforms.uEnergy.value = energy;
-    this.material.uniforms.uOpacity.value = 0.25 + light * 0.45;
+    this.material.uniforms.uOpacity.value = 0.04 + light * 0.19;
   }
 
   setPixelRatio(value: number) {

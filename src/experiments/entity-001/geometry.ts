@@ -28,38 +28,41 @@ function tangentFor(direction: Vector3, angle: number) {
   return base.multiplyScalar(Math.cos(angle)).addScaledVector(second, Math.sin(angle));
 }
 
-// Fibonacci lattice on a sphere, with a radius that varies gently so the shell
-// reads as assembled rather than printed. A cap facing +Z is left open: that is the
-// aperture the visitor sees, and the luminous core shows through it.
+// A swept, elongated carapace: crown, temples and a tapered jaw around an
+// almond-shaped aperture. The normal is taken from the ellipsoid, not its radius.
 export function createShell(count: number, radius: number, aperture: number, seed = 7): ShardSlot[] {
   const random = createRandom(seed);
-  const capArea = (1 - Math.cos(aperture)) / 2;
-  // A small margin covers rounding, so the aperture never leaves the shell short.
-  const candidates = Math.ceil((count / (1 - capArea)) * 1.02) + 4;
-  const rimCos = Math.cos(aperture + 0.22);
-  const apertureCos = Math.cos(aperture);
+  const candidates = Math.ceil(count * 1.3) + 12;
   const slots: ShardSlot[] = [];
-
-  for (let i = 0; i < candidates && slots.length < count; i++) {
+  const eyeWidth = Math.sin(aperture) * 1.68;
+  const eyeHeight = Math.sin(aperture) * 0.59;
+  for (let i = 0; i < candidates; i++) {
     const y = 1 - (2 * (i + 0.5)) / candidates;
     const ring = Math.sqrt(1 - y * y);
     const theta = i * GOLDEN_ANGLE;
-    const direction = new Vector3(Math.cos(theta) * ring, y, Math.sin(theta) * ring);
-    if (direction.z > apertureCos) continue;
+    const x = Math.cos(theta) * ring;
+    const z = Math.sin(theta) * ring;
+    const eye = (x / eyeWidth) ** 2 + ((y - 0.055) / eyeHeight) ** 2;
+    if (z > 0.48 && eye < 1) continue;
 
-    const swell = 1 + 0.05 * Math.sin(3 * theta + y * 4) + (random() - 0.5) * 0.04;
-    const position = direction.clone().multiplyScalar(radius * swell);
-    const tangent = tangentFor(direction, random() * Math.PI * 2);
-    // The rim of the aperture is framed by slightly larger shards.
-    const rim = direction.z > rimCos ? 1.35 : 1;
+    const jaw = y < -0.15 ? 1 - Math.pow((-y - 0.15) / 0.85, 1.3) * 0.4 : 1;
+    const crown = 1 + Math.max(0, y) * 0.09;
+    const ridge = 1 + Math.sin(y * Math.PI * 9) * 0.023;
+    const swell = ridge * (1 + (random() - 0.5) * 0.022);
+    const position = new Vector3(x * 0.91 * jaw * crown, y * 1.27, z * 0.76).multiplyScalar(radius * swell);
+    const normal = new Vector3(x / 0.91, y / 1.27, z / 0.76).normalize();
+    // Swept temple plates follow a shared current instead of random rotations.
+    const sweep = Math.sin(theta) * 0.32 + y * 0.65;
+    const tangent = tangentFor(normal, sweep);
+    const brow = z > 0.48 && eye < 2 ? 1.2 : 1;
     slots.push({
       position,
-      orientation: basisQuaternion(tangent, direction),
-      size: (0.07 + 0.15 * Math.pow(random(), 2.4)) * rim,
+      orientation: basisQuaternion(tangent, normal),
+      size: (0.12 + 0.16 * Math.pow(random(), 1.6)) * brow,
       seed: random(),
     });
   }
-  return slots;
+  return Array.from({ length: count }, (_, i) => slots[Math.floor((i * slots.length) / count)]);
 }
 
 // Three orbital rings. Shards lie along each ring, with their thin axis pointing
