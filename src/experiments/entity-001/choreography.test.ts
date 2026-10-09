@@ -8,12 +8,16 @@ describe("intro choreography", () => {
     const goal = { ...CAMERA_INTRO };
     const onDone = vi.fn();
     const timeline = playIntro(director, goal, onDone);
+    expect(timeline.duration()).toBeGreaterThanOrEqual(8);
+    expect(timeline.duration()).toBeLessThanOrEqual(15);
+    expect(timeline.paused()).toBe(true);
     timeline.progress(1);
 
     expect(director.core).toBeCloseTo(1);
     expect(director.reveal).toBeCloseTo(1);
     expect(goal.distance).toBeCloseTo(CAMERA_BASE.distance);
     expect(onDone).toHaveBeenCalled();
+    timeline.kill();
   });
 });
 
@@ -31,6 +35,8 @@ describe("metamorphosis choreography", () => {
     expect(director.morph).toBeCloseTo(0);
     expect(director.disperse).toBeCloseTo(0);
     expect(director.flash).toBeCloseTo(0);
+    expect(director.evolution).toBeCloseTo(1);
+    timeline.kill();
   });
 
   it("under reduced motion only the light moves: no morph, no dispersal", () => {
@@ -42,5 +48,6 @@ describe("metamorphosis choreography", () => {
     expect(director.morph).toBe(0);
     expect(director.disperse).toBe(0);
     expect(goal.distance).toBeCloseTo(CAMERA_BASE.distance);
+    timeline.kill();
   });
 });

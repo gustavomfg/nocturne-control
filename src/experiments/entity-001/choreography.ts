@@ -2,52 +2,64 @@ import { gsap } from "gsap";
 import type { CameraGoal } from "../../core/camera";
 import { CAMERA_BASE } from "./config";
 
-// Plain numbers that the scene reads every frame. GSAP timelines tween them, so
-// the choreography lives here and the renderer only consumes its results.
 export type Director = {
-  // 0 to 1. How far the shards have materialized during the intro.
-  reveal: number;
-  // 0 to 1. How lit the core is during the intro.
-  core: number;
-  // 0 shell, 1 rings.
-  morph: number;
-  // 0 assembled, 1 scattered outward.
-  disperse: number;
-  // 0 to 1. Flash of light during the metamorphosis; also adds tremor.
-  flash: number;
+  reveal: number; core: number; morph: number; disperse: number; flash: number;
+  eye: number; key: number; rim: number; atmosphere: number; dive: number;
+  evolution: number; contraction: number; scan: number;
 };
+export const INTRO_DURATION = 11.8;
+export const METAMORPHOSIS_DURATION = 12.6;
 
 export function createDirector(): Director {
-  return { reveal: 0, core: 0, morph: 0, disperse: 0, flash: 0 };
+  return { reveal: 0, core: 0, morph: 0, disperse: 0, flash: 0, eye: 0.12,
+    key: 0, rim: 0, atmosphere: 0, dive: 0, evolution: 0, contraction: 0, scan: -1 };
+}
+export function settleDirector(director: Director) {
+  Object.assign(director, { reveal: 1, core: 1, morph: 0, disperse: 0, flash: 0,
+    eye: 1, key: 1, rim: 1, atmosphere: 1, dive: 0, contraction: 0, scan: 2 });
 }
 
-// Emergence from darkness: the core ignites first, the shell materializes from
-// bottom to top, and the camera settles from far away into its resting distance.
+// Timelines remain paused. The visible scene advances their playhead with its own
+// delta, so a hidden tab pauses the film as well as the renderer.
 export function playIntro(director: Director, goal: CameraGoal, onDone: () => void) {
-  return gsap.timeline({ onComplete: onDone })
-    .to(director, { core: 1, duration: 2.6, ease: "power2.out" }, 0.4)
-    .to(director, { reveal: 1, duration: 5.4, ease: "power2.inOut" }, 1.5)
-    .to(goal, { distance: CAMERA_BASE.distance, fov: CAMERA_BASE.fov, orbit: CAMERA_BASE.orbit, height: CAMERA_BASE.height, duration: 7.2, ease: "power3.out" }, 0);
+  return gsap.timeline({ paused: true, defaults: { ease: "sine.inOut" }, onComplete: onDone })
+    .addLabel("trace", 0.3)
+    .to(director, { rim: 1, atmosphere: 0.65, duration: 2 }, "trace")
+    .to(director, { key: 0.18, duration: 1.8 }, 0.6)
+    .to(director, { reveal: 0.38, duration: 3.2 }, 0.5)
+    .to(director, { core: 0.28, duration: 1.4 }, 1.2)
+    .to(director, { scan: 1.4, duration: 6.8, ease: "none" }, 0.6)
+    .to(goal, { distance: 12.9, orbit: 0.32, height: 0.13, fov: 35, duration: 6.4 }, 0)
+    .addLabel("material", 3.4)
+    .to(director, { reveal: 1, key: 0.8, duration: 4.6 }, "material")
+    .to(director, { core: 0.75, eye: 0.38, duration: 3.5 }, 4.3)
+    .addLabel("recognition", 8)
+    .to(director, { core: 1, eye: 1, rim: 1, key: 1, atmosphere: 1, duration: 3.8 }, "recognition")
+    .to(goal, { ...CAMERA_BASE, duration: 5.4 }, 6.4);
 }
 
-// Metamorphosis: the entity tenses, the shell scatters, the matter gathers into
-// three orbital rings, holds, and returns. Under reduced motion only the light moves.
-export function playMetamorphosis(director: Director, goal: CameraGoal, reduced: boolean, onDone: () => void) {
-  const timeline = gsap.timeline({ onComplete: onDone });
+export function playMetamorphosis(director: Director, goal: CameraGoal, reduced: boolean, onDone: () => void, onCue?: () => void) {
+  const timeline = gsap.timeline({ paused: true, defaults: { ease: "sine.inOut" }, onComplete: onDone });
   if (reduced) {
-    return timeline
-      .to(director, { flash: 1, duration: 0.5, ease: "power2.out" })
-      .to(director, { flash: 0, duration: 1.6, ease: "power2.inOut" });
+    return timeline.to(director, { flash: 0.28, duration: 0.65 })
+      .to(director, { flash: 0, duration: 1.55 });
   }
   return timeline
-    .to(director, { flash: 0.9, duration: 0.7, ease: "power2.in" }, 0)
-    .to(goal, { distance: CAMERA_BASE.distance + 3, fov: CAMERA_BASE.fov + 6, duration: 0.9, ease: "power2.inOut" }, 0)
-    .to(director, { disperse: 1, duration: 1.2, ease: "expo.out" }, 0.8)
-    .to(director, { flash: 0.12, duration: 1.4, ease: "power2.out" }, 1.4)
-    .to(director, { morph: 1, duration: 2.2, ease: "power3.inOut" }, 2.1)
-    .to(goal, { orbit: `+=${(Math.PI * 0.8).toFixed(3)}`, distance: CAMERA_BASE.distance - 2.2, duration: 3.6, ease: "sine.inOut" }, 2.0)
-    .to(director, { morph: 0, duration: 1.9, ease: "power3.inOut" }, 5.4)
-    .to(goal, { orbit: `+=${(0.6).toFixed(3)}`, distance: CAMERA_BASE.distance, fov: CAMERA_BASE.fov, duration: 2.6, ease: "power2.inOut" }, 5.4)
-    .to(director, { disperse: 0, duration: 1.8, ease: "expo.inOut" }, 6.0)
-    .to(director, { flash: 0, duration: 1.2, ease: "power2.out" }, 6.6);
+    .addLabel("anticipation", 0)
+    .to(director, { contraction: 0.14, eye: 0.14, key: 0.35, flash: 0.2, duration: 1.15 }, 0)
+    .to(goal, { distance: 13.7, orbit: -0.24, height: 0.12, duration: 1.9 }, 0)
+    .addLabel("rupture", 1.2)
+    .call(() => onCue?.(), [], "rupture")
+    .to(director, { disperse: 1.45, contraction: 0, eye: 1, atmosphere: 1.5, duration: 1.9, ease: "power3.out" }, "rupture")
+    .to(director, { morph: 1, flash: 0.35, duration: 2.8 }, 2)
+    .addLabel("threshold", 3.8)
+    .to(goal, { distance: 2.1, orbit: 0.06, height: 0.035, fov: 58, duration: 3.2, ease: "power2.inOut" }, "threshold")
+    .to(director, { dive: 1, core: 0.68, flash: 0.04, duration: 2.4 }, "threshold")
+    .addLabel("inside", 7)
+    .to(goal, { orbit: 0.28, distance: 2.4, height: -0.03, duration: 1.4 }, "inside")
+    .to(director, { evolution: 1, duration: 1.4 }, "inside")
+    .call(() => onCue?.(), [], 8.4)
+    .addLabel("return", 8.4)
+    .to(goal, { ...CAMERA_BASE, orbit: -0.12, duration: 4.2 }, "return")
+    .to(director, { morph: 0, disperse: 0, dive: 0, key: 1, core: 1, flash: 0, atmosphere: 1, duration: 3.8, ease: "power3.inOut" }, 8.8);
 }
