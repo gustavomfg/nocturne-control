@@ -9,7 +9,7 @@
   ·
   <a href="DESIGN.md">Sistema visual</a>
   ·
-  <a href="docs/entity-001.md">ENTITY 001</a>
+  <a href="docs/entity-001.md">ENTITY 001 — AWAKENING</a>
 </p>
 
 <p align="center">
@@ -21,14 +21,23 @@
 </p>
 
 <p align="center">
-  <img src="images/ovra-entity-001.png" alt="ENTITY 001: uma casca de estilhaços metálicos em torno de um núcleo âmbar, com um anel orbital de luz" width="1440" />
+  <img src="images/ovra-entity-001.png" alt="ENTITY 001 — AWAKENING: máscara de placas em grafite, coroa alongada, mandíbula afunilada e olhar âmbar no vazio" width="1440" />
 </p>
 
 ## Experimentos
 
 | Código | Nome | Ideia |
 | --- | --- | --- |
-| 001 | ENTITY 001 | Uma entidade digital feita de estilhaços. Ela surge da escuridão, observa o cursor com atraso e inércia, recua, se vira de costas e se transforma com um duplo toque. |
+| 001 | [ENTITY 001 — AWAKENING](docs/entity-001.md) | Uma presença de metal frio que desperta, observa com atraso, guarda tensão e responde com sete temperamentos. A ressonância abre sua matéria em órbitas e a devolve alterada. |
+
+Uma performance audiovisual feita com código: a abertura de 11,8 s revela contorno, matéria e olhar. Aproxime o cursor devagar e permaneça para despertar curiosidade; movimentos rápidos e toques acumulam tensão. Segure perto da entidade por 1,25 s, dê um duplo toque ou use o botão `metamorfose` para iniciar a ressonância de 12,6 s. O som é opcional e começa no botão `som`.
+
+<details>
+  <summary>AWAKENING durante a ressonância</summary>
+  <p align="center">
+    <img src="images/ovra-awakening-resonance.png" alt="AWAKENING em ressonância: placas de metal reorganizadas em faixas orbitais ao redor do núcleo" width="1440" />
+  </p>
+</details>
 
 Cada experimento é uma pasta independente em `src/experiments/`. A lista fica em `src/experiments/registry.ts` e é carregada sob demanda: um experimento só é baixado quando aberto.
 
@@ -67,14 +76,14 @@ src/
   core/                       base reutilizável para qualquer experimento
     camera.ts                 câmera orbital com movimento amortecido e objetivos tweenáveis
     lighting.ts               ambiente HDR procedural (softboxes) para reflexos de metal
-    postprocessing.ts         bloom, acabamento (vinheta, grão, lente, ondulação) em um passe
-    frameLoop.ts              loop de quadros que pausa com a aba oculta ou fora da tela
+    postprocessing.ts         bloom, antialiasing e acabamento (vinheta, grão, lente, ondulação)
+    frameLoop.ts              tempo da cena e passo físico; pausa com a aba oculta ou fora da tela
     assets.ts                 carregamento de GLTF/GLB com cache e descarte de recursos
     audio.ts                  ambiência opcional em Web Audio, desligada por padrão
     spring.ts, math.ts, noise.ts, transitions.ts, capabilities.ts
   experiments/
     registry.ts               lista de experimentos (carregamento preguiçoso)
-    entity-001/               ENTITY 001: cena, comportamento, coreografia, fallback 2D
+    entity-001/               AWAKENING: anatomia, temperamento, percepção, performance e renderizadores
 public/                       manifesto, service worker, ícone e página 404 do GitHub Pages
 tests/                        teste de offline do PWA e teste de navegador
 docs/entity-001.md            direção artística e especificação de comportamento
@@ -89,15 +98,15 @@ docs/entity-001.md            direção artística e especificação de comporta
 
 ### Modelos 3D
 
-ENTITY 001 é procedural: não depende de arquivos binários. Para um experimento com modelo pronto, exporte um GLB/GLTF pelo Blender e carregue com `loadGltf` (`src/core/assets.ts`), que já faz cache e tenta de novo após uma falha. Descarte o objeto com `disposeObject` ao desmontar.
+AWAKENING é procedural: não depende de arquivos binários. Para um experimento com modelo pronto, exporte um GLB/GLTF pelo Blender e carregue com `loadGltf` (`src/core/assets.ts`), que já faz cache e tenta de novo após uma falha. Descarte o objeto com `disposeObject` ao desmontar.
 
 ## Qualidade e acessibilidade
 
-- **Movimento reduzido**: sem intro, sem deriva, sem o olhar seguindo o cursor, sem movimento de câmera e sem empurrões nos estilhaços. A reação ao toque continua apenas como brilho; a metamorfose vira um pulso de luz.
-- **Sem WebGL2**: o mesmo experimento é desenhado em um canvas 2D com a mesma silhueta e os mesmos controles.
-- **Recursos**: o loop para com a aba oculta ou fora da tela; geometrias, materiais, texturas e o contexto WebGL são liberados ao desmontar.
+- **Movimento reduzido**: a entidade aparece assentada, sem intro, deriva, olhar seguindo o cursor, movimento de câmera ou empurrões nos estilhaços. Ativar a preferência durante uma sequência interrompe o movimento. A metamorfose vira um pulso suave de luz.
+- **Sem WebGL2**: o modo essencial desenha uma máscara procedural em canvas 2D e compartilha temperamento, percepção, relógio da performance e controles. Também assume a cena após uma perda de contexto WebGL.
+- **Recursos**: o render e o tempo narrativo param com a aba oculta, fora da tela ou com a área da cena zerada. Recursos da cena, pós-processamento, ambiente HDR e contexto WebGL são liberados ao desmontar; a resolução pode baixar quando o render fica lento.
 - **Áudio**: silencioso por padrão e só começa após ação explícita.
-- **Teclado**: os controles são botões nativos; a metamorfose também está disponível pelo botão, além do duplo toque.
+- **Teclado**: os controles são botões nativos com foco visível; `metamorfose` oferece a mesma ação do gesto de segurar ou do duplo toque. O estado é anunciado sem interromper a leitura.
 - **Publicação**: GitHub Pages em [`/ovra/`](https://gustavomfg.github.io/ovra/). `VITE_BASE_PATH` e `base` em `vite.config.ts` usam o caminho atual do repositório.
 
 ## Publicação
