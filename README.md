@@ -21,21 +21,21 @@
 </p>
 
 <p align="center">
-  <img src="images/ovra-entity-001.png" alt="ENTITY 001 — AWAKENING: máscara de placas em grafite, coroa alongada, mandíbula afunilada e olhar âmbar no vazio" width="1440" />
+  <img src="images/ovra-entity-001.png" alt="ENTITY 001 — AWAKENING: cápsula mecânica com olho central, superfícies metálicas e arcos orbitais no vazio" width="1440" />
 </p>
 
 ## Experimentos
 
 | Código | Nome | Ideia |
 | --- | --- | --- |
-| 001 | [ENTITY 001 — AWAKENING](docs/entity-001.md) | Uma presença de metal frio que desperta, observa com atraso, guarda tensão e responde com sete temperamentos. A ressonância abre sua matéria em órbitas e a devolve alterada. |
+| 001 | [ENTITY 001 — AWAKENING](docs/entity-001.md) | Uma cápsula mecânica que desperta, observa com atraso e responde com sete temperamentos. A ressonância abre suavemente as placas, modula a luz e mantém a entidade montada. |
 
-Uma performance audiovisual feita com código: a abertura de 11,8 s revela contorno, matéria e olhar. Aproxime o cursor devagar e permaneça para despertar curiosidade; movimentos rápidos e toques acumulam tensão. Segure perto da entidade por 1,25 s, dê um duplo toque ou use o botão `metamorfose` para iniciar a ressonância de 12,6 s. O som é opcional e começa no botão `som`.
+Uma performance audiovisual feita com código: a abertura de 11,8 s revela contorno, matéria e olhar. Aproxime o cursor devagar e permaneça para despertar curiosidade; movimentos rápidos acumulam tensão; o toque produz um pulso discreto de luz. Segure perto da entidade por 1,25 s, dê um duplo toque ou use o botão `metamorfose` para iniciar a ressonância contida de 8,8 s. O som é opcional e começa no botão `som`.
 
 <details>
   <summary>AWAKENING durante a ressonância</summary>
   <p align="center">
-    <img src="images/ovra-awakening-resonance.png" alt="AWAKENING em ressonância: placas de metal reorganizadas em faixas orbitais ao redor do núcleo" width="1440" />
+    <img src="images/ovra-awakening-resonance.png" alt="AWAKENING em ressonância: a mesma cápsula durante uma abertura controlada das placas, com luz e câmera suaves" width="1440" />
   </p>
 </details>
 
@@ -83,7 +83,8 @@ src/
     spring.ts, math.ts, noise.ts, transitions.ts, capabilities.ts
   experiments/
     registry.ts               lista de experimentos (carregamento preguiçoso)
-    entity-001/               AWAKENING: anatomia, temperamento, percepção, performance e renderizadores
+    entity-001/               AWAKENING: modelo Blender, temperamento, percepção, performance e fallback
+public/3d/entity-001/          modelos Blender cinematic e optimized
 public/                       manifesto, service worker, ícone e página 404 do GitHub Pages
 tests/                        teste de offline do PWA e teste de navegador
 docs/entity-001.md            direção artística e especificação de comportamento
@@ -98,13 +99,13 @@ docs/entity-001.md            direção artística e especificação de comporta
 
 ### Modelos 3D
 
-AWAKENING é procedural: não depende de arquivos binários. Para um experimento com modelo pronto, exporte um GLB/GLTF pelo Blender e carregue com `loadGltf` (`src/core/assets.ts`), que já faz cache e tenta de novo após uma falha. Descarte o objeto com `disposeObject` ao desmontar.
+AWAKENING usa os modelos Blender existentes em `public/3d/entity-001/`, com versões cinematic e optimized. A forma e os materiais de origem são preservados; a animação web atua sobre seus controles. Se o modelo falhar, uma cápsula procedural mantém a experiência. Para um experimento com modelo pronto, exporte um GLB/GLTF pelo Blender e carregue com `loadGltf` (`src/core/assets.ts`), que já faz cache e tenta de novo após uma falha. Siga o exemplo de propriedade de recursos em `Character`: cada montagem possui geometrias e materiais próprios, e o cache compartilhado não é descartado.
 
 ## Qualidade e acessibilidade
 
-- **Movimento reduzido**: a entidade aparece assentada, sem intro, deriva, olhar seguindo o cursor, movimento de câmera ou empurrões nos estilhaços. Ativar a preferência durante uma sequência interrompe o movimento. A metamorfose vira um pulso suave de luz.
+- **Movimento reduzido**: a entidade aparece assentada, sem intro, deriva, olhar seguindo o cursor ou movimento de câmera. Ativar a preferência durante uma sequência interrompe o movimento. A metamorfose vira um pulso suave de luz.
 - **Sem WebGL2**: o modo essencial desenha uma máscara procedural em canvas 2D e compartilha temperamento, percepção, relógio da performance e controles. Também assume a cena após uma perda de contexto WebGL.
-- **Recursos**: o render e o tempo narrativo param com a aba oculta, fora da tela ou com a área da cena zerada. Recursos da cena, pós-processamento, ambiente HDR e contexto WebGL são liberados ao desmontar; a resolução pode baixar quando o render fica lento.
+- **Recursos**: o render e o tempo narrativo param com a aba oculta, fora da tela ou com a área da cena zerada. Recursos da cena, pós-processamento, ambiente HDR e contexto WebGL são liberados ao desmontar; a resolução pode baixar em passos pequenos quando uma janela de quadros confirma lentidão.
 - **Áudio**: silencioso por padrão e só começa após ação explícita.
 - **Teclado**: os controles são botões nativos com foco visível; `metamorfose` oferece a mesma ação do gesto de segurar ou do duplo toque. O estado é anunciado sem interromper a leitura.
 - **Publicação**: GitHub Pages em [`/ovra/`](https://gustavomfg.github.io/ovra/). `VITE_BASE_PATH` e `base` em `vite.config.ts` usam o caminho atual do repositório.

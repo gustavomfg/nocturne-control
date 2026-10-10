@@ -49,14 +49,17 @@ Texto nunca compete com a obra. Quando aparece, é uma leitura do que a obra est
 - Os controles ficam nos cantos inferiores e somam no máximo duas palavras cada.
 - Em celulares, a obra é enquadrada pela largura: a câmera recua para que a silhueta não seja cortada.
 
-Em ENTITY 001 — AWAKENING, a massa é uma máscara alongada de grafite: coroa, têmporas e mandíbula afunilada, com placas orientadas pela superfície. A abertura amendoada sustenta uma íris âmbar e uma pupila escura; o recorte de luz fria revela o metal sem dissolver sua massa no vazio.
+Em ENTITY 001 — AWAKENING, preservar a cápsula/ovo mecânico do modelo Blender, as placas cerâmicas e metálicas, o olho central e os arcos orbitais. A luz distingue as superfícies claras do metal escuro sem cobrir o mecanismo com bloom.
 
 ## Movimento
 
-- Em ENTITY 001 — AWAKENING, a abertura dura 11,8 s: contorno, matéria e reconhecimento. A ressonância dura 12,6 s, passando por tensão, dispersão, faixas orbitais, aproximação do núcleo e retorno alterado. Câmera e luz sustentam juntas esse ritmo.
-- Nada muda de forma abrupta sem intenção artística. A luz é o primeiro sinal, a forma vem depois.
-- O temperamento de AWAKENING aparece na pose, na abertura do olho, na respiração, na luz, nos fragmentos e no enquadramento. O olhar tem memória curta, antecipação limitada, hesitação e piscadas suaves.
-- Com movimento reduzido: sem intro, sem deriva, sem movimento em resposta ao cursor e sem movimento de câmera. Ativar a preferência interrompe a sequência espacial e assenta a entidade. Ao toque, a matéria só acende. A metamorfose vira um pulso suave de luz.
+- A abertura continua em 11,8 s. A câmera se aproxima em uma direção contínua, sem mudanças bruscas de órbita.
+- A ressonância dura 8,8 s: uma preparação discreta, abertura pequena das placas, pausa e retorno. A cápsula permanece montada; sem explosões, nuvens de fragmentos ou mergulho da câmera.
+- Molas com amortecimento crítico preservam a velocidade nas mudanças de alvo. O olhar combina memória interpolada, antecipação limitada e uma hesitação gradual; o corpo acompanha parte do movimento.
+- O modelo usa apenas `AWAKEN` e `IDLE` na web. O idle continua durante a ressonância e as mudanças de humor. Pálpebras, olho e giroscópios têm um único controle, sem sobreposição de clipes.
+- Os estados alteram atenção, inclinação, abertura do olho, luz e enquadramento. Alarme e indiferença são sutis, sem tremor artificial ou giros agressivos.
+- Câmera com distância mínima de 12,5 unidades e fov estável na sequência especial. A leitura da cápsula tem prioridade sobre o close.
+- Com movimento reduzido: sem abertura espacial, deriva, perseguição do cursor ou câmera móvel. A metamorfose vira um pulso suave de luz, e ativar a preferência assenta a cena.
 
 ## Acessibilidade
 
