@@ -32,7 +32,7 @@ export default function Entity001() {
     const canvas = document.createElement("canvas");
     canvas.className = mode === "webgl" ? "entity-canvas" : "entity-fallback";
     canvas.setAttribute("role", "img");
-    canvas.setAttribute("aria-label", "Entidade digital abstrata: máscara de metal vivo com um olhar âmbar.");
+    canvas.setAttribute("aria-label", "Entidade digital abstrata: cápsula mecânica com um olho luminoso central.");
     stage.prepend(canvas);
     let reduced = false;
     const stopReduced = watchReducedMotion(value => {

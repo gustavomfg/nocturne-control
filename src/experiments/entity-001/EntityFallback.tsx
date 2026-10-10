@@ -4,6 +4,7 @@ import { clamp, damp } from "../../core/math";
 import { createTemperament, easeIntent, intentFor, MOOD_LABELS, stepTemperament } from "./behavior";
 import { CAMERA_BASE, CAMERA_INTRO, ENTITY } from "./config";
 import { createShell } from "./geometry";
+import { Spring } from "../../core/spring";
 import { Perception } from "./perception";
 import { createPerformance } from "./performance";
 import type { EntityScene, SceneOptions } from "./scene";
@@ -20,11 +21,12 @@ export function createFallbackScene(options: SceneOptions): EntityScene {
   const ctx: CanvasRenderingContext2D = context;
   let reduced = options.reduced;
   let width = 1, height = 1, dpr = 1;
-  let present = false, speed = 0, contact = 0, lastLabel = "";
+  let present = false, speed = 0, lastLabel = "";
   const pointer = { x: 0, y: 0 }, previous = { x: 0, y: 0 };
   let temperament = createTemperament();
   let intent = intentFor("observing");
   const perception = new Perception();
+  const yawSpring = new Spring(0, 14), pitchSpring = new Spring(0, 14), lidSpring = new Spring(0.85, 64);
   const goal = { ...(reduced ? CAMERA_BASE : CAMERA_INTRO) };
   const performance = createPerformance(goal, reduced, {
     onPhase: (phase) => { canvas.dataset.phase = phase; },
@@ -44,14 +46,14 @@ export function createFallbackScene(options: SceneOptions): EntityScene {
     const awake = performance.phase === "awake";
     speed = damp(speed, frameDt > 0 ? Math.hypot(pointer.x - previous.x, pointer.y - previous.y) * 4 / frameDt : 0, 9, frameDt);
     previous.x = pointer.x; previous.y = pointer.y;
-    contact = Math.max(0, contact - frameDt);
+    director.flash *= Math.exp(-frameDt * 2.4);
     const near = Math.hypot(pointer.x * (width / height), pointer.y) < 0.75;
-    if (awake) temperament = stepTemperament(temperament, { dt: frameDt, present, near, speed, contact: contact > 0 });
+    if (awake) temperament = stepTemperament(temperament, { dt: frameDt, present, near, speed });
     intent = easeIntent(intent, intentFor(temperament.mood), frameDt);
     const gaze = perception.step(pointer.x, pointer.y, present, temperament.mood, frameDt);
-    const yaw = reduced ? 0 : intent.away ? 2.1 : gaze.x * intent.gaze * 0.55 + Math.sin(elapsed * 0.13) * 0.06;
-    const pitch = reduced ? 0 : intent.tilt - gaze.y * intent.gaze * 0.13;
-    const zoom = Math.min(4, CAMERA_BASE.distance / goal.distance);
+    const yaw = reduced ? 0 : yawSpring.step(gaze.x * intent.gaze * 0.34 + intent.away * 0.38 + Math.sin(elapsed * 0.12) * 0.035, frameDt);
+    const pitch = reduced ? 0 : pitchSpring.step(intent.tilt - gaze.y * intent.gaze * 0.11, frameDt);
+    const zoom = Math.min(1.08, CAMERA_BASE.distance / goal.distance);
     const scale = Math.min(width * 0.205, height * 0.145) * zoom;
     const cx = width / 2, cy = height / 2;
     const rotation = (point: Vector3) => {
@@ -69,21 +71,22 @@ export function createFallbackScene(options: SceneOptions): EntityScene {
     haze.addColorStop(1, "rgba(3, 3, 4, 0)");
     ctx.fillStyle = haze; ctx.fillRect(0, 0, width, height);
 
+    ctx.save();
+    ctx.strokeStyle = "rgba(105, 140, 153, " + (director.reveal * (0.14 + director.resonance * 0.035)) + ")";
+    ctx.lineWidth = 0.8;
+    for (const angle of [-0.16, 0.16]) {
+      ctx.beginPath(); ctx.ellipse(cx, cy, scale * 2.22, scale * 2.95, angle, 0.15, Math.PI * 1.83); ctx.stroke();
+    }
+    ctx.restore();
     const facets = slots.map((slot, i) => ({ slot, i, center: rotation(slot.position) })).sort((a, b) => a.center.z - b.center.z);
     for (const { slot, i, center } of facets) {
       const threshold = clamp((slot.position.y + 2.7) / 5.4) * 0.65 + slot.seed * 0.25;
       const reveal = clamp((director.reveal - threshold) * 7);
       if (reveal <= 0) continue;
-      const expand = 1 + director.disperse * (0.65 + slot.seed * 0.45);
-      const band = Math.sin(i * 0.08 + elapsed * 0.05);
+      const expand = 1 + director.opening * 0.025;
       const mapped = vertices[i].map((vertex) => {
         const p = rotation(vertex);
-        if (director.morph > 0) {
-          const a = (i / slots.length) * Math.PI * 8;
-          p.x = p.x * (1 - director.morph) + Math.cos(a) * 2.55 * director.morph;
-          p.y = p.y * (1 - director.morph) + Math.sin(a) * 1.5 * director.morph;
-        }
-        return project({ x: p.x * expand, y: p.y * expand, z: p.z + band * director.morph });
+        return project({ x: p.x * expand, y: p.y * expand, z: p.z });
       });
       const shade = clamp((center.z / 2 + 1) * 0.5);
       const light = 0.2 + director.key * 0.8;
@@ -95,11 +98,11 @@ export function createFallbackScene(options: SceneOptions): EntityScene {
 
     // The eye is drawn after the near-face facets, just as a lens sits in its socket.
     if (Math.cos(yaw) > 0.1) {
-      const face = project(rotation(new Vector3(0, ENTITY.eye.y, ENTITY.eye.z * (1 - director.dive))));
+      const face = project(rotation(new Vector3(0, ENTITY.eye.y, ENTITY.eye.z)));
       const ex = scale * 0.74;
-      const openness = reduced ? 0.85 : director.eye * intent.openness * (1 - gaze.blink * 0.7);
+      const openness = reduced ? 0.85 : lidSpring.step(director.eye * intent.openness * (1 - gaze.blink * 0.65), frameDt);
       const ey = Math.max(1.5, scale * 0.3 * openness);
-      const light = director.core * intent.light + director.flash * 0.4;
+      const light = director.core * intent.light + director.flash * 0.2;
       ctx.save(); ctx.translate(face.x, face.y);
       ctx.scale(1, ey / ex);
       const iris = ctx.createRadialGradient(0, 0, ex * 0.1, 0, 0, ex);
@@ -117,7 +120,8 @@ export function createFallbackScene(options: SceneOptions): EntityScene {
     const label = performance.phase === "intro" ? "despertando" : performance.phase === "sequence" ? "ressonância" : MOOD_LABELS[temperament.mood];
     if (label !== lastLabel) { lastLabel = label; options.onState(label); }
     canvas.dataset.ready = "true"; canvas.dataset.mood = temperament.mood;
-    canvas.dataset.evolution = director.evolution > 0.9 ? "awakened" : "latent";
+    canvas.dataset.particleMode = "off";
+    canvas.dataset.storyTime = performance.time.toFixed(2);
   }
   const loop = createFrameLoop(draw);
   loop.start();
@@ -128,14 +132,14 @@ export function createFallbackScene(options: SceneOptions): EntityScene {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     },
     setVisible: loop.setVisible,
-    setReduced(value) { reduced = value; performance.setReduced(value); },
+    setReduced(value) { reduced = value; performance.setReduced(value); if (value) { yawSpring.snap(0); pitchSpring.snap(0); lidSpring.snap(0.85); } },
     pointer(x, y) {
       if (!present) { previous.x = x; previous.y = y; }
       pointer.x = x; pointer.y = y; present = true;
     },
     leave() { present = false; performance.hold(false); },
     hold(active) { performance.hold(active && Math.hypot(pointer.x * (width / height), pointer.y) < 0.75); },
-    tap(x, y) { pointer.x = x; pointer.y = y; present = true; if (!reduced) contact = 0.4; },
+    tap(x, y) { pointer.x = x; pointer.y = y; present = true; director.flash = Math.min(0.12, director.flash + 0.08); },
     metamorphose: performance.metamorphose,
     dispose() { loop.dispose(); performance.dispose(); },
   };

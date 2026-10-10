@@ -87,7 +87,7 @@ export class Dust {
   update(elapsed: number, energy: number, light: number) {
     this.material.uniforms.uTime.value = elapsed;
     this.material.uniforms.uEnergy.value = energy;
-    this.material.uniforms.uOpacity.value = 0.04 + light * 0.19;
+    this.material.uniforms.uOpacity.value = 0.025 + light * 0.07;
   }
 
   setPixelRatio(value: number) {

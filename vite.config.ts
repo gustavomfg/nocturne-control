@@ -50,6 +50,9 @@ function pwaPrecachePlugin(): Plugin {
       const version = versionHash.digest('hex').slice(0, 16)
       const precacheUrls = ['./', ...relativeFiles
         .filter((file) => file !== 'sw.js')
+        // Models are large and only one quality is used per device: they are cached
+        // at runtime when first fetched instead of on install.
+        .filter((file) => !file.endsWith('.glb'))
         .map((file) => `./${file}`)]
       const serviceWorkerPath = resolve(outputDirectory, 'sw.js')
       const serviceWorker = injectPrecacheManifest(
@@ -68,8 +71,8 @@ export default defineConfig({
   base: process.env.VITE_BASE_PATH || '/ovra/',
   plugins: [react(), pwaPrecachePlugin()],
   build: {
-    // The Three.js renderer lives in the experiment chunk, which is only fetched when
+    // The Three.js renderer and glTF loader live in the experiment chunk, which is only fetched when
     // that experiment opens. The shell itself stays small.
-    chunkSizeWarningLimit: 700,
+    chunkSizeWarningLimit: 800,
   },
 })

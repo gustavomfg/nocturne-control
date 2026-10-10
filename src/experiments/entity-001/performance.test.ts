@@ -20,7 +20,7 @@ describe("AWAKENING performance clock", () => {
     expect(onPhase).toHaveBeenCalledTimes(1);
     p.dispose();
   });
-  it("a sustained hold triggers one sequence and leaves a changed entity", () => {
+  it("a sustained hold triggers one sequence and returns the capsule to rest", () => {
     const onSequence = vi.fn();
     const p = createPerformance({ ...CAMERA_INTRO }, false, { onSequence });
     advance(p, 12);
@@ -31,7 +31,8 @@ describe("AWAKENING performance clock", () => {
     expect(onSequence).toHaveBeenCalledWith(true);
     advance(p, 13);
     expect(p.phase).toBe("awake");
-    expect(p.director.evolution).toBeCloseTo(1);
+    expect(p.director.opening).toBeCloseTo(0);
+    expect(p.director.resonance).toBeCloseTo(0);
     expect(onSequence.mock.calls).toEqual([[true], [false]]);
     p.dispose();
   });
@@ -42,17 +43,16 @@ describe("AWAKENING performance clock", () => {
     expect(p.phase).toBe("awake");
     p.dispose();
   });
-  it("changing motion preference during the dive stops all spatial choreography", () => {
+  it("changing motion preference during resonance stops all spatial choreography", () => {
     const goal = { ...CAMERA_INTRO };
     const onSequence = vi.fn();
     const p = createPerformance(goal, false, { onSequence });
     advance(p, 12); p.metamorphose(); advance(p, 6);
-    expect(p.director.dive).toBeGreaterThan(0.5);
+    expect(p.director.resonance).toBeGreaterThan(0.5);
     p.setReduced(true);
     expect(p.phase).toBe("awake");
-    expect(p.director.morph).toBe(0);
-    expect(p.director.disperse).toBe(0);
-    expect(p.director.dive).toBe(0);
+    expect(p.director.opening).toBe(0);
+    expect(p.director.resonance).toBe(0);
     expect(goal).toMatchObject(CAMERA_BASE);
     expect(onSequence.mock.calls).toEqual([[true], [false]]);
     p.setReduced(false); advance(p, 2);
@@ -65,7 +65,7 @@ describe("AWAKENING performance clock", () => {
     expect(p.metamorphose()).toBe(true);
     advance(p, 0.6);
     expect(p.director.flash).toBeGreaterThan(0);
-    expect(p.director.morph).toBe(0);
+    expect(p.director.opening).toBe(0);
     expect(goal).toMatchObject(CAMERA_BASE);
     advance(p, 2);
     expect(p.phase).toBe("awake");

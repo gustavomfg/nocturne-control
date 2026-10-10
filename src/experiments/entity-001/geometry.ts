@@ -64,34 +64,3 @@ export function createShell(count: number, radius: number, aperture: number, see
   }
   return Array.from({ length: count }, (_, i) => slots[Math.floor((i * slots.length) / count)]);
 }
-
-// Three orbital rings. Shards lie along each ring, with their thin axis pointing
-// radially, so the sphere can unfold into them without a cut.
-export function createRings(count: number, radius: number, seed = 11): ShardSlot[] {
-  const random = createRandom(seed);
-  const normals = [
-    new Vector3(0, 0, 1),
-    new Vector3(0, 0.82, 0.57).normalize(),
-    new Vector3(0.78, 0, 0.62).normalize(),
-  ];
-  const perRing = Math.ceil(count / normals.length);
-  const slots: ShardSlot[] = [];
-
-  normals.forEach((normal, ringIndex) => {
-    const u = tangentFor(normal, 0);
-    const v = new Vector3().crossVectors(normal, u);
-    for (let i = 0; i < perRing && slots.length < count; i++) {
-      const angle = ((i + random() * 0.6) / perRing) * Math.PI * 2;
-      const radial = new Vector3().addScaledVector(u, Math.cos(angle)).addScaledVector(v, Math.sin(angle));
-      const tangent = new Vector3().addScaledVector(u, -Math.sin(angle)).addScaledVector(v, Math.cos(angle));
-      const ringRadius = radius * (1.12 + (random() - 0.5) * 0.06) + (ringIndex === 1 ? 0.04 : 0);
-      slots.push({
-        position: radial.clone().multiplyScalar(ringRadius),
-        orientation: basisQuaternion(tangent, radial),
-        size: 0.06 + 0.12 * Math.pow(random(), 2),
-        seed: random(),
-      });
-    }
-  });
-  return slots;
-}

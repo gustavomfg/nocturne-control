@@ -19,7 +19,7 @@ void main() {
 `;
 const fragment = /* glsl */ `
 uniform vec3 uEmber, uFrost;
-uniform float uLight, uWarmth, uTime, uAgitation;
+uniform float uLight, uWarmth, uTime;
 varying vec3 vNormal, vView, vLocal;
 void main() {
   float facing = clamp(dot(normalize(vNormal), normalize(vView)), 0.0, 1.0);
@@ -33,7 +33,6 @@ void main() {
   vec3 color = vec3(0.006, 0.01, 0.014);
   color += tone * iris * (0.28 + fibers * 0.55 + orbit * 0.55) * pulse * uLight;
   color += tone * pow(1.0 - facing, 5.0) * 0.28 * uLight;
-  color *= 1.0 + uAgitation * sin(uTime * 17.0) * 0.07;
   gl_FragColor = vec4(color, 1.0);
 }
 `;
@@ -50,7 +49,7 @@ void main() {
 
 export type KernelState = {
   light: number; warmth: number; elapsed: number; openness?: number;
-  agitation?: number; gazeX?: number; gazeY?: number; dive?: number; evolution?: number;
+  gazeX?: number; gazeY?: number;
 };
 
 export class Kernel {
@@ -69,7 +68,7 @@ export class Kernel {
   private readonly frost = new Color(ENTITY.palette.frost);
   private readonly uniforms = {
     uEmber: { value: this.ember }, uFrost: { value: this.frost },
-    uLight: { value: 0 }, uWarmth: { value: 1 }, uTime: { value: 0 }, uAgitation: { value: 0 },
+    uLight: { value: 0 }, uWarmth: { value: 1 }, uTime: { value: 0 },
   };
 
   constructor(radius: number) {
@@ -130,15 +129,13 @@ export class Kernel {
 
   update(state: KernelState) {
     const openness = clamp(state.openness ?? 1, 0.05, 1);
-    const dive = state.dive ?? 0;
-    this.uniforms.uLight.value = Math.min(1.65, state.light * 1.25);
+    this.uniforms.uLight.value = Math.min(1.25, state.light);
     this.uniforms.uWarmth.value = state.warmth;
     this.uniforms.uTime.value = state.elapsed;
-    this.uniforms.uAgitation.value = state.agitation ?? 0;
     this.color.copy(this.frost).lerp(this.ember, state.warmth);
     this.irisMaterial.color.copy(this.color);
     this.irisMaterial.opacity = state.light * 0.35;
-    this.lens.position.set(0, ENTITY.eye.y, lerp(ENTITY.eye.z, 0, dive));
+    this.lens.position.set(0, ENTITY.eye.y, ENTITY.eye.z);
     this.lens.scale.y = lerp(0.1, 1, openness);
     this.iris.rotation.z = Math.sin(state.elapsed * 0.12) * 0.03;
     this.pupil.position.x = (state.gazeX ?? 0) * 0.07;
@@ -146,7 +143,6 @@ export class Kernel {
     for (const [plate, sign] of [[this.upper, 1], [this.lower, -1]] as const) {
       plate.position.set(0, ENTITY.eye.y + sign * (1 - openness) * -0.23, ENTITY.eye.z + 0.13);
       plate.scale.y = lerp(0.35, 1, openness);
-      plate.visible = dive < 0.7;
     }
     this.platesMaterial.emissive.copy(this.color);
     this.platesMaterial.emissiveIntensity = state.light * 0.025;

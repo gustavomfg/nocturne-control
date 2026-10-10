@@ -53,15 +53,15 @@ export class Atmosphere {
       this.group.add(ring);
     }
   }
-  update(camera: Camera, time: number, presence: number, energy: number, morph: number, reduced: boolean) {
+  update(camera: Camera, time: number, presence: number, energy: number, resonance: number, reduced: boolean, orbitalVisibility = 1) {
     this.backdrop.quaternion.copy(camera.quaternion);
     this.backdrop.position.copy(camera.position).normalize().multiplyScalar(-14);
     this.material.uniforms.uTime.value = reduced ? 0 : time;
     this.material.uniforms.uPresence.value = presence;
     this.material.uniforms.uEnergy.value = energy;
-    this.ringMaterial.opacity = morph * 0.24;
+    this.ringMaterial.opacity = (0.055 + resonance * 0.035) * orbitalVisibility;
     this.rings.forEach((ring, i) => {
-      ring.rotation.z = i * 0.35 + (reduced ? 0 : time * (i % 2 ? -0.04 : 0.03));
+      ring.rotation.z = i * 0.35 + (reduced ? 0 : Math.sin(time * 0.07 + i) * 0.08);
     });
   }
   dispose() {

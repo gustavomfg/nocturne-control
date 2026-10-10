@@ -65,26 +65,25 @@ export function stepTemperament(state: Temperament, sense: Sense): Temperament {
 }
 
 export type Intent = {
-  gaze: number; lean: number; light: number; warmth: number; reactivity: number;
-  away: boolean; openness: number; rhythm: number; tremor: number;
-  tilt: number; roll: number; spread: number; camera: number; orbit: number;
+  gaze: number; lean: number; light: number; warmth: number; away: number;
+  openness: number; rhythm: number; tilt: number; roll: number; camera: number; orbit: number;
 };
 
+// States differ in attention and posture; alarm never introduces vibration or
+// particle forces. Aversion is a continuous weight, not a switch in the body rig.
 const INTENTS: Record<Mood, Intent> = {
-  dreaming:  { gaze: 0, lean: -0.1, light: 0.22, warmth: 0.9, reactivity: 0.1, away: false, openness: 0.18, rhythm: 0.5, tremor: 0, tilt: 0.14, roll: -0.05, spread: -0.035, camera: 0.65, orbit: 0.13 },
-  observing: { gaze: 0.58, lean: 0, light: 0.7, warmth: 1, reactivity: 0.6, away: false, openness: 0.72, rhythm: 0.8, tremor: 0, tilt: 0, roll: 0, spread: 0, camera: 0, orbit: 0 },
-  curious:   { gaze: 0.95, lean: 0.35, light: 0.98, warmth: 1, reactivity: 0.35, away: false, openness: 1, rhythm: 0.58, tremor: 0, tilt: -0.08, roll: 0.07, spread: 0.055, camera: -1.35, orbit: -0.12 },
-  wary:      { gaze: 0.8, lean: -0.65, light: 1, warmth: 0.15, reactivity: 1.4, away: false, openness: 0.43, rhythm: 1.5, tremor: 0.3, tilt: 0.08, roll: -0.09, spread: 0.15, camera: 1, orbit: 0.16 },
-  ignoring:  { gaze: 0, lean: -0.4, light: 0.16, warmth: 0.05, reactivity: 0.12, away: true, openness: 0.12, rhythm: 0.45, tremor: 0, tilt: -0.12, roll: 0.1, spread: -0.025, camera: 0.8, orbit: 0.12 },
-  alert:     { gaze: 0.9, lean: -0.4, light: 1.15, warmth: 0.05, reactivity: 1.8, away: false, openness: 0.56, rhythm: 2, tremor: 0.65, tilt: -0.05, roll: -0.12, spread: 0.22, camera: 1.2, orbit: -0.18 },
-  disturbed: { gaze: 0.35, lean: -0.85, light: 1.25, warmth: 0, reactivity: 2.2, away: false, openness: 0.3, rhythm: 2.8, tremor: 1, tilt: 0.22, roll: 0.16, spread: 0.3, camera: 1.9, orbit: 0.22 },
+  dreaming:  { gaze: 0, lean: -0.04, light: 0.46, warmth: 0.85, away: 0, openness: 0.46, rhythm: 0.55, tilt: 0.035, roll: -0.012, camera: 0.25, orbit: 0.025 },
+  observing: { gaze: 0.62, lean: 0, light: 0.76, warmth: 1, away: 0, openness: 0.82, rhythm: 0.65, tilt: 0, roll: 0, camera: 0, orbit: 0 },
+  curious:   { gaze: 0.86, lean: 0.12, light: 0.9, warmth: 1, away: 0, openness: 1, rhythm: 0.62, tilt: -0.035, roll: 0.025, camera: -0.3, orbit: -0.045 },
+  wary:      { gaze: 0.65, lean: -0.18, light: 0.8, warmth: 0.7, away: 0, openness: 0.66, rhythm: 0.74, tilt: 0.04, roll: -0.02, camera: 0.28, orbit: 0.035 },
+  ignoring:  { gaze: 0.12, lean: -0.07, light: 0.5, warmth: 0.55, away: 1, openness: 0.55, rhythm: 0.58, tilt: 0.025, roll: 0.025, camera: 0.3, orbit: 0.04 },
+  alert:     { gaze: 0.8, lean: -0.14, light: 0.87, warmth: 0.45, away: 0, openness: 0.72, rhythm: 0.8, tilt: -0.02, roll: -0.025, camera: 0.3, orbit: -0.04 },
+  disturbed: { gaze: 0.35, lean: -0.22, light: 0.72, warmth: 0.4, away: 0.35, openness: 0.6, rhythm: 0.84, tilt: 0.055, roll: 0.025, camera: 0.4, orbit: 0.04 },
 };
 export function intentFor(mood: Mood): Intent { return { ...INTENTS[mood] }; }
 export function easeIntent(current: Intent, target: Intent, dt: number): Intent {
   const next = { ...target };
-  for (const key of Object.keys(target) as (keyof Intent)[]) {
-    if (key !== "away") next[key] = damp(current[key], target[key], 1.8, dt);
-  }
+  for (const key of Object.keys(target) as (keyof Intent)[]) next[key] = damp(current[key], target[key], 1.15, dt);
   return next;
 }
 export const MOOD_LABELS: Record<Mood, string> = {

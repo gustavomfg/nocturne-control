@@ -13,13 +13,14 @@ export const ENTITY = {
   },
 } as const;
 
-export const CAMERA_BASE: CameraGoal = { distance: 11.8, orbit: 0.04, height: 0.06, fov: 34 };
-export const CAMERA_INTRO: CameraGoal = { distance: 19, orbit: -0.58, height: 0.22, fov: 38 };
+export const CAMERA_BASE: CameraGoal = { distance: 13.2, orbit: 0.06, height: 0.035, fov: 34 };
+export const CAMERA_INTRO: CameraGoal = { distance: 17.4, orbit: -0.24, height: 0.1, fov: 36 };
+export const MIN_CAMERA_DISTANCE = 12.5;
 export const HOLD_SECONDS = 1.25;
 
 export type Quality = { shards: number; dust: number; pixelRatio: number };
 export function qualityFor(compact: boolean): Quality {
   return compact
-    ? { shards: 820, dust: 430, pixelRatio: 1.25 }
-    : { shards: 1800, dust: 980, pixelRatio: 1.6 };
+    ? { shards: 820, dust: 200, pixelRatio: 1.25 }
+    : { shards: 1800, dust: 420, pixelRatio: 1.6 };
 }

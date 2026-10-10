@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { Vector3 } from "three";
-import { createRings, createShell } from "./geometry";
+import { createShell } from "./geometry";
 import { ENTITY } from "./config";
 
 describe("createShell", () => {
@@ -36,27 +35,5 @@ describe("createShell", () => {
   it("is deterministic for the same seed", () => {
     const again = createShell(1200, ENTITY.radius, ENTITY.aperture);
     expect(again[10].position.toArray()).toEqual(slots[10].position.toArray());
-  });
-});
-
-describe("createRings", () => {
-  const count = 900;
-  const rings = createRings(count, ENTITY.radius);
-
-  it("matches the shell count, so every shard has a target during the morph", () => {
-    expect(rings).toHaveLength(count);
-  });
-
-  it("places shards on three bands around the origin", () => {
-    const radii = rings.map((slot) => slot.position.length());
-    expect(Math.min(...radii)).toBeGreaterThan(ENTITY.radius);
-    expect(Math.max(...radii)).toBeLessThan(ENTITY.radius * 1.3);
-  });
-
-  it("orients each ring shard tangentially, with its thin axis pointing radially", () => {
-    const slot = rings[0];
-    const radial = slot.position.clone().normalize();
-    const thin = new Vector3(0, 1, 0).applyQuaternion(slot.orientation);
-    expect(Math.abs(thin.dot(radial))).toBeGreaterThan(0.99);
   });
 });
