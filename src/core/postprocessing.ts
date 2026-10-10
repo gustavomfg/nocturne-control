@@ -13,7 +13,7 @@ const FinishShader = {
     tDiffuse: { value: null as unknown },
     uTime: { value: 0 },
     uVignette: { value: 0.55 },
-    uGrain: { value: 0.012 },
+    uGrain: { value: 0.009 },
     uAberration: { value: 0.00065 },
     // xy: ripple origin in UV space, z: amplitude, w: unused.
     uRipple: { value: new Vector4(0.5, 0.5, 0, 0) },
@@ -75,7 +75,7 @@ export function createPostProcessing(renderer: WebGLRenderer, scene: Scene, came
   composer.setSize(width, height);
 
   composer.addPass(new RenderPass(scene, camera));
-  const bloom = new UnrealBloomPass(new Vector2(width, height), 0.35, 0.45, 1.05);
+  const bloom = new UnrealBloomPass(new Vector2(width, height), 0.2, 0.35, 1.2);
   composer.addPass(bloom);
   composer.addPass(new OutputPass());
   const antialias = new ShaderPass(FXAAShader);
